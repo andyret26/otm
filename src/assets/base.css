@@ -1,11 +1,42 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap');
 
 :root {
   --bg1: #1c1719;
   --bg2: #382e32;
+  --bg3: #473a3f;
   --text-color: #fff;
+  --base-font-size: 14px;
+  --osu-purple: #8c66ff;
+  --osu-blue: #54b2e0;
+  --osu-green: #73ff66;
+  --osu-pink: #ff66ab;
+  --osu-brown: #ff9966;
+  --osu-yellow: #ffd866;
+  --base-border-radius: 3px;
 
   background-color: var(--bg1);
   color: var(--text-color);
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Comfortaa', sans-serif;
+  font-size: var(--base-font-size);
+
+  ::placeholder {
+    color: #aaa;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: var(--base-font-size);
+  }
+}
+
+body {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+  font-size: var(--base-font-size);
+}
+
+:focus {
+  outline-offset: 0px;
+  outline: 2px solid #ddd;
+  border-radius: inherit;
 }
