@@ -37,7 +37,7 @@ const searchText = ref('')
 
 const handleLogoClick = () => {
   if (isAuthenticated) {
-    router.push(`user/${user.value?.nickname}/dashboard`)
+    router.push(`/user/${user.value?.sub?.split('|')[2]}/dashboard`)
   } else {
     router.push('/')
   }
@@ -45,7 +45,7 @@ const handleLogoClick = () => {
 
 const handleLogin = async () => {
   await loginWithPopup()
-  router.push(`user/${user.value?.nickname}/dashboard`)
+  router.push(`/user/${user.value?.sub?.split('|')[2]}/dashboard`)
 }
 const handleLogout = () => {
   logout({ logoutParams: { returnTo: window.location.origin } })
