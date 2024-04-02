@@ -3,7 +3,7 @@
     <button class="profile-menu__btn" @click="isMenuOpen = !isMenuOpen">
       <img :src="user?.picture" alt="profile" class="profile-menu__img" />
     </button>
-    <div class="profile-menu__dropdown" v-if="isMenuOpen">
+    <div class="profile-menu__dropdown" v-if="isMenuOpen" @click="isMenuOpen = false">
       <div class="profile-menu__list">
         <RouterLink class="profile-menu__item" to="/">Profile</RouterLink>
         <RouterLink class="profile-menu__item" to="/">Settings</RouterLink>
@@ -62,7 +62,6 @@ onMounted(() => {
   &__list {
     list-style-type: none;
     padding: 0;
-    height: 100px;
     width: 150px;
 
     display: flex;
@@ -97,7 +96,7 @@ onMounted(() => {
       }
     }
 
-    &:focus-visible {
+    &:focus {
       box-sizing: border-box;
       outline: 1px solid var(--osu-blue);
       border-radius: var(--base-border-radius);
