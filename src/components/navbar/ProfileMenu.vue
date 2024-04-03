@@ -5,6 +5,10 @@
     </button>
     <div class="profile-menu__dropdown" v-if="isMenuOpen" @click="isMenuOpen = false">
       <div class="profile-menu__list">
+        <RouterLink class="profile-menu__item" :to="`/user/${user?.sub?.split('|')[2]}/dashboard`"
+          >Dashboard
+        </RouterLink>
+
         <RouterLink class="profile-menu__item" to="/">Profile</RouterLink>
         <RouterLink class="profile-menu__item" to="/">Settings</RouterLink>
         <button class="profile-menu__item" @click="logout">Sign Out</button>
