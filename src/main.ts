@@ -5,9 +5,9 @@ import App from './App.vue'
 import router from './router'
 import { createAuth0 } from '@auth0/auth0-vue'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
-import { FaSearch } from 'oh-vue-icons/icons'
+import { FaSearch, FaPlus } from 'oh-vue-icons/icons'
 
-addIcons(FaSearch)
+addIcons(FaSearch, FaPlus)
 
 const app = createApp(App)
 
