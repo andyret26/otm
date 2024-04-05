@@ -5,9 +5,12 @@ import App from './App.vue'
 import router from './router'
 import { createAuth0 } from '@auth0/auth0-vue'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
-import { FaSearch, FaPlus } from 'oh-vue-icons/icons'
+import { FaSearch, FaPlus, FaTimes } from 'oh-vue-icons/icons'
+import Toast from 'vue-toastification'
+import type { PluginOptions } from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
-addIcons(FaSearch, FaPlus)
+addIcons(FaSearch, FaPlus, FaTimes)
 
 const app = createApp(App)
 
@@ -21,5 +24,8 @@ app.use(
 )
 
 app.component('v-icon', OhVueIcon)
+app.use(Toast, {
+  position: 'bottom-center'
+} as PluginOptions)
 
 app.mount('#app')
