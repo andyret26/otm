@@ -7,20 +7,22 @@
       '--size': props.size + 'px'
     }"
   >
-    <v-icon :name="props.iconName" />
+    <v-icon :name="props.iconName" :scale="props.iconSize" />
   </button>
 </template>
 
 <script setup lang="ts">
 interface Props {
   iconName: string
-  color: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow'
+  color: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow' | 'red'
   textColor: string
   size?: number
+  iconSize?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: 35
+  size: 35,
+  iconSize: 1
 })
 </script>
 
@@ -40,5 +42,14 @@ const props = withDefaults(defineProps<Props>(), {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &:hover {
+    cursor: pointer;
+    filter: brightness(1.3);
+  }
+
+  &:active {
+    filter: brightness(1.1);
+  }
 }
 </style>

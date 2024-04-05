@@ -7,6 +7,7 @@
       v-model="model"
       :placeholder="props.placeholder"
       autocomplete="off"
+      :style="{ backgroundColor: props.bgColor }"
     />
     <div class="input__icon">
       <v-icon v-if="props.iconName" :name="props.iconName" />
@@ -18,8 +19,11 @@
 interface Props {
   placeholder?: string
   iconName?: string
+  bgColor?: string
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  bgColor: 'var(--bg3)'
+})
 const model = defineModel()
 </script>
 
@@ -29,14 +33,14 @@ const model = defineModel()
   align-items: center;
   max-width: 200px;
   position: relative;
+  border-radius: var(--base-border-radius);
 
   &__field {
-    background-color: var(--bg3);
     border: none;
     color: inherit;
     width: 100%;
     padding: 10px 30px 10px 10px;
-    border-radius: 5px;
+    border-radius: var(--base-border-radius);
 
     &:focus {
       outline: 1px solid #6b575e;

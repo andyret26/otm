@@ -24,5 +24,14 @@ const props = defineProps<Props>()
   padding: 5px 10px;
   border: none;
   border-radius: var(--base-border-radius);
+
+  &:hover {
+    cursor: pointer;
+    filter: grayscale(0.25);
+  }
+
+  &:active {
+    filter: grayscale(0);
+  }
 }
 </style>
