@@ -4,16 +4,18 @@
   --bg1: #1c1719;
   --bg2: #382e32;
   --bg3: #473a3f;
-  --text-color: #fff;
   --base-font-size: 14px;
+  --base-border-radius: 3px;
+  --text-color: #fff;
   --osu-purple: #8c66ff;
   --osu-blue: #54b2e0;
   --osu-green: #73ff66;
   --osu-pink: #ff66ab;
   --osu-brown: #ff9966;
   --osu-yellow: #ffd866;
-  --base-border-radius: 3px;
-
+  --osu-red: #cc3333;
+  --boxshadow-blue: 0px 0px 10px 2px var(--osu-blue);
+  --boxshadow-white: 0px 0px 5px 1px white;
   background-color: var(--bg1);
   color: var(--text-color);
   font-family: 'Comfortaa', sans-serif;
@@ -35,8 +37,13 @@ button {
   font-size: var(--base-font-size);
 }
 
+button:focus {
+  outline: none;
+}
+
 :focus {
-  outline-offset: 0px;
-  outline: 2px solid #ddd;
+  box-shadow: var(--boxshadow-blue);
+  -webkit-box-shadow: var(--boxshadow-blue);
+  -moz-box-shadow: var(--boxshadow-blue);
   border-radius: inherit;
 }
