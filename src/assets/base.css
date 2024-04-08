@@ -37,6 +37,16 @@ button {
   font-size: var(--base-font-size);
 }
 
+a {
+  text-decoration: none;
+  color: var(--text-color);
+}
+
+input {
+  font-family: inherit;
+  font-size: var(--base-font-size);
+}
+
 button:focus {
   outline: none;
 }
