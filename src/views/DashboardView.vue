@@ -1,28 +1,53 @@
 <template>
   <div class="dashboard">
-    <h3 v-if="dashboardData.length <= 0">You have no tournaments at the moment</h3>
-    <div v-else></div>
-    <IconBtn @click="handleCreate" icon-name="fa-plus" color="green" text-color="black" />
+    <h3 v-if="dashboardData && dashboardData.length <= 0">You have no tournaments at the moment</h3>
+    <IconBtn
+      @click="showCreateTournament = true"
+      icon-name="fa-plus"
+      color="green"
+      text-color="black"
+    />
+    <LoadingSpinner v-if="!dashboardData" />
+    <div v-if="dashboardData" class="dashboard__tournaments">
+      <TournamentCard v-for="tourney in dashboardData" :key="tourney.id" :tournament="tourney" />
+    </div>
+    <CreateTournamet
+      v-if="showCreateTournament"
+      @tournament-created="handleTourneyCreated"
+      @close-clicked="showCreateTournament = false"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { getDashboardData } from '@/Api/OthApi'
-import type { DashboardTournament } from '@/Types'
+import { ref, watch } from 'vue'
+import TournamentCard from '@/components/dashboard/TournamentCard.vue'
 import IconBtn from '@/components/general-purpose/IconBtn.vue'
+import LoadingSpinner from '@/components/general-purpose/LoadingSpinner.vue'
+import CreateTournamet from '@/components/dashboard/CreateTournament.vue'
+import { useRoute } from 'vue-router'
+import type { DashboardTournament } from '@/Types'
+import { getDashboardData } from '@/Api/OthApi'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { onMounted, ref } from 'vue'
 
+const route = useRoute()
 const { user } = useAuth0()
 
-const dashboardData = ref<DashboardTournament[]>([])
+const dashboardData = ref<DashboardTournament[] | null>(null)
+const showCreateTournament = ref(false)
 
-onMounted(async () => {
-  await getDashboardData(user.value!.sub!)
-})
+watch(
+  route,
+  async () => {
+    dashboardData.value = await getDashboardData(user.value!.sub!)
+  },
+  { immediate: true }
+)
 
-const handleCreate = () => {
-  console.log('Create tournament')
+const handleTourneyCreated = async () => {
+  dashboardData.value = null
+  dashboardData.value = await getDashboardData(user.value!.sub!)
+  showCreateTournament.value = false
 }
 </script>
 
@@ -31,5 +56,14 @@ const handleCreate = () => {
   display: flex;
   align-items: center;
   flex-direction: column;
+  padding: 50px;
+
+  &__tournaments {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+  }
 }
 </style>
