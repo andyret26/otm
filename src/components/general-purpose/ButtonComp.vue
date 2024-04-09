@@ -9,12 +9,16 @@
 
 <script setup lang="ts">
 interface Props {
-  btnText: string
-  color: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow'
-  textColor: string
+  btnText?: string
+  color?: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow'
+  textColor?: string
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  color: 'purple',
+  textColor: 'white',
+  btnText: 'BtnText'
+})
 </script>
 
 <style scoped lang="scss">

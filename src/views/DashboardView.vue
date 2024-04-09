@@ -26,14 +26,14 @@ import IconBtn from '@/components/general-purpose/IconBtn.vue'
 import LoadingSpinner from '@/components/general-purpose/LoadingSpinner.vue'
 import CreateTournamet from '@/components/dashboard/CreateTournament.vue'
 import { useRoute } from 'vue-router'
-import type { DashboardTournament } from '@/Types'
+import type { Tournament } from '@/Types'
 import { getDashboardData } from '@/Api/OthApi'
 import { useAuth0 } from '@auth0/auth0-vue'
 
 const route = useRoute()
 const { user } = useAuth0()
 
-const dashboardData = ref<DashboardTournament[] | null>(null)
+const dashboardData = ref<Tournament[] | null>(null)
 const showCreateTournament = ref(false)
 
 watch(

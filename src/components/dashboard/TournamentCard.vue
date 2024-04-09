@@ -5,11 +5,11 @@
 </template>
 
 <script setup lang="ts">
-import type { DashboardTournament } from '@/Types'
+import type { Tournament } from '@/Types'
 import { RouterLink } from 'vue-router'
 
 interface Props {
-  tournament: DashboardTournament
+  tournament: Tournament
 }
 
 defineProps<Props>()
