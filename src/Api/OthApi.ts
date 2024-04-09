@@ -1,4 +1,4 @@
-import type { DashboardTournament, CreateTouernament } from '@/Types'
+import type { Tournament, CreateTouernament } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
 let OTH_API: string
@@ -10,9 +10,9 @@ if (process.env.NODE_ENV === 'production') {
   OTH_API = 'http://localhost:5110/api/v1/otm'
 }
 
-export async function getDashboardData(sub: string): Promise<DashboardTournament[]> {
+export async function getDashboardData(sub: string): Promise<Tournament[]> {
   const id = subToId(sub)
-  const resp = await axios.get<DashboardTournament[]>(`${OTH_API}/host/${id}/tournaments`)
+  const resp = await axios.get<Tournament[]>(`${OTH_API}/host/${id}/tournaments`)
   return resp.data
 }
 
@@ -25,6 +25,11 @@ export async function createTournament(
   })
   console.log(resp)
   return resp
+}
+
+export async function getTournamentById(id: number): Promise<Tournament> {
+  const resp = await axios.get<Tournament>(`${OTH_API}/tournament/${id}`)
+  return resp.data
 }
 
 function subToId(sub: string): number {
