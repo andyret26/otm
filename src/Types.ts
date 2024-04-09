@@ -1,7 +1,11 @@
-export type DashboardTournament = {
+export type Tournament = {
   id: number
   name: string
   formuPostLink?: string
+  isTeamTourney: boolean
+  format: '2v2' | '3v3' | '4v4'
+  maxTeamSize: number
+  rankRange: string
 
   rounds: Round[]
   players: Player[]
@@ -37,10 +41,19 @@ export type Staff = {
 export type CreateTouernament = {
   name: string
   formuPostLink?: string
+  isTeamTourney: boolean
+  format: '1v1' | '2v2' | '3v3' | '4v4'
+  maxTeamSize: number
+  rankRange: string
 }
 
 export type ResponseError = {
   title: string
   status: number
   detail: string
+}
+
+export type RadioOption = {
+  label: string
+  value: string
 }
