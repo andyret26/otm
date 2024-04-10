@@ -1,6 +1,7 @@
 <template>
   <button
     class="btn"
+    title="Create Tournament"
     :style="{
       backgroundColor: `var(--osu-${props.color})`,
       color: props.textColor,

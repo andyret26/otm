@@ -57,3 +57,7 @@ button:focus {
   -moz-box-shadow: var(--boxshadow-blue);
   border-radius: inherit;
 }
+
+:focus-visible {
+  outline: none;
+}
