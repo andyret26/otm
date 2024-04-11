@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import InputField from '../commone/InputField.vue'
-import ButtonComp from '../commone/ButtonComp.vue'
+import InputField from '../common/InputField.vue'
+import ButtonComp from '../common/ButtonComp.vue'
 import ProfileMenu from './ProfileMenu.vue'
 import { ref } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'

@@ -49,17 +49,17 @@
 </template>
 
 <script setup lang="ts">
-import ButtonComp from '../commone/ButtonComp.vue'
-import InputField from '../commone/InputField.vue'
-import IconBtn from '../commone/IconBtn.vue'
-import SelectBox from '../commone/SelectBox.vue'
+import ButtonComp from '../common/ButtonComp.vue'
+import InputField from '../common/InputField.vue'
+import IconBtn from '../common/IconBtn.vue'
+import SelectBox from '../common/SelectBox.vue'
 import { createTournament } from '@/Api/OthApi'
 import { ref, watch } from 'vue'
 import type { CreateTouernament, ResponseError } from '@/Types'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useToast } from 'vue-toastification'
 import { AxiosError } from 'axios'
-import RadioGroup from '../commone/RadioGroup.vue'
+import RadioGroup from '../common/RadioGroup.vue'
 
 const emit = defineEmits(['tournamentCreated', 'closeClicked'])
 const { idTokenClaims } = useAuth0()
