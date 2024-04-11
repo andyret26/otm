@@ -1,6 +1,11 @@
 <template>
   <RouterLink :to="`/tournament/${tournament.id}`" class="tournament-card">
-    <p class="tournament-card__name">{{ tournament.name }}</p>
+    <div class="tournament-card__format">
+      <p>{{ tournament.format }}</p>
+      <p v-if="tournament.isTeamTourney">Teams of {{ tournament.maxTeamSize }}</p>
+    </div>
+    <h2 class="tournament-card__name">{{ tournament.name }}</h2>
+    <p class="tournament-card__rank-range">{{ tournament.rankRange }}</p>
   </RouterLink>
 </template>
 
@@ -22,10 +27,32 @@ defineProps<Props>()
   border-radius: 99999px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  text-align: center;
+  justify-content: space-between;
+  padding: 0 40px;
 
   &:hover {
     background-color: var(--bg2);
+  }
+
+  &__format {
+    white-space: nowrap;
+    width: 80px;
+  }
+  &__rank-range {
+    white-space: nowrap;
+    width: 80px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .tournament-card {
+    flex-direction: column;
+    height: auto;
+    border-radius: var(--base-border-radius);
+    &__format {
+      order: 2;
+    }
   }
 }
 </style>
