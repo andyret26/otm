@@ -9,8 +9,8 @@ export type Tournament = {
 
   rounds: Round[]
   players: Player[]
-  Teams: Team[]
-  Staff: Staff[]
+  teams: Team[]
+  staff: Staff[]
 }
 
 export type Round = {

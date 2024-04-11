@@ -1,7 +1,6 @@
 <template>
   <button
     class="btn"
-    title="Create Tournament"
     :style="{
       backgroundColor: `var(--osu-${props.color})`,
       color: props.textColor,
@@ -15,15 +14,17 @@
 <script setup lang="ts">
 interface Props {
   iconName: string
-  color: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow' | 'red'
-  textColor: string
+  color?: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow' | 'red'
+  textColor?: string
   size?: number
   iconSize?: number
 }
 
 const props = withDefaults(defineProps<Props>(), {
   size: 35,
-  iconSize: 1
+  iconSize: 1,
+  color: 'blue',
+  textColor: 'white'
 })
 </script>
 

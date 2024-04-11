@@ -3,6 +3,7 @@
     <h2 class="create-tournament__header">Create Tournament</h2>
     <div class="create-tournament__close">
       <IconBtn
+        title="Close"
         @click="emit('closeClicked')"
         color="red"
         icon-name="fa-times"

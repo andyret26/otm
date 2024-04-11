@@ -2,6 +2,7 @@
   <div class="dashboard">
     <h3 v-if="dashboardData && dashboardData.length <= 0">You have no tournaments at the moment</h3>
     <IconBtn
+      title="Create Tournament"
       @click="showCreateTournament = true"
       icon-name="fa-plus"
       color="green"
