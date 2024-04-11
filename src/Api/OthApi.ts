@@ -23,7 +23,6 @@ export async function createTournament(
   const resp = await axios.post(`${OTH_API}/tournament`, tournament, {
     headers: { Authorization: `Bearer ${token}` }
   })
-  console.log(resp)
   return resp
 }
 

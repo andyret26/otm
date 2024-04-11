@@ -1,7 +1,11 @@
 <template>
   <button
     class="btn"
-    :style="{ backgroundColor: `var(--osu-${props.color})`, color: props.textColor }"
+    :disabled="props.disabled"
+    :style="{
+      backgroundColor: `var(--osu-${props.color})`,
+      color: props.textColor
+    }"
   >
     {{ props.btnText }}
   </button>
@@ -12,12 +16,14 @@ interface Props {
   btnText?: string
   color?: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow'
   textColor?: string
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   color: 'purple',
   textColor: 'white',
-  btnText: 'BtnText'
+  btnText: 'BtnText',
+  disabled: false
 })
 </script>
 
@@ -36,6 +42,11 @@ const props = withDefaults(defineProps<Props>(), {
 
   &:active {
     filter: grayscale(0);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    filter: grayscale(0.75);
   }
 }
 </style>

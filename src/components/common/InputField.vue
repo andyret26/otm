@@ -7,7 +7,10 @@
       v-model="model"
       :placeholder="props.placeholder"
       autocomplete="off"
-      :style="{ backgroundColor: props.bgColor }"
+      :style="{
+        backgroundColor: props.bgColor,
+        outline: validTextLength ? 'none' : '2px solid var(--osu-red)'
+      }"
     />
     <div class="input__icon">
       <v-icon v-if="props.iconName" :name="props.iconName" />
@@ -16,15 +19,27 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
+
 interface Props {
   placeholder?: string
   iconName?: string
   bgColor?: string
+  maxTextLength?: number
 }
 const props = withDefaults(defineProps<Props>(), {
   bgColor: 'var(--bg3)'
 })
 const model = defineModel()
+
+const validTextLength = computed<boolean>(() => {
+  const modelText = model.value as string
+
+  if (props.maxTextLength && modelText.length > props.maxTextLength) {
+    return false
+  }
+  return true
+})
 </script>
 
 <style scoped lang="scss">

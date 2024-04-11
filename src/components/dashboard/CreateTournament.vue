@@ -17,6 +17,7 @@
       placeholder="Name"
       v-model="name"
       label-text="Tournament Name"
+      :max-text-length="25"
     />
     <InputField :bg-color="'var(--bg3)'" placeholder="Forum post link" v-model="forumPostLink" />
     <RadioGroup
@@ -44,7 +45,13 @@
     />
     <InputField :bg-color="'var(--bg3)'" placeholder="Rank range" v-model="rankRange" />
 
-    <ButtonComp @click="handleCreateClick" btn-text="Create" color="green" text-color="black" />
+    <ButtonComp
+      @click="handleCreateClick"
+      btn-text="Create"
+      color="green"
+      text-color="black"
+      :disabled="creatDisabled"
+    />
   </div>
 </template>
 
@@ -60,6 +67,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import { useToast } from 'vue-toastification'
 import { AxiosError } from 'axios'
 import RadioGroup from '../common/RadioGroup.vue'
+import { validateCreatTournament } from '@/Utils/HelperFunctions'
 
 const emit = defineEmits(['tournamentCreated', 'closeClicked'])
 const { idTokenClaims } = useAuth0()
@@ -80,6 +88,7 @@ const selectedFormat = ref<'1v1' | '2v2' | '3v3' | '4v4'>('1v1')
 const seclectedTeamSize = ref<string>('1')
 const rankRange = ref('')
 const formatDisabled = ref(selectedOption.value === 'Solo')
+const creatDisabled = ref(false)
 
 watch(selectedOption, (newVal) => {
   if (newVal === 'Solo') {
@@ -90,11 +99,7 @@ watch(selectedOption, (newVal) => {
 })
 
 const handleCreateClick = async () => {
-  console.log(selectedOption.value)
-  const toastId = toast.info('Creating tournament...', {
-    hideProgressBar: true,
-    timeout: 0
-  })
+  creatDisabled.value = true
 
   const tournamentToCreate: CreateTouernament = {
     name: name.value,
@@ -104,6 +109,19 @@ const handleCreateClick = async () => {
     maxTeamSize: parseInt(seclectedTeamSize.value),
     rankRange: rankRange.value
   }
+
+  const errors = validateCreatTournament(tournamentToCreate)
+  if (errors.length !== 0) {
+    toast.error(errors.join(',\n'))
+    creatDisabled.value = false
+
+    return
+  }
+
+  const toastId = toast.info('Creating tournament...', {
+    hideProgressBar: true,
+    timeout: 0
+  })
 
   const token = idTokenClaims.value!.__raw
 
@@ -116,6 +134,8 @@ const handleCreateClick = async () => {
     const err = e as AxiosError<ResponseError>
     toast.dismiss(toastId)
     toast.error(`Error: ${err.response!.data.detail}`)
+  } finally {
+    creatDisabled.value = false
   }
 }
 </script>
