@@ -23,8 +23,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import TournamentCard from '@/components/dashboard/TournamentCard.vue'
-import IconBtn from '@/components/general-purpose/IconBtn.vue'
-import LoadingSpinner from '@/components/general-purpose/LoadingSpinner.vue'
+import IconBtn from '@/components/commone/IconBtn.vue'
+import LoadingSpinner from '@/components/commone/LoadingSpinner.vue'
 import CreateTournamet from '@/components/dashboard/CreateTournament.vue'
 import { useRoute } from 'vue-router'
 import type { Tournament } from '@/Types'
