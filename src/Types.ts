@@ -49,8 +49,14 @@ export type CreateTouernament = {
 }
 
 export type PlayerRegister = {
-  id: string
-  discord_tag?: string
+  osuUserId: string | number
+  discordUsername?: string
+}
+
+export type TeamRegister = {
+  tournamentId: number
+  teamName: string
+  players: PlayerRegister[]
 }
 
 export type ResponseError = {
