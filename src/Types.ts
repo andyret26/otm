@@ -24,6 +24,7 @@ export type Player = {
   avatar_url: string
   global_rank?: number
   country_code: string
+  discord_tag?: string
 }
 
 export type Team = {
@@ -45,6 +46,11 @@ export type CreateTouernament = {
   format: '1v1' | '2v2' | '3v3' | '4v4'
   maxTeamSize: number
   rankRange: string
+}
+
+export type PlayerRegister = {
+  id: string
+  discord_tag?: string
 }
 
 export type ResponseError = {

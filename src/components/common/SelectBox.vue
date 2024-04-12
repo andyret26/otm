@@ -30,7 +30,8 @@ const model = defineModel()
 
 <style scoped lang="scss">
 .select {
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
   &__label {
     font-size: 16px;
     margin-left: 5px;

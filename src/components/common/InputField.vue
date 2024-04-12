@@ -1,7 +1,8 @@
 <template>
   <div class="input">
+    <label class="input__label" v-if="label" :for="id">{{ label }}</label>
     <input
-      id="input"
+      :id="id"
       class="input__field"
       type="text"
       v-model="model"
@@ -9,7 +10,8 @@
       autocomplete="off"
       :style="{
         backgroundColor: props.bgColor,
-        outline: validTextLength ? 'none' : '2px solid var(--osu-red)'
+        outline: validTextLength ? 'none' : '2px solid var(--osu-red)',
+        marginTop: label ? '5px' : '0'
       }"
     />
     <div class="input__icon">
@@ -20,12 +22,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+const id = 'input-' + Math.random().toString(36).substring(2, 9)
 
 interface Props {
   placeholder?: string
   iconName?: string
   bgColor?: string
   maxTextLength?: number
+  label?: string
 }
 const props = withDefaults(defineProps<Props>(), {
   bgColor: 'var(--bg3)'
@@ -44,13 +48,18 @@ const validTextLength = computed<boolean>(() => {
 
 <style scoped lang="scss">
 .input {
-  display: flex;
-  align-items: center;
+  width: 100%;
   max-width: 200px;
   position: relative;
   border-radius: var(--base-border-radius);
 
+  &__label {
+    font-size: 15px;
+    font-weight: 900;
+  }
+
   &__field {
+    box-sizing: border-box;
     border: none;
     color: inherit;
     width: 100%;
@@ -64,6 +73,7 @@ const validTextLength = computed<boolean>(() => {
 
   &__icon {
     position: absolute;
+    top: 25%;
     right: 10px;
   }
 }
