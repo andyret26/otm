@@ -6,6 +6,7 @@
       v-model="teamName"
       placeholder="Team name"
       label="Team name"
+      :max-text-length="25"
     />
     <div class="register__player-inputs" v-for="(pi, i) in playerInputs" :key="i">
       <p class="register__player-label">Player {{ i + 1 }}</p>
@@ -21,6 +22,7 @@
       color="green"
       text-color="black"
       @click="handleRegisterTeam"
+      :disabled="regBtnDisabled"
     />
     <ButtonComp
       v-else
@@ -28,24 +30,30 @@
       color="green"
       text-color="black"
       @click="handleRegisterPlayer"
+      :disabled="regBtnDisabled"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PlayerRegister, Tournament } from '@/Types'
+import type { PlayerRegister, ResponseError, Tournament } from '@/Types'
 import InputField from '../common/InputField.vue'
 import { onMounted, ref } from 'vue'
 import ButtonComp from '../common/ButtonComp.vue'
 import { registerTeam } from '@/Api/OthApi'
+import type { AxiosError } from 'axios'
+import { useToast } from 'vue-toastification'
 
 interface Props {
   tournament: Tournament
 }
 const props = defineProps<Props>()
+const emit = defineEmits(['team-reg-success'])
+const toast = useToast()
 
 const teamName = ref('')
 const playerInputs = ref<PlayerRegister[]>([])
+const regBtnDisabled = ref(false)
 
 onMounted(() => {
   for (let i = 0; i < props.tournament.maxTeamSize; i++) {
@@ -57,7 +65,7 @@ onMounted(() => {
 })
 
 const handleRegisterTeam = async () => {
-  // convert osuUserIdToNumber
+  regBtnDisabled.value = true
   playerInputs.value = playerInputs.value.map((pi) => {
     return {
       ...pi,
@@ -66,16 +74,22 @@ const handleRegisterTeam = async () => {
   })
 
   if (props.tournament.isTeamTourney) {
-    const resp = await registerTeam({
-      tournamentId: props.tournament.id,
-      teamName: teamName.value,
-      players: playerInputs.value
-    })
-
-    if (resp.status === 200) {
-      console.log('Team registered')
-      //TODO: emit added team to parent component to update tournament data
+    try {
+      const resp = await registerTeam({
+        tournamentId: props.tournament.id,
+        teamName: teamName.value,
+        players: playerInputs.value
+      })
+      toast.success('Team registered successfully')
+      emit('team-reg-success', resp.data.teams)
+    } catch (e) {
+      const err = e as AxiosError<ResponseError>
+      toast.error(err.response?.data.detail)
+    } finally {
+      regBtnDisabled.value = false
     }
+
+    //TODO: emit added team to parent component to update tournament data
   }
 }
 

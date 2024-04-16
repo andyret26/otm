@@ -44,7 +44,7 @@
         <p v-if="tournament.staff.length <= 0">No Staff</p>
       </div>
       <div v-else-if="activeBtn === 'Register'">
-        <RegisterParticipant :tournament="tournament" />
+        <RegisterParticipant :tournament="tournament" @team-reg-success="handleTeamRegSuccess" />
       </div>
     </div>
   </div>
@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import { getTournamentById } from '@/Api/OthApi'
-import type { Tournament } from '@/Types'
+import type { Team, Tournament } from '@/Types'
 import ButtonComp from '@/components/common/ButtonComp.vue'
 import IconBtn from '@/components/common/IconBtn.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
@@ -77,6 +77,10 @@ const handleBtnClick = (e: MouseEvent) => {
   const target = e.target as HTMLButtonElement
   activeBtn.value = target.innerText
   router.push({ hash: '#' + target.innerText })
+}
+
+const handleTeamRegSuccess = (teams: Team[]) => {
+  tournament.value!.teams = teams
 }
 </script>
 
