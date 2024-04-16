@@ -2,9 +2,9 @@
   <div class="navbar">
     <div class="navbar__inner">
       <div class="navbar__left">
-        <div class="navbar__logo-wrapper" @click="handleLogoClick">
-          <img class="navbar__logo" src="" alt="logo" />
-        </div>
+        <RouterLink class="navbar__logo-wrapper" to="/">
+          <img class="navbar__logo" src="/public/Otm-logo.png" alt="logo" />
+        </RouterLink>
         <InputField icon-name="fa-search" placeholder="Search tournament..." v-model="searchText" />
       </div>
 
@@ -35,14 +35,6 @@ var router = useRouter()
 var { isAuthenticated, loginWithPopup, user, logout } = useAuth0()
 const searchText = ref('')
 
-const handleLogoClick = () => {
-  if (isAuthenticated) {
-    router.push(`/user/${user.value?.sub?.split('|')[2]}/dashboard`)
-  } else {
-    router.push('/')
-  }
-}
-
 const handleLogin = async () => {
   await loginWithPopup()
   router.push(`/user/${user.value?.sub?.split('|')[2]}/dashboard`)
@@ -72,6 +64,13 @@ const handleLogout = () => {
   &__logo-wrapper {
     color: white;
     cursor: pointer;
+    width: 55px;
+    height: 55px;
+    border-radius: 99999px;
+  }
+
+  &__logo {
+    width: inherit;
   }
 
   &__left {
