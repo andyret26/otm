@@ -143,10 +143,9 @@ const handleCreateClick = async () => {
 <style scoped lang="scss">
 .create-tournament {
   position: absolute;
+  top: 100px;
   width: 300px;
   height: 500px;
-  top: 50%;
-  margin-top: -130px;
   background-color: var(--bg2);
   display: flex;
   flex-direction: column;

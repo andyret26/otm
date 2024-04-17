@@ -3,7 +3,7 @@
     <LoadingSpinner v-if="!tournament" />
     <div v-else class="tournament__container">
       <div class="tournament__header">
-        <h2 class="tournament__header-text">{{ tournament?.name }}</h2>
+        <h1 class="tournament__header-text">{{ tournament?.name }}</h1>
         <div class="tournament__header-btns">
           <ButtonComp
             btn-text="Rounds"
@@ -127,9 +127,15 @@ const handlePlayerRegSuccess = (player: Player) => {
   &__teams-container,
   &__players-container,
   &__staff-container {
+    min-width: 360px;
+    max-width: 1080px;
+    max-height: 70vh;
+    overflow-y: auto;
+    margin: 0px 20px;
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
   }
 }
 </style>
