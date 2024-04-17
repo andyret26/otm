@@ -24,7 +24,7 @@ export type Player = {
   avatar_url: string
   global_rank?: number
   country_code: string
-  discord_tag?: string
+  discordUsername?: string
 }
 
 export type Team = {

@@ -40,7 +40,7 @@ import type { PlayerRegister, ResponseError, Tournament } from '@/Types'
 import InputField from '../common/InputField.vue'
 import { onMounted, ref } from 'vue'
 import ButtonComp from '../common/ButtonComp.vue'
-import { registerTeam } from '@/Api/OthApi'
+import { registerPlayer, registerTeam } from '@/Api/OthApi'
 import type { AxiosError } from 'axios'
 import { useToast } from 'vue-toastification'
 
@@ -48,7 +48,7 @@ interface Props {
   tournament: Tournament
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['team-reg-success'])
+const emit = defineEmits(['team-reg-success', 'player-reg-success'])
 const toast = useToast()
 
 const teamName = ref('')
@@ -88,12 +88,26 @@ const handleRegisterTeam = async () => {
     } finally {
       regBtnDisabled.value = false
     }
-
-    //TODO: emit added team to parent component to update tournament data
   }
 }
 
-const handleRegisterPlayer = () => {}
+const handleRegisterPlayer = async () => {
+  regBtnDisabled.value = true
+
+  try {
+    const resp = await registerPlayer(props.tournament.id, {
+      osuUserId: Number(playerInputs.value[0].osuUserId),
+      discordUsername: playerInputs.value[0].discordUsername
+    })
+    toast.success('Player registered successfully')
+    emit('player-reg-success', resp.data)
+  } catch (e) {
+    var err = e as AxiosError<ResponseError>
+    toast.error(err.response?.data.detail)
+  } finally {
+    regBtnDisabled.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">

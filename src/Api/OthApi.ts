@@ -1,4 +1,4 @@
-import type { Tournament, CreateTouernament, TeamRegister } from '@/Types'
+import type { Tournament, CreateTouernament, TeamRegister, PlayerRegister, Player } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
 let OTH_API: string
@@ -35,6 +35,17 @@ export async function registerTeam(team: TeamRegister): Promise<AxiosResponse<To
   const resp = await axios.post<Tournament>(
     `${OTH_API}/tournament/${team.tournamentId}/register-team`,
     team
+  )
+  return resp
+}
+
+export async function registerPlayer(
+  tournamentId: number,
+  player: PlayerRegister
+): Promise<AxiosResponse<Player>> {
+  const resp = await axios.post<Player>(
+    `${OTH_API}/tournament/${tournamentId}/register-player`,
+    player
   )
   return resp
 }
