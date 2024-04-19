@@ -28,19 +28,39 @@
         </div>
       </div>
 
-      <div v-if="activeBtn === 'Rounds'" class="tournament__rounds-container">
+      <div v-if="activeBtn === 'Rounds'" class="tournament__tab-container">
         <p v-if="tournament.rounds.length <= 0">No Rounds</p>
-        <IconBtn icon-name="fa-plus" color="green" text-color="black" title="Add round" />
-        <RoundCard v-for="round in tournament.rounds" :key="round.id" :round="round" />
+        <IconBtn
+          v-if="auth.isAuthenticated"
+          icon-name="fa-plus"
+          color="green"
+          text-color="black"
+          title="Add round"
+          @click="showCreateRound = true"
+        />
+        <div class="tournament__cards-container">
+          <RoundCard v-for="round in tournament.rounds" :key="round.id" :round="round" />
+        </div>
+        <CreateRound
+          v-if="showCreateRound"
+          @closeClicked="showCreateRound = false"
+          :tournament-id="tournament.id"
+          @roundCreated="(e: Round) => tournament?.rounds.push(e)"
+        />
       </div>
-      <div v-else-if="activeBtn === 'Teams'" class="tournament__teams-container">
+
+      <div v-else-if="activeBtn === 'Teams'" class="tournament__tab-container">
         <p v-if="tournament.teams.length <= 0">No Teams</p>
-        <TeamCard v-for="team in tournament.teams" :key="team.id" :team="team" />
+        <div class="tournament__cards-container">
+          <TeamCard v-for="team in tournament.teams" :key="team.id" :team="team" />
+        </div>
       </div>
-      <div v-else-if="activeBtn === 'Players'" class="tournament__players-container">
+
+      <div v-else-if="activeBtn === 'Players'" class="tournament__tab-container">
         <p v-if="tournament.players.length <= 0">No Players</p>
       </div>
-      <div v-else-if="activeBtn === 'Staff'" class="tournament__staff-container">
+
+      <div v-else-if="activeBtn === 'Staff'" class="tournament__tab-container">
         <p v-if="tournament.staff.length <= 0">No Staff</p>
       </div>
       <div v-else-if="activeBtn === 'Register'">
@@ -56,21 +76,25 @@
 
 <script setup lang="ts">
 import { getTournamentById } from '@/Api/OthApi'
-import type { Player, Team, Tournament } from '@/Types'
+import type { Player, Round, Team, Tournament } from '@/Types'
 import ButtonComp from '@/components/common/ButtonComp.vue'
 import IconBtn from '@/components/common/IconBtn.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import RegisterParticipant from '@/components/tournament/RegisterParticipant.vue'
-import RoundCard from '@/components/tournament/RoundCard.vue'
+import RoundCard from '@/components/cards/RoundCard.vue'
 import TeamCard from '@/components/tournament/TeamCard.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
+import CreateRound from '@/components/tournament/CreateRound.vue'
 
 const route = useRoute()
 const router = useRouter()
+const auth = useAuth0()
 
 const tournament = ref<Tournament | null>(null)
 const activeBtn = ref<string>('Rounds')
+const showCreateRound = ref<boolean>(false)
 
 onMounted(async () => {
   tournament.value = await getTournamentById(parseInt(route.path.split('/')[2]))
@@ -123,11 +147,8 @@ const handlePlayerRegSuccess = (player: Player) => {
     gap: 10px;
   }
 
-  &__rounds-container,
-  &__teams-container,
-  &__players-container,
-  &__staff-container {
-    min-width: 360px;
+  &__cards-container {
+    min-width: 340px;
     max-width: 1080px;
     max-height: 70vh;
     overflow-y: auto;
@@ -136,6 +157,13 @@ const handlePlayerRegSuccess = (player: Player) => {
     flex-wrap: wrap;
     justify-content: center;
     gap: 10px;
+  }
+
+  &__tab-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 }
 </style>

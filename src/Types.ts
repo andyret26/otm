@@ -18,6 +18,21 @@ export type Round = {
   name: string
 }
 
+export type Map = {
+  id: number
+  orderNumber: string
+  mod: string
+  name: string
+  sr: number
+  bpm: number
+  length: number
+  cs: number
+  ar: number
+  od: number
+  mapper: string
+  link?: string
+}
+
 export type Player = {
   id: number
   username: string

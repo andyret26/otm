@@ -1,5 +1,5 @@
 <template>
-  <div class="round">round</div>
+  <div>Round</div>
 </template>
 
 <script setup lang="ts">
