@@ -17,13 +17,23 @@ const router = createRouter({
           path: 'dashboard',
           name: 'Dashboard',
           component: () => import('../views/DashboardView.vue')
-        },
-        {
-          path: '/tournament/:id',
-          name: 'Tournament',
-          component: () => import('../views/TournamentView.vue')
         }
       ]
+    },
+    {
+      path: '/tournament/:id',
+      name: 'Tournament',
+      component: () => import('../views/TournamentView.vue')
+    },
+    {
+      path: '/tournament/:id/round/:roundId/mappool',
+      name: 'mappool',
+      component: () => import('@/views/MappoolView.vue')
+    },
+    {
+      path: '/tournament/:id/round/:name/stats',
+      name: 'stats',
+      component: () => import('@/views/StatsView.vue')
     }
   ]
 })

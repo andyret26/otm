@@ -38,14 +38,20 @@
           title="Add round"
           @click="showCreateRound = true"
         />
-        <div class="tournament__cards-container">
-          <RoundCard v-for="round in tournament.rounds" :key="round.id" :round="round" />
+        <div class="tournament__round-cards">
+          <RoundCard
+            v-for="round in tournament.rounds"
+            :key="round.id"
+            :round="round"
+            :tournament-id="tournament.id"
+          />
         </div>
+
         <CreateRound
           v-if="showCreateRound"
           @closeClicked="showCreateRound = false"
           :tournament-id="tournament.id"
-          @roundCreated="(e: Round) => tournament?.rounds.push(e)"
+          @roundCreated="handleRoundCreated"
         />
       </div>
 
@@ -98,6 +104,7 @@ const showCreateRound = ref<boolean>(false)
 
 onMounted(async () => {
   tournament.value = await getTournamentById(parseInt(route.path.split('/')[2]))
+  tournament.value.rounds = tournament.value.rounds.reverse()
   activeBtn.value = route.hash.replace('#', '') || 'Rounds'
 })
 
@@ -113,6 +120,10 @@ const handleTeamRegSuccess = (teams: Team[]) => {
 
 const handlePlayerRegSuccess = (player: Player) => {
   tournament.value!.players.push(player)
+}
+
+const handleRoundCreated = (round: Round) => {
+  tournament.value!.rounds = [round, ...tournament.value!.rounds]
 }
 </script>
 
@@ -164,6 +175,14 @@ const handlePlayerRegSuccess = (player: Player) => {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+  }
+
+  &__round-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1080px;
   }
 }
 </style>
