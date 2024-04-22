@@ -64,6 +64,9 @@
 
       <div v-else-if="activeBtn === 'Players'" class="tournament__tab-container">
         <p v-if="tournament.players.length <= 0">No Players</p>
+        <div class="tournament__cards-container">
+          <PlayerCard v-for="player in tournament.players" :key="player.id" :p="player" />
+        </div>
       </div>
 
       <div v-else-if="activeBtn === 'Staff'" class="tournament__tab-container">
@@ -81,18 +84,19 @@
 </template>
 
 <script setup lang="ts">
-import { getTournamentById } from '@/Api/OthApi'
-import type { Player, Round, Team, Tournament } from '@/Types'
-import ButtonComp from '@/components/common/ButtonComp.vue'
-import IconBtn from '@/components/common/IconBtn.vue'
-import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import RegisterParticipant from '@/components/tournament/RegisterParticipant.vue'
-import RoundCard from '@/components/cards/RoundCard.vue'
-import TeamCard from '@/components/tournament/TeamCard.vue'
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { useAuth0 } from '@auth0/auth0-vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import CreateRound from '@/components/tournament/CreateRound.vue'
+import type { Player, Round, Team, Tournament } from '@/Types'
+import TeamCard from '@/components/tournament/TeamCard.vue'
+import ButtonComp from '@/components/common/ButtonComp.vue'
+import PlayerCard from '@/components/cards/PlayerCard.vue'
+import RoundCard from '@/components/cards/RoundCard.vue'
+import IconBtn from '@/components/common/IconBtn.vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getTournamentById } from '@/Api/OtmApi'
+import { useAuth0 } from '@auth0/auth0-vue'
+import { onMounted, ref } from 'vue'
 
 const route = useRoute()
 const router = useRouter()

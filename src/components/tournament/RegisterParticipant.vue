@@ -40,7 +40,7 @@ import type { PlayerRegister, ResponseError, Tournament } from '@/Types'
 import InputField from '../common/InputField.vue'
 import { onMounted, ref } from 'vue'
 import ButtonComp from '../common/ButtonComp.vue'
-import { registerPlayer, registerTeam } from '@/Api/OthApi'
+import { registerPlayer, registerTeam } from '@/Api/OtmApi'
 import type { AxiosError } from 'axios'
 import { useToast } from 'vue-toastification'
 

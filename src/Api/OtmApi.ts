@@ -8,18 +8,30 @@ import type {
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
-let OTH_API: string
+let otm_API: string
 // @ts-ignore
 if (process.env.NODE_ENV === 'production') {
-  OTH_API = 'https://oth-api.azurewebsites.net/api/v1/otm'
+  otm_API = 'https://otm-api.azurewebsites.net/api/v1/otm'
   // @ts-ignore
 } else if (process.env.NODE_ENV === 'development') {
-  OTH_API = 'http://localhost:5110/api/v1/otm'
+  otm_API = 'http://localhost:5236/api/v1'
+}
+
+export async function addHost(sub: string, token: string): Promise<void> {
+  const id = subToId(sub)
+  await axios.post(
+    `${otm_API}/host/${id}`,
+    {},
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  )
+  return
 }
 
 export async function getDashboardData(sub: string): Promise<Tournament[]> {
   const id = subToId(sub)
-  const resp = await axios.get<Tournament[]>(`${OTH_API}/host/${id}/tournaments`)
+  const resp = await axios.get<Tournament[]>(`${otm_API}/host/${id}/tournaments`)
   return resp.data
 }
 
@@ -27,20 +39,20 @@ export async function createTournament(
   tournament: CreateTouernament,
   token: string
 ): Promise<AxiosResponse> {
-  const resp = await axios.post(`${OTH_API}/tournament`, tournament, {
+  const resp = await axios.post(`${otm_API}/tournament`, tournament, {
     headers: { Authorization: `Bearer ${token}` }
   })
   return resp
 }
 
 export async function getTournamentById(id: number): Promise<Tournament> {
-  const resp = await axios.get<Tournament>(`${OTH_API}/tournament/${id}`)
+  const resp = await axios.get<Tournament>(`${otm_API}/tournament/${id}`)
   return resp.data
 }
 
 export async function registerTeam(team: TeamRegister): Promise<AxiosResponse<Tournament>> {
   const resp = await axios.post<Tournament>(
-    `${OTH_API}/tournament/${team.tournamentId}/register-team`,
+    `${otm_API}/tournament/${team.tournamentId}/register-team`,
     team
   )
   return resp
@@ -51,7 +63,7 @@ export async function registerPlayer(
   player: PlayerRegister
 ): Promise<AxiosResponse<Player>> {
   const resp = await axios.post<Player>(
-    `${OTH_API}/tournament/${tournamentId}/register-player`,
+    `${otm_API}/tournament/${tournamentId}/register-player`,
     player
   )
   return resp
@@ -63,7 +75,7 @@ export async function addRound(
   Token: string
 ): Promise<AxiosResponse<Round>> {
   const resp = await axios.post<Round>(
-    `${OTH_API}/tournament/${tournamentId}/add-round`,
+    `${otm_API}/tournament/${tournamentId}/add-round`,
     { name: roundName },
     {
       headers: { Authorization: `Bearer ${Token}` }

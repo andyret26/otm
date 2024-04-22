@@ -28,7 +28,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import CreateTournamet from '@/components/dashboard/CreateTournament.vue'
 import { useRoute } from 'vue-router'
 import type { Tournament } from '@/Types'
-import { getDashboardData } from '@/Api/OthApi'
+import { getDashboardData } from '@/Api/OtmApi'
 import { useAuth0 } from '@auth0/auth0-vue'
 
 const route = useRoute()

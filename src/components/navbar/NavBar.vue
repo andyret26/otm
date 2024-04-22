@@ -30,13 +30,15 @@ import ProfileMenu from './ProfileMenu.vue'
 import { ref } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useRouter } from 'vue-router'
+import { addHost } from '@/Api/OtmApi'
 
 var router = useRouter()
-var { isAuthenticated, loginWithPopup, user, logout } = useAuth0()
+var { isAuthenticated, loginWithPopup, user, logout, idTokenClaims } = useAuth0()
 const searchText = ref('')
 
 const handleLogin = async () => {
   await loginWithPopup()
+  await addHost(user!.value!.sub!, idTokenClaims.value!.__raw)
   router.push(`/user/${user.value?.sub?.split('|')[2]}/dashboard`)
 }
 const handleLogout = () => {

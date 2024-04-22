@@ -38,7 +38,7 @@ import { ref } from 'vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useToast } from 'vue-toastification'
 import { AxiosError } from 'axios'
-import { addRound } from '@/Api/OthApi'
+import { addRound } from '@/Api/OtmApi'
 import type { ResponseError } from '@/Types'
 
 interface Props {
