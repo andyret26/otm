@@ -11,10 +11,10 @@ import axios, { type AxiosResponse } from 'axios'
 let otm_API: string
 // @ts-ignore
 if (process.env.NODE_ENV === 'production') {
-  otm_API = 'https://otm-api.azurewebsites.net/api/v1/otm'
+  otm_API = 'https://osu-tm-api.azurewebsites.net/api/v1'
   // @ts-ignore
 } else if (process.env.NODE_ENV === 'development') {
-  otm_API = 'http://localhost:5236/api/v1'
+  otm_API = 'http://localhost:80/api/v1'
 }
 
 export async function addHost(sub: string, token: string): Promise<void> {
