@@ -4,7 +4,9 @@ import type {
   TeamRegister,
   PlayerRegister,
   Player,
-  Round
+  Round,
+  PostMapSuggestion,
+  Map
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -81,6 +83,23 @@ export async function addRound(
       headers: { Authorization: `Bearer ${Token}` }
     }
   )
+  return resp
+}
+
+export async function getRound(roundId: number): Promise<AxiosResponse<Round>> {
+  const resp = await axios.get<Round>(`${otm_API}/round/${roundId}`)
+  return resp
+}
+
+export async function addMapSuggestion(
+  roundId: number,
+  suggestion: PostMapSuggestion,
+  token: string
+): Promise<AxiosResponse<Map>> {
+  const resp = await axios.post<Map>(`${otm_API}/round/${roundId}/suggestion`, suggestion, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  console.log(resp.data)
   return resp
 }
 

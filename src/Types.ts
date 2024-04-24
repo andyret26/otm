@@ -16,6 +16,8 @@ export type Tournament = {
 export type Round = {
   id: number
   name: string
+  mappool: Map[]
+  mapSuggestions: Map[]
 }
 
 export type Map = {
@@ -23,14 +25,18 @@ export type Map = {
   orderNumber: string
   mod: string
   name: string
-  sr: number
+  artist: string
+  version: string
+  difficulty_rating: number
   bpm: number
-  length: number
+  total_length: number
   cs: number
   ar: number
-  od: number
+  accuracy: number
   mapper: string
-  link?: string
+  url: string
+  image: string
+  notes?: string
 }
 
 export type Player = {
@@ -83,4 +89,10 @@ export type ResponseError = {
 export type RadioOption = {
   label: string
   value: string
+}
+
+export type PostMapSuggestion = {
+  mapId: number
+  mod: string
+  notes?: string
 }
