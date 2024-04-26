@@ -19,6 +19,7 @@
       :suggestions="round.mapSuggestions"
       :round-id="parseInt(route.path.split('/')[4])"
       @added-suggestion="round?.mapSuggestions.push($event)"
+      :tournament-id="parseInt(route.path.split('/')[2])"
     />
     <div class="mappool__maps-tab" v-if="activeBtn === 'Maps'">
       <div class="mappool__maps-container" v-if="round.mappool.length > 0">

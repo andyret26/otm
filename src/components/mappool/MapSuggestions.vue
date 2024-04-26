@@ -38,6 +38,7 @@ import MapCardHeader from '../cards/MapCardHeader.vue'
 interface Props {
   suggestions: Map[]
   roundId: number
+  tournamentId: number
 }
 const props = defineProps<Props>()
 const emit = defineEmits(['addedSuggestion'])
@@ -57,6 +58,8 @@ const handleSuggestMap = async () => {
     const resp = await addMapSuggestion(
       props.roundId,
       {
+        tournamentId: props.tournamentId,
+        roundId: props.roundId,
         mapId: parseInt(mapId.value!),
         mod: selectedMod.value,
         notes: notes.value

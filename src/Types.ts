@@ -92,6 +92,8 @@ export type RadioOption = {
 }
 
 export type PostMapSuggestion = {
+  tournamentId: number
+  roundId: number
   mapId: number
   mod: string
   notes?: string
