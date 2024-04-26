@@ -128,6 +128,7 @@ const handlePlayerRegSuccess = (player: Player) => {
 
 const handleRoundCreated = (round: Round) => {
   tournament.value!.rounds = [round, ...tournament.value!.rounds]
+  showCreateRound.value = false
 }
 </script>
 

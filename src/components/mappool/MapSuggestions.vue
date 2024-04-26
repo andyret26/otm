@@ -11,10 +11,12 @@
         color="green"
         text-color="black"
         title="Suggest Map"
+        :disabled="addBtnDisabled"
       />
     </div>
     <div v-if="suggestions.length > 0" class="suggestions__card-container">
-      <p v-for="map in suggestions" :key="map.id">{{ map.name }}</p>
+      <MapCardHeader />
+      <MapCard v-for="map in suggestions" :key="map.id" :map="map" />
     </div>
     <p v-else>No suggestions made</p>
   </div>
@@ -25,44 +27,75 @@ import IconBtn from '@/components/common/IconBtn.vue'
 import InputField from '@/components/common/InputField.vue'
 import SelectBox from '../common/SelectBox.vue'
 import { ref } from 'vue'
-import type { Map } from '@/Types'
+import type { Map, ResponseError } from '@/Types'
 import { addMapSuggestion } from '@/Api/OtmApi'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useToast } from 'vue-toastification'
+import type { AxiosError } from 'axios'
+import MapCard from '../cards/MapCard.vue'
+import MapCardHeader from '../cards/MapCardHeader.vue'
 
 interface Props {
   suggestions: Map[]
   roundId: number
 }
 const props = defineProps<Props>()
+const emit = defineEmits(['addedSuggestion'])
 const { idTokenClaims } = useAuth0()
+const toast = useToast()
 
 const modOptions = ref(['NM', 'HD', 'HR', 'DT', 'FM', 'TB', 'EZ'])
+const addBtnDisabled = ref<boolean>(false)
 
 const mapId = ref<string>()
 const selectedMod = ref('NM')
 const notes = ref<string>()
 
-const handleSuggestMap = () => {
-  console.log('Suggesting map')
-  addMapSuggestion(
-    props.roundId,
-    {
-      mapId: parseInt(mapId.value!),
-      mod: selectedMod.value,
-      notes: notes.value
-    },
-    idTokenClaims.value?.__raw!
-  )
+const handleSuggestMap = async () => {
+  addBtnDisabled.value = true
+  try {
+    const resp = await addMapSuggestion(
+      props.roundId,
+      {
+        mapId: parseInt(mapId.value!),
+        mod: selectedMod.value,
+        notes: notes.value
+      },
+      idTokenClaims.value?.__raw!
+    )
+    emit('addedSuggestion', resp.data)
+    toast.success('Map suggestion added')
+  } catch (error) {
+    console.log(error)
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response?.data.detail)
+  } finally {
+    addBtnDisabled.value = false
+  }
 }
 </script>
 
 <style scoped lang="scss">
 .suggestions {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   &__inputs {
     display: flex;
     justify-content: center;
     align-items: end;
     gap: 10px;
+  }
+
+  &__card-container {
+    display: flex;
+    max-width: 100%;
+    flex-direction: column;
+    margin-top: 20px;
+    overflow-x: auto;
+    overflow-y: hidden;
   }
 }
 </style>

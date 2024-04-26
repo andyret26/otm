@@ -5,7 +5,7 @@
   --bg2: #382e32;
   --bg3: #473a3f;
   --base-font-size: 14px;
-  --base-border-radius: 3px;
+  --base-border-radius: 5px;
   --text-color: #fff;
   --osu-purple: #8c66ff;
   --osu-blue: #54b2e0;
@@ -14,6 +14,12 @@
   --osu-brown: #ff9966;
   --osu-yellow: #ffd866;
   --osu-red: #cc3333;
+  --nm-color: #7fc8ff;
+  --hd-color: #ffff7f;
+  --hr-color: #ff7f7f;
+  --dt-color: #ee7fff;
+  --fm-color: #7fff7f;
+  --tb-color: #c4c4c4;
   --boxshadow-blue: 0px 0px 10px 2px var(--osu-blue);
   --boxshadow-white: 0px 0px 5px 1px white;
   background-color: var(--bg1);

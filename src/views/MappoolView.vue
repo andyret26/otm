@@ -18,10 +18,11 @@
       v-if="activeBtn === 'Suggestions'"
       :suggestions="round.mapSuggestions"
       :round-id="parseInt(route.path.split('/')[4])"
+      @added-suggestion="round?.mapSuggestions.push($event)"
     />
     <div class="mappool__maps-tab" v-if="activeBtn === 'Maps'">
       <div class="mappool__maps-container" v-if="round.mappool.length > 0">
-        <MapCard v-for="map in round.mappool" :key="map.id" />
+        <MapCard v-for="map in round.mappool" :key="map.id" :map="map" />
       </div>
       <p v-else>No Maps</p>
     </div>
@@ -58,6 +59,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 20px 20px;
 
   &__nav {
     display: flex;
