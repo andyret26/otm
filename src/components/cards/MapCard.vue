@@ -14,7 +14,7 @@
     >
 
     <div class="map-card__field3 map-card__field">
-      <span class="map-card__sr">{{ map.difficulty_rating }}</span>
+      <span class="map-card__sr">{{ map.difficulty_rating.toFixed(2) }}</span>
       |
       <span class="map-card__bpm">{{ map.bpm.toFixed() }}</span>
       |
@@ -24,9 +24,13 @@
     <div class="map-card__field2 map-card__field">
       <span class="map-card__cs">{{ map.cs }}</span>
       |
-      <span class="map-card__ar">{{ map.ar }}</span>
+      <span class="map-card__ar">{{
+        map.ar % 1 === 0 ? map.ar.toFixed(0) : map.ar.toFixed(1)
+      }}</span>
       |
-      <span class="map-card__od">{{ map.accuracy }}</span>
+      <span class="map-card__od">{{
+        map.accuracy % 1 === 0 ? map.accuracy.toFixed(0) : map.accuracy.toFixed(1)
+      }}</span>
     </div>
 
     <p class="map-card__mapper">{{ map.mapper }}</p>
