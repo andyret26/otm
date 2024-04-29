@@ -5,7 +5,6 @@
         <RouterLink class="navbar__logo-wrapper" to="/">
           <img class="navbar__logo" src="/Otm-logo.png" alt="logo" />
         </RouterLink>
-        <InputField icon-name="fa-search" placeholder="Search tournament..." v-model="searchText" />
       </div>
 
       <div class="navbar__right">

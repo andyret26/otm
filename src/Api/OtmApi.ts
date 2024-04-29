@@ -19,6 +19,11 @@ if (process.env.NODE_ENV === 'production') {
   otm_API = 'http://localhost:80/api/v1'
 }
 
+export async function getAllTournaments(): Promise<Tournament[]> {
+  const resp = await axios.get<Tournament[]>(`${otm_API}/tournament`)
+  return resp.data
+}
+
 export async function addHost(sub: string, token: string): Promise<void> {
   const id = subToId(sub)
   await axios.post(

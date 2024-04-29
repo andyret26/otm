@@ -24,6 +24,7 @@ defineProps<Props>()
 .tournament-card {
   background-color: var(--bg3);
   height: 75px;
+  min-height: 75px;
   border-radius: 99999px;
   display: flex;
   align-items: center;
