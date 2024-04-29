@@ -1,15 +1,28 @@
 <template>
-  <div class="map-card">
+  <div class="map-card" oncontextmenu="return false">
+    <div class="map-card__add map-card__field">
+      <ButtonComp
+        @click="handleAddClick"
+        btn-text="Add"
+        text-color="black"
+        color="green"
+        title="Add to mappool"
+      />
+    </div>
+
     <p class="map-card__map-id">{{ map.id }}</p>
-    <p class="map-card__mod" :style="{ backgroundColor: `var(--${map.mod.toLowerCase()}-color)` }">
+    <p
+      class="map-card__mod map-card__field"
+      :style="{ backgroundColor: `var(--${map.mod.toLowerCase()}-color)` }"
+    >
       {{ map.mod }}
     </p>
 
-    <div class="map-card__banner-wrapper">
+    <div class="map-card__banner-wrapper map-card__field">
       <img class="map-card__banner-img" :src="map.image" alt="banner" />
     </div>
 
-    <a :href="map.url" class="map-card__title"
+    <a :href="map.url" class="map-card__title map-card__field"
       >{{ map.artist }} - {{ map.name }} [{{ map.version }}]</a
     >
 
@@ -33,14 +46,19 @@
       }}</span>
     </div>
 
-    <p class="map-card__mapper">{{ map.mapper }}</p>
-    <p class="map-card__notes">{{ map.notes }}</p>
+    <p class="map-card__mapper map-card__field">{{ map.mapper }}</p>
+    <p class="map-card__notes map-card__field">{{ map.notes }}</p>
+    <div class="map-card__remove map-card__field">
+      <IconBtn iconName="fa-trash" color="red" :size="25" :iconSize="0.75" title="Remove" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Map } from '@/Types'
 import { computed } from 'vue'
+import ButtonComp from '../common/ButtonComp.vue'
+import IconBtn from '@/components/common/IconBtn.vue'
 
 interface Props {
   map: Map
@@ -52,6 +70,10 @@ const lengthInMin = computed(() => {
   const sec = props.map.total_length - 60 * min
   return `${min}:${sec.toString().padStart(2, '0')}`
 })
+
+const handleAddClick = () => {
+  console.log('Add clicked')
+}
 </script>
 
 <style scoped lang="scss">
@@ -60,17 +82,32 @@ const lengthInMin = computed(() => {
   justify-content: center;
   align-items: center;
   height: 50px;
-  background-color: var(--bg3);
-  width: fit-content;
+  background-color: var(--bg1);
+  max-width: 1280px;
+  min-width: 1280px;
 
-  &__map-id {
-    width: 20px;
-    font-size: 11px;
-    text-align: center;
-    transform: rotate(-90deg);
+  &__add {
+    width: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: var(--bg1);
+  }
+
+  &__map-id {
+    width: 20px;
+    height: 45px;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    background-color: var(--bg3);
+    margin: 0px;
   }
 
   &__mod {
@@ -99,13 +136,12 @@ const lengthInMin = computed(() => {
   }
 
   &__title {
-    width: 400px;
-    max-width: 400px;
-    min-width: 400px;
-
+    width: 350px;
     font-weight: 900;
     text-align: center;
     padding: 0px 5px;
+    word-wrap: break-word;
+    background-color: var(--bg3);
   }
 
   &__field {
@@ -147,6 +183,16 @@ const lengthInMin = computed(() => {
   &__notes {
     width: 100px;
     text-align: center;
+    background-color: var(--bg2);
+  }
+
+  &__remove {
+    width: 50px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg1);
   }
 }
 </style>

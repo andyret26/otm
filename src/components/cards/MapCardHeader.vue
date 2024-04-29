@@ -1,5 +1,6 @@
 <template>
   <div class="map-card-header">
+    <p class="map-card-header__add"></p>
     <p class="map-card-header__map-id">Id</p>
     <p class="map-card-header__mod">Mod</p>
 
@@ -25,6 +26,7 @@
 
     <p class="map-card-header__mapper">Mapper</p>
     <p class="map-card-header__notes">Comment</p>
+    <p class="map-card-header__remove"></p>
   </div>
 </template>
 
@@ -36,9 +38,16 @@
   justify-content: center;
   align-items: center;
   height: 25px;
-  width: fit-content;
   font-weight: 900;
   margin-bottom: 10px;
+  border-radius: var(base-border-radius);
+  max-width: 1280px;
+  min-width: 1280px;
+
+  &__add {
+    width: 70px;
+    text-align: center;
+  }
 
   &__map-id {
     width: 20px;
@@ -73,9 +82,7 @@
   }
 
   &__title {
-    width: 400px;
-    max-width: 400px;
-    min-width: 400px;
+    width: 350px;
 
     font-weight: 900;
     text-align: center;
@@ -119,6 +126,11 @@
 
   &__notes {
     width: 100px;
+    text-align: center;
+  }
+
+  &__remove {
+    width: 50px;
     text-align: center;
   }
 }

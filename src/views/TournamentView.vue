@@ -31,7 +31,7 @@
       <div v-if="activeBtn === 'Rounds'" class="tournament__tab-container">
         <p v-if="tournament.rounds.length <= 0">No Rounds</p>
         <IconBtn
-          v-if="auth.isAuthenticated"
+          v-if="isAuthenticated"
           icon-name="fa-plus"
           color="green"
           text-color="black"
@@ -100,7 +100,7 @@ import { onMounted, ref } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
-const auth = useAuth0()
+const { isAuthenticated } = useAuth0()
 
 const tournament = ref<Tournament | null>(null)
 const activeBtn = ref<string>('Rounds')
@@ -144,7 +144,7 @@ const handleRoundCreated = (round: Round) => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 50px;
+    gap: 25px;
   }
 
   &__header {
