@@ -61,6 +61,7 @@ const handleTourneyCreated = async () => {
 
   &__tournaments {
     width: 100%;
+    max-width: 1000px;
     display: flex;
     flex-direction: column;
     gap: 20px;

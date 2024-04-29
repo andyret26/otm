@@ -13,13 +13,15 @@
 
     <div class="home__content">
       <InputField icon-name="fa-search" placeholder="Search tournament..." v-model="searchText" />
-      <div class="home__tournaments-container">
+      <div class="home__tournaments-container" v-if="tournaments !== null">
+        <p v-if="tournaments.length <= 0 || filteredTournaments.length <= 0">No Tournaments</p>
         <TournamentCard
           v-for="tournament in filteredTournaments"
           :key="tournament.id"
           :tournament="tournament"
         />
       </div>
+      <LoadingSpinner v-else />
     </div>
   </div>
 </template>
@@ -29,15 +31,17 @@ import { getAllTournaments } from '@/Api/OtmApi'
 import type { Tournament } from '@/Types'
 import TournamentCard from '@/components/cards/TournamentCard.vue'
 import InputField from '@/components/common/InputField.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import { computed, onMounted, ref } from 'vue'
 
 const searchText = ref('')
-const tournaments = ref<Tournament[]>([])
-const filteredTournaments = computed<Tournament[]>(() =>
-  tournaments.value.filter((tournament) =>
+const tournaments = ref<Tournament[] | null>(null)
+const filteredTournaments = computed<Tournament[]>(() => {
+  if (!tournaments.value) return []
+  return tournaments.value.filter((tournament) =>
     tournament.name.toLowerCase().includes(searchText.value.toLowerCase())
   )
-)
+})
 
 onMounted(async () => {
   tournaments.value = await getAllTournaments()
@@ -76,7 +80,7 @@ onMounted(async () => {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    max-height: 45vh;
+    max-height: 50vh;
 
     gap: 10px;
     overflow-y: auto;
