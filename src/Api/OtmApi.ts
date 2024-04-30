@@ -108,6 +108,16 @@ export async function addMapSuggestion(
   return resp
 }
 
+export async function addSuggestionToPool(
+  request: PostMapSuggestion,
+  token: string
+): Promise<AxiosResponse<Map>> {
+  const resp = await axios.post<Map>(`${otm_API}/round/${request.roundId}/mappool`, request, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  return resp
+}
+
 function subToId(sub: string): number {
   return parseInt(sub.split('|')[2], 10)
 }

@@ -1,6 +1,6 @@
 <template>
   <div class="map-card-header">
-    <p class="map-card-header__add"></p>
+    <p class="map-card-header__add" v-if="showBtns"></p>
     <p class="map-card-header__map-id">Id</p>
     <p class="map-card-header__mod">Mod</p>
 
@@ -26,11 +26,19 @@
 
     <p class="map-card-header__mapper">Mapper</p>
     <p class="map-card-header__notes">Comment</p>
-    <p class="map-card-header__remove"></p>
+    <p class="map-card-header__remove" v-if="showBtns"></p>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+interface Props {
+  showBtns: boolean
+}
+
+withDefaults(defineProps<Props>(), {
+  showBtns: false
+})
+</script>
 
 <style scoped lang="scss">
 .map-card-header {
@@ -45,7 +53,7 @@
   min-width: 1280px;
 
   &__add {
-    width: 70px;
+    width: 50px;
     text-align: center;
   }
 

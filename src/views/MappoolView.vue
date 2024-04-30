@@ -20,10 +20,12 @@
       :round-id="parseInt(route.path.split('/')[4])"
       @added-suggestion="round?.mapSuggestions.push($event)"
       :tournament-id="parseInt(route.path.split('/')[2])"
+      :main-pool="round.mappool"
+      @suggestion-to-pool="round?.mappool.push($event)"
     />
     <div class="mappool__maps-tab" v-if="activeBtn === 'Maps'">
       <div class="mappool__maps-container" v-if="round.mappool.length > 0">
-        <MapCard v-for="map in round.mappool" :key="map.id" :map="map" />
+        <MapCard v-for="map in round.mappool" :key="map.id" :map="map" :main-pool="round.mappool" />
       </div>
       <p v-else>No Maps</p>
     </div>

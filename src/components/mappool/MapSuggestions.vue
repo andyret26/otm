@@ -15,8 +15,15 @@
       />
     </div>
     <div v-if="suggestions.length > 0" class="suggestions__card-container">
-      <MapCardHeader />
-      <MapCard v-for="map in suggestions" :key="map.id" :map="map" />
+      <MapCardHeader :show-btns="true" />
+      <MapCard
+        v-for="map in suggestions"
+        :key="map.id + map.mod"
+        :map="map"
+        :main-pool="mainPool"
+        :show-btns="true"
+        @suggestion-to-pool="$emit('suggestionToPool', $event)"
+      />
     </div>
     <p v-else>No suggestions made</p>
   </div>
@@ -37,11 +44,12 @@ import MapCardHeader from '../cards/MapCardHeader.vue'
 
 interface Props {
   suggestions: Map[]
+  mainPool: Map[]
   roundId: number
   tournamentId: number
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['addedSuggestion'])
+const emit = defineEmits(['addedSuggestion', 'suggestionToPool'])
 const { idTokenClaims } = useAuth0()
 const toast = useToast()
 
@@ -99,6 +107,7 @@ const handleSuggestMap = async () => {
     margin-top: 20px;
     overflow-x: auto;
     overflow-y: hidden;
+    padding-bottom: 5px;
   }
 }
 </style>

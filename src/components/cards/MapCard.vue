@@ -1,12 +1,24 @@
 <template>
-  <div class="map-card" oncontextmenu="return false">
-    <div class="map-card__add map-card__field">
-      <ButtonComp
+  <div class="map-card">
+    <div class="map-card__add map-card__field" v-if="showBtns">
+      <IconBtn
+        v-if="isAdded"
         @click="handleAddClick"
-        btn-text="Add"
+        icon-name="fa-plus"
         text-color="black"
         color="green"
         title="Add to mappool"
+        :size="25"
+      />
+
+      <IconBtn
+        v-else
+        @click="handleRemoveClick"
+        icon-name="fa-minus"
+        text-color="white"
+        color="red"
+        title="Remove from mappool"
+        :size="25"
       />
     </div>
 
@@ -48,8 +60,14 @@
 
     <p class="map-card__mapper map-card__field">{{ map.mapper }}</p>
     <p class="map-card__notes map-card__field">{{ map.notes }}</p>
-    <div class="map-card__remove map-card__field">
-      <IconBtn iconName="fa-trash" color="red" :size="25" :iconSize="0.75" title="Remove" />
+    <div class="map-card__remove map-card__field" v-if="showBtns">
+      <IconBtn
+        iconName="fa-trash"
+        color="red"
+        :size="25"
+        :iconSize="0.75"
+        title="Delete from suggestions"
+      />
     </div>
   </div>
 </template>
@@ -57,13 +75,23 @@
 <script setup lang="ts">
 import type { Map } from '@/Types'
 import { computed } from 'vue'
-import ButtonComp from '../common/ButtonComp.vue'
 import IconBtn from '@/components/common/IconBtn.vue'
+import { addSuggestionToPool } from '@/Api/OtmApi'
+import { useRoute } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 interface Props {
   map: Map
+  mainPool: Map[]
+  showBtns?: boolean
 }
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  showBtns: false
+})
+
+const emit = defineEmits(['suggestionToPool'])
+const route = useRoute()
+const { idTokenClaims } = useAuth0()
 
 const lengthInMin = computed(() => {
   const min = Math.floor(props.map.total_length / 60)
@@ -71,8 +99,33 @@ const lengthInMin = computed(() => {
   return `${min}:${sec.toString().padStart(2, '0')}`
 })
 
-const handleAddClick = () => {
-  console.log('Add clicked')
+const isAdded = computed<boolean>(() => {
+  if (props.mainPool.some((map) => map.id === props.map.id && map.mod === props.map.mod)) {
+    return false
+  }
+  return true
+})
+
+const handleAddClick = async () => {
+  try {
+    const resp = await addSuggestionToPool(
+      {
+        mapId: props.map.id,
+        tournamentId: parseInt(route.path.split('/')[2]),
+        roundId: parseInt(route.path.split('/')[4]),
+        mod: props.map.mod
+      },
+      idTokenClaims.value!.__raw
+    )
+
+    emit('suggestionToPool', resp.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const handleRemoveClick = () => {
+  console.log('Remove clicked')
 }
 </script>
 
@@ -87,7 +140,7 @@ const handleAddClick = () => {
   min-width: 1280px;
 
   &__add {
-    width: 70px;
+    width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
