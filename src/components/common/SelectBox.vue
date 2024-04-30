@@ -1,5 +1,5 @@
 <template>
-  <div class="select">
+  <div class="select" :style="{ maxWidth: props.maxWidth }">
     <label
       class="select__label"
       v-if="label"
@@ -20,10 +20,12 @@ interface Props {
   options: string[]
   disabled?: boolean
   label?: string
+  maxWidth?: string
 }
 
-withDefaults(defineProps<Props>(), {
-  disabled: false
+const props = withDefaults(defineProps<Props>(), {
+  disabled: false,
+  maxWidth: '200px'
 })
 const model = defineModel()
 </script>
@@ -31,7 +33,6 @@ const model = defineModel()
 <style scoped lang="scss">
 .select {
   width: 100%;
-  max-width: 200px;
   &__label {
     font-size: 16px;
     margin-left: 5px;

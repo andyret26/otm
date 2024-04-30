@@ -3,7 +3,8 @@
     <h3>Suggest map</h3>
     <div class="suggestions__inputs">
       <InputField label="Map Id" placeholder="Map Id" v-model="mapId" />
-      <SelectBox label="Mod" :options="modOptions" v-model="selectedMod" />
+      <SelectBox label="Mod" :options="modOptions" v-model="selectedMod" max-width="75px" />
+      <InputField placeholder="#" v-model="modNumber" max-width="75px" label="Number" />
       <InputField label="Comment" placeholder="Comment" v-model="notes" />
       <IconBtn
         @click="handleSuggestMap"
@@ -58,10 +59,17 @@ const addBtnDisabled = ref<boolean>(false)
 
 const mapId = ref<string>()
 const selectedMod = ref('NM')
+const modNumber = ref<string>()
 const notes = ref<string>()
 
 const handleSuggestMap = async () => {
   addBtnDisabled.value = true
+  //check if modNumber is a number
+  if (isNaN(parseInt(modNumber.value!))) {
+    toast.error('Mod number must be a number')
+    addBtnDisabled.value = false
+    return
+  }
   try {
     const resp = await addMapSuggestion(
       props.roundId,
@@ -69,7 +77,7 @@ const handleSuggestMap = async () => {
         tournamentId: props.tournamentId,
         roundId: props.roundId,
         mapId: parseInt(mapId.value!),
-        mod: selectedMod.value,
+        mod: selectedMod.value + modNumber.value,
         notes: notes.value
       },
       idTokenClaims.value?.__raw!
@@ -108,6 +116,7 @@ const handleSuggestMap = async () => {
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 5px;
+    gap: 5px;
   }
 }
 </style>

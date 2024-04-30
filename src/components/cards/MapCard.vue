@@ -25,7 +25,7 @@
     <p class="map-card__map-id">{{ map.id }}</p>
     <p
       class="map-card__mod map-card__field"
-      :style="{ backgroundColor: `var(--${map.mod.toLowerCase()}-color)` }"
+      :style="{ backgroundColor: `var(--${map.mod.toLowerCase().substring(0, 2)}-color)` }"
     >
       {{ map.mod }}
     </p>
@@ -149,7 +149,7 @@ const handleRemoveClick = () => {
 
   &__map-id {
     width: 20px;
-    height: 45px;
+    height: 100%;
     font-size: 10px;
     font-weight: 900;
     letter-spacing: 0.8px;

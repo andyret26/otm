@@ -1,5 +1,5 @@
 <template>
-  <div class="input">
+  <div class="input" :style="{ maxWidth: props.maxWidth }">
     <label class="input__label" v-if="label" :for="id">{{ label }}</label>
     <input
       :id="id"
@@ -30,9 +30,11 @@ interface Props {
   bgColor?: string
   maxTextLength?: number
   label?: string
+  maxWidth?: string
 }
 const props = withDefaults(defineProps<Props>(), {
-  bgColor: 'var(--bg3)'
+  bgColor: 'var(--bg3)',
+  maxWidth: '200px'
 })
 const model = defineModel()
 
@@ -49,7 +51,6 @@ const validTextLength = computed<boolean>(() => {
 <style scoped lang="scss">
 .input {
   width: 100%;
-  max-width: 200px;
   position: relative;
   border-radius: var(--base-border-radius);
 
@@ -65,6 +66,7 @@ const validTextLength = computed<boolean>(() => {
     width: 100%;
     padding: 10px 30px 10px 10px;
     border-radius: var(--base-border-radius);
+    height: 35px;
 
     &:focus {
       outline: 1px solid #6b575e;

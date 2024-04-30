@@ -23,11 +23,17 @@
       :main-pool="round.mappool"
       @suggestion-to-pool="round?.mappool.push($event)"
     />
+
     <div class="mappool__maps-tab" v-if="activeBtn === 'Maps'">
-      <div class="mappool__maps-container" v-if="round.mappool.length > 0">
-        <MapCard v-for="map in round.mappool" :key="map.id" :map="map" :main-pool="round.mappool" />
-      </div>
-      <p v-else>No Maps</p>
+      <template v-if="round.mappool.length > 0">
+        <div class="mappool__maps-container" group="maps">
+          <MapCard v-for="map in poolSorted" :key="map.id" :map="map" :main-pool="round.mappool" />
+        </div>
+      </template>
+
+      <template v-else>
+        <p>No Maps</p>
+      </template>
     </div>
   </div>
   <LoadingSpinner v-else />
@@ -35,11 +41,11 @@
 
 <script setup lang="ts">
 import { getRound, getTournamentById } from '@/Api/OtmApi'
-import { type Tournament, type Round } from '@/Types'
+import { type Tournament, type Round, type Map } from '@/Types'
 import ButtonComp from '@/components/common/ButtonComp.vue'
 import MapSuggestions from '@/components/mappool/MapSuggestions.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import MapCard from '@/components/cards/MapCard.vue'
 const route = useRoute()
@@ -55,6 +61,24 @@ onMounted(async () => {
   round.value = resp.data
   tourney.value = resp2
 })
+
+const poolSorted = computed<Map[]>(() => {
+  const modSort = (modPrefix: string) => {
+    return round
+      .value!.mappool.filter((map) => map.mod.startsWith(modPrefix))
+      .sort((a, b) => a.mod.localeCompare(b.mod))
+  }
+
+  const modPrefixes = ['NM', 'HD', 'HR', 'DT', 'FM', 'TB']
+  const res: Map[] = []
+
+  modPrefixes.forEach((prefix) => {
+    const filteredMaps = modSort(prefix)
+    res.push(...filteredMaps)
+  })
+
+  return res
+})
 </script>
 
 <style scoped lang="scss">
@@ -67,6 +91,12 @@ onMounted(async () => {
   &__nav {
     display: flex;
     gap: 10px;
+  }
+
+  &__maps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 }
 </style>
