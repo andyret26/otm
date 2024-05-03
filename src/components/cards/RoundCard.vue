@@ -5,8 +5,11 @@
       <RouterLink :to="`/tournament/${tournamentId}/round/${round.id}/mappool`">
         <ButtonComp btn-text="Mappool" color="blue" />
       </RouterLink>
-      <RouterLink :to="'/'">
+      <RouterLink :to="`/tournament/${tournamentId}/round/${round.id}/stats`">
         <ButtonComp btn-text="Stats" color="brown" />
+      </RouterLink>
+      <RouterLink :to="`/tournament/${tournamentId}/round/${round.id}/schedule`">
+        <ButtonComp btn-text="Schedule" color="blue" />
       </RouterLink>
     </div>
   </div>

@@ -1,12 +1,12 @@
 <template>
   <div class="map-card-header">
-    <p class="map-card-header__add" v-if="showBtns"></p>
-    <p class="map-card-header__map-id">Id</p>
-    <p class="map-card-header__mod">Mod</p>
+    <div class="map-card-header__add" v-if="showBtns"></div>
+    <div class="map-card-header__map-id">Id</div>
+    <div class="map-card-header__mod">Mod</div>
 
     <div class="map-card-header__banner-wrapper">Banner</div>
 
-    <p class="map-card-header__title">Artist - Name [Diff]</p>
+    <div class="map-card-header__title">Artist - Name [Diff]</div>
 
     <div class="map-card-header__field3 map-card-header__field">
       <span class="map-card-header__sr">SR</span>
@@ -24,9 +24,9 @@
       <span class="map-card-header__od">OD</span>
     </div>
 
-    <p class="map-card-header__mapper">Mapper</p>
-    <p class="map-card-header__notes">Comment</p>
-    <p class="map-card-header__remove" v-if="showBtns"></p>
+    <div class="map-card-header__mapper">Mapper</div>
+    <div class="map-card-header__notes">Comment</div>
+    <div class="map-card-header__remove" v-if="showBtns"></div>
   </div>
 </template>
 
@@ -47,10 +47,9 @@ withDefaults(defineProps<Props>(), {
   align-items: center;
   height: 25px;
   font-weight: 900;
-  margin-bottom: 10px;
   border-radius: var(base-border-radius);
-  max-width: 1280px;
-  min-width: 1280px;
+  max-width: 1080px;
+  min-width: 1080px;
 
   &__add {
     width: 50px;
@@ -64,7 +63,7 @@ withDefaults(defineProps<Props>(), {
 
   &__mod {
     width: 50px;
-    height: 50px;
+    height: 25px;
     border-radius: var(base-border-radius);
     text-align: center;
     font-weight: 900;
@@ -75,7 +74,7 @@ withDefaults(defineProps<Props>(), {
 
   &__banner-wrapper {
     width: 180px;
-    height: 50px;
+    height: 25px;
     border-radius: var(base-border-radius);
     text-align: center;
     display: flex;

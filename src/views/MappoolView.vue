@@ -2,7 +2,7 @@
   <div v-if="round !== null" class="mappool">
     <h1>{{ tourney?.name }}</h1>
     <h2>{{ round.name }} mappool</h2>
-    <div class="mappool__nav">
+    <div class="mappool__nav" v-if="isAuthenticated">
       <ButtonComp
         @click="activeBtn = 'Maps'"
         btn-text="Maps"
@@ -25,6 +25,7 @@
     />
 
     <div class="mappool__maps-tab" v-if="activeBtn === 'Maps'">
+      <MapCardHeader />
       <template v-if="round.mappool.length > 0">
         <div class="mappool__maps-container" group="maps">
           <MapCard v-for="map in poolSorted" :key="map.id" :map="map" :main-pool="round.mappool" />
@@ -48,7 +49,10 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import MapCard from '@/components/cards/MapCard.vue'
+import MapCardHeader from '@/components/cards/MapCardHeader.vue'
+import { useAuth0 } from '@auth0/auth0-vue'
 const route = useRoute()
+const { isAuthenticated } = useAuth0()
 
 const activeBtn = ref<'Maps' | 'Suggestions'>('Maps')
 const round = ref<Round | null>(null)
@@ -93,9 +97,19 @@ const poolSorted = computed<Map[]>(() => {
     gap: 10px;
   }
 
-  &__maps-container {
+  &__maps-tab {
+    max-width: 100%;
+    overflow-x: auto;
     display: flex;
     flex-direction: column;
+    margin-top: 15px;
+  }
+
+  &__maps-container {
+    display: flex;
+    max-width: 100%;
+    flex-direction: column;
+    padding-bottom: 5px;
     gap: 5px;
   }
 }

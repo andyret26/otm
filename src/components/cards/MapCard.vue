@@ -132,12 +132,12 @@ const handleRemoveClick = () => {
 <style scoped lang="scss">
 .map-card {
   display: flex;
-  justify-content: center;
   align-items: center;
   height: 50px;
   background-color: var(--bg1);
-  max-width: 1280px;
-  min-width: 1280px;
+  width: 1080px;
+  max-width: 1080px;
+  min-width: 1080px;
 
   &__add {
     width: 50px;

@@ -103,7 +103,6 @@ const handleSuggestMap = async () => {
 
   &__inputs {
     display: flex;
-    justify-content: center;
     align-items: end;
     gap: 10px;
   }
@@ -112,9 +111,11 @@ const handleSuggestMap = async () => {
     display: flex;
     max-width: 100%;
     flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+
     margin-top: 20px;
     overflow-x: auto;
-    overflow-y: hidden;
     padding-bottom: 5px;
     gap: 5px;
   }
