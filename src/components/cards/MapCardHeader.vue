@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 interface Props {
-  showBtns: boolean
+  showBtns?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
