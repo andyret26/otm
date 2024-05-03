@@ -79,11 +79,12 @@ export async function registerPlayer(
 export async function addRound(
   tournamentId: number,
   roundName: string,
+  isQualifier: boolean,
   Token: string
 ): Promise<AxiosResponse<Round>> {
   const resp = await axios.post<Round>(
     `${otm_API}/tournament/${tournamentId}/add-round`,
-    { name: roundName },
+    { name: roundName, isQualifier: isQualifier },
     {
       headers: { Authorization: `Bearer ${Token}` }
     }

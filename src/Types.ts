@@ -16,6 +16,7 @@ export type Tournament = {
 export type Round = {
   id: number
   name: string
+  isQualifiers: boolean
   mappool: Map[]
   mapSuggestions: Map[]
 }

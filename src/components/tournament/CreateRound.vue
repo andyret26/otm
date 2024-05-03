@@ -20,6 +20,15 @@
       :max-text-length="25"
     />
 
+    <RadioGroup
+      @change="isQuals = $event.value"
+      id="is-quals"
+      :value="isQuals"
+      :options="radioOptions"
+      label="Qualifier round?"
+      direction="row"
+    />
+
     <ButtonComp
       @click="handleCreateClick"
       btn-text="Create"
@@ -39,7 +48,8 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import { useToast } from 'vue-toastification'
 import { AxiosError } from 'axios'
 import { addRound } from '@/Api/OtmApi'
-import type { ResponseError } from '@/Types'
+import type { RadioOption, ResponseError } from '@/Types'
+import RadioGroup from '../common/RadioGroup.vue'
 
 interface Props {
   tournamentId: number
@@ -50,6 +60,12 @@ const emit = defineEmits(['roundCreated', 'closeClicked'])
 const { idTokenClaims } = useAuth0()
 const toast = useToast()
 
+const radioOptions = ref<RadioOption[]>([
+  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'no' }
+])
+
+const isQuals = ref('no')
 const roundName = ref('')
 const createDisabled = ref(false)
 
@@ -59,6 +75,7 @@ const handleCreateClick = async () => {
     const res = await addRound(
       props.tournamentId,
       roundName.value,
+      isQuals.value === 'yes' ? true : false,
       idTokenClaims.value?.__raw as string
     )
 

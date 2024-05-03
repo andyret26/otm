@@ -1,7 +1,7 @@
 <template>
   <div class="radio-group">
     <legend v-if="label" class="radio-group__label">{{ label }}</legend>
-    <div class="radio-group__fields">
+    <div class="radio-group__fields" :style="{ flexDirection: direction }">
       <div
         class="radio-group__field"
         v-for="option in options"
@@ -33,8 +33,11 @@ interface Props {
   label?: string
   value: string
   options: RadioOption[]
+  direction?: 'row' | 'column'
 }
-defineProps<Props>()
+withDefaults(defineProps<Props>(), {
+  direction: 'column'
+})
 
 const emit = defineEmits(['change'])
 
@@ -58,7 +61,7 @@ const handleFieldKeypress = (e: KeyboardEvent, option: RadioOption) => {
   }
   &__fields {
     display: flex;
-    flex-direction: column;
+    justify-content: space-evenly;
     gap: 5px;
   }
 
