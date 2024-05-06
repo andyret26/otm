@@ -4,8 +4,7 @@
     <h2>{{ round!.name }} schedule</h2>
     <div v-if="qualsSchedule !== null || Schedule !== null">HERE IS THE SCHEDULE</div>
     <div v-else-if="isAuthenticated">
-      <ButtonComp btn-text="Generate Round" />
-      <ButtonComp btn-text="Generate Qualifiers" />
+      <ButtonComp @click="handleGenerate" btn-text="Generate Schedule" />
     </div>
     <div v-else>No Schedule</div>
   </div>
@@ -35,6 +34,14 @@ onMounted(async () => {
   round.value = resp.data
   tourney.value = resp2
 })
+
+const handleGenerate = async () => {
+  if (round.value?.isQualifier) {
+    console.log('Generating qualifiers schedule')
+  } else {
+    console.log('Generating schedule')
+  }
+}
 </script>
 
 <style scoped lang="scss">

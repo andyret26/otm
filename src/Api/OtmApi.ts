@@ -6,7 +6,8 @@ import type {
   Player,
   Round,
   PostMapSuggestion,
-  Map
+  Map,
+  QualifierSchedule
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -116,6 +117,21 @@ export async function addSuggestionToPool(
   const resp = await axios.post<Map>(`${otm_API}/round/${request.roundId}/mappool`, request, {
     headers: { Authorization: `Bearer ${token}` }
   })
+  return resp
+}
+
+export async function generateQualsSchedule(
+  tournamentId: number,
+  roundId: number,
+  startDate: Date,
+  endDate: Date,
+  token: string
+): Promise<AxiosResponse<QualifierSchedule>> {
+  const resp = await axios.post<QualifierSchedule>(
+    `${otm_API}/schedule/generate-qualifier`,
+    { tournamentId, roundId, startDate, endDate },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
   return resp
 }
 

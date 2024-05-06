@@ -8,7 +8,7 @@ export type Tournament = {
   rankRange: string
 
   rounds: Round[]
-  players: Player[]
+  players: TournamentPlayer[]
   teams: Team[]
   staff: Staff[]
 }
@@ -16,7 +16,7 @@ export type Tournament = {
 export type Round = {
   id: number
   name: string
-  isQualifiers: boolean
+  isQualifier: boolean
   mappool: Map[]
   mapSuggestions: Map[]
 }
@@ -40,6 +40,14 @@ export type Map = {
   notes?: string
 }
 
+export type TournamentPlayer = {
+  playerId: number
+  player: Player
+  tournamentId: number
+  tournament: Tournament
+  isknockout: boolean
+}
+
 export type Player = {
   id: number
   username: string
@@ -53,6 +61,7 @@ export type Team = {
   id: number
   teamName: string
   players: Player[]
+  isknockout: boolean
 }
 
 export type Staff = {
@@ -98,4 +107,12 @@ export type PostMapSuggestion = {
   mapId: number
   mod: string
   notes?: string
+}
+
+export type QualifierSchedule = {
+  id: number
+  roundId: number
+  startTime: string
+  teams: Team[]
+  players: Player[]
 }

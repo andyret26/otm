@@ -65,7 +65,11 @@
       <div v-else-if="activeBtn === 'Players'" class="tournament__tab-container">
         <p v-if="tournament.players.length <= 0">No Players</p>
         <div class="tournament__cards-container">
-          <PlayerCard v-for="player in tournament.players" :key="player.id" :p="player" />
+          <PlayerCard
+            v-for="player in tournament.players"
+            :key="player.playerId"
+            :p="player.player"
+          />
         </div>
       </div>
 
@@ -108,6 +112,7 @@ const showCreateRound = ref<boolean>(false)
 
 onMounted(async () => {
   tournament.value = await getTournamentById(parseInt(route.path.split('/')[2]))
+  console.log(tournament.value)
   tournament.value.rounds = tournament.value.rounds.reverse()
   activeBtn.value = route.hash.replace('#', '') || 'Rounds'
 })
@@ -123,7 +128,13 @@ const handleTeamRegSuccess = (teams: Team[]) => {
 }
 
 const handlePlayerRegSuccess = (player: Player) => {
-  tournament.value!.players.push(player)
+  tournament.value!.players.push({
+    player,
+    isknockout: false,
+    playerId: player.id,
+    tournament: tournament.value!,
+    tournamentId: tournament.value!.id
+  })
 }
 
 const handleRoundCreated = (round: Round) => {
