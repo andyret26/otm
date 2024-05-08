@@ -66,6 +66,7 @@ export type Team = {
 
 export type Staff = {
   id: number
+  tournamentId: number
   username: string
   roles: string[]
 }
@@ -112,7 +113,16 @@ export type PostMapSuggestion = {
 export type QualifierSchedule = {
   id: number
   roundId: number
-  startTime: string
+  dateTime: string
   teams: Team[]
   players: Player[]
+  referee?: Staff
+  num: string
+}
+
+// Random Types
+
+export type AddedReferee = {
+  ref: Staff
+  qualScheduleId: number
 }

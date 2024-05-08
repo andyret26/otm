@@ -8,7 +8,14 @@
       <RouterLink :to="`/tournament/${tournamentId}/round/${round.id}/stats`">
         <ButtonComp btn-text="Stats" color="brown" />
       </RouterLink>
-      <RouterLink :to="`/tournament/${tournamentId}/round/${round.id}/schedule`">
+      <RouterLink
+        v-if="round.isQualifier"
+        :to="`/tournament/${tournamentId}/round/${round.id}/quals-schedule`"
+      >
+        <ButtonComp btn-text="Schedule" color="blue" />
+      </RouterLink>
+      <RouterLink v-else
+        :to="`/tournament/${tournamentId}/round/${round.id}/schedule`">
         <ButtonComp btn-text="Schedule" color="blue" />
       </RouterLink>
     </div>

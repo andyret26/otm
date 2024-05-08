@@ -27,18 +27,23 @@ const router = createRouter({
     },
     {
       path: '/tournament/:id/round/:roundId/mappool',
-      name: 'mappool',
+      name: 'Mappool',
       component: () => import('@/views/MappoolView.vue')
     },
     {
       path: '/tournament/:id/round/:roundId/stats',
-      name: 'stats',
+      name: 'Stats',
       component: () => import('@/views/StatsView.vue')
     },
     {
       path: '/tournament/:id/round/:roundId/schedule',
-      name: 'schedule',
+      name: 'Schedule',
       component: () => import('@/views/ScheduleView.vue')
+    },
+    {
+      path: '/tournament/:id/round/:roundId/quals-schedule',
+      name: 'Quals-schedule',
+      component: () => import('@/views/QualsScheduleView.vue')
     }
   ]
 })

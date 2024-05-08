@@ -11,3 +11,13 @@ export const validateCreatTournament = (tourney: CreateTouernament): string[] =>
 
   return errors
 }
+
+export const validDate = (date: string): boolean => {
+  if (!date) return false
+  if (date.length !== 10) return false
+  if (date.split('-').length !== 3) return false
+
+  const today = new Date()
+  const inputDate = new Date(date)
+  return inputDate > today
+}

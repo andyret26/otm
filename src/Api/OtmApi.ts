@@ -7,7 +7,9 @@ import type {
   Round,
   PostMapSuggestion,
   Map,
-  QualifierSchedule
+  QualifierSchedule,
+  Staff,
+  Team
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -126,12 +128,46 @@ export async function generateQualsSchedule(
   startDate: Date,
   endDate: Date,
   token: string
-): Promise<AxiosResponse<QualifierSchedule>> {
-  const resp = await axios.post<QualifierSchedule>(
+): Promise<AxiosResponse<QualifierSchedule[]>> {
+  const resp = await axios.post<QualifierSchedule[]>(
     `${otm_API}/schedule/generate-qualifier`,
     { tournamentId, roundId, startDate, endDate },
     { headers: { Authorization: `Bearer ${token}` } }
   )
+  return resp
+}
+
+export async function getQualifierSchedule(
+  roundId: number
+): Promise<AxiosResponse<QualifierSchedule[]>> {
+  const resp = await axios.get<QualifierSchedule[]>(`${otm_API}/schedule/qualifier/${roundId}`)
+  return resp
+}
+
+export async function addQualsRef(
+  tourneyId: number,
+  scheduleId: number,
+  token: string
+): Promise<AxiosResponse<Staff>> {
+  const resp = await axios.post<Staff>(
+    `${otm_API}/schedule/tournament/${tourneyId}/qualifier/${scheduleId}/referee`,
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  return resp
+}
+
+export async function getTournamentPlayerMin(tourneyId: number): Promise<AxiosResponse<Player>> {
+  const resp = await axios.get<Player>(`${otm_API}/tournament/${tourneyId}/player-min`)
+  return resp
+}
+
+export async function getTournementTeamsMin(tourneyId: number): Promise<AxiosResponse<Team>> {
+  const resp = await axios.get<Team>(`${otm_API}/tournament/${tourneyId}/team-min`)
+  return resp
+}
+export async function getTournamentStaff(tourneyId: number): Promise<AxiosResponse<Staff>> {
+  const resp = await axios.get<Staff>(`${otm_API}/tournament/${tourneyId}/staff`)
   return resp
 }
 

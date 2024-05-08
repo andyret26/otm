@@ -15,7 +15,7 @@
 <script setup lang="ts">
 interface Props {
   iconName: string
-  color?: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow' | 'red'
+  color?: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow' | 'red' | 'none'
   textColor?: string
   size?: number
   iconSize?: number
