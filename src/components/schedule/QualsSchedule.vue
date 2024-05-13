@@ -43,8 +43,10 @@
       </div>
     </div>
     <QualsRowEdit
-      v-if="showEditRow"
+      v-if="showEditRow && staff !== null && particapents !== null"
       :quals-schedule="currentEditRow!"
+      :staff="staff"
+      :participants="particapents"
       :handle-ref-add="handleAddReferee"
       @closeClicked="showEditRow = false"
     />
@@ -79,8 +81,8 @@ const route = useRoute()
 const toast = useToast()
 const TourneyId = parseInt(route.path.split('/')[2])
 
-const particapents = ref<Player | Team | null>(null)
-const staff = ref<Staff | null>(null)
+const particapents = ref<Player[] | Team[] | null>(null)
+const staff = ref<Staff[] | null>(null)
 const currentEditRow = ref<QualifierSchedule | null>(null)
 const showEditRow = ref(false)
 
@@ -141,6 +143,7 @@ onMounted(async () => {
 .quals-schedule {
   display: flex;
   flex-direction: column;
+
   gap: 5px;
   max-width: 100%;
   overflow-x: auto;

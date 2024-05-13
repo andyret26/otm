@@ -157,17 +157,17 @@ export async function addQualsRef(
   return resp
 }
 
-export async function getTournamentPlayerMin(tourneyId: number): Promise<AxiosResponse<Player>> {
-  const resp = await axios.get<Player>(`${otm_API}/tournament/${tourneyId}/player-min`)
+export async function getTournamentPlayerMin(tourneyId: number): Promise<AxiosResponse<Player[]>> {
+  const resp = await axios.get<Player[]>(`${otm_API}/tournament/${tourneyId}/player-min`)
   return resp
 }
 
-export async function getTournementTeamsMin(tourneyId: number): Promise<AxiosResponse<Team>> {
-  const resp = await axios.get<Team>(`${otm_API}/tournament/${tourneyId}/team-min`)
+export async function getTournementTeamsMin(tourneyId: number): Promise<AxiosResponse<Team[]>> {
+  const resp = await axios.get<Team[]>(`${otm_API}/tournament/${tourneyId}/team-min`)
   return resp
 }
-export async function getTournamentStaff(tourneyId: number): Promise<AxiosResponse<Staff>> {
-  const resp = await axios.get<Staff>(`${otm_API}/tournament/${tourneyId}/staff`)
+export async function getTournamentStaff(tourneyId: number): Promise<AxiosResponse<Staff[]>> {
+  const resp = await axios.get<Staff[]>(`${otm_API}/tournament/${tourneyId}/staff`)
   return resp
 }
 
