@@ -66,7 +66,7 @@ const validTextLength = computed<boolean>(() => {
     width: 100%;
     padding: 10px 30px 10px 10px;
     border-radius: var(--base-border-radius);
-    height: 35px;
+    height: 40px;
 
     &:focus {
       outline: 1px solid #6b575e;

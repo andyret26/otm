@@ -39,7 +39,7 @@ const model = defineModel()
   }
   &__field {
     width: 100%;
-    height: 35px;
+    height: 40px;
     margin-top: 5px;
     background-color: var(--bg3);
     color: inherit;
