@@ -1,10 +1,10 @@
-# OTM - Osu! Tournament Maker
+# O!tm - Osu! Tournament Maker
 
 ## Description
 
-OTM is a tool to help tournament organizers manage their tournaments. It is designed to be easy to use and to provide a wide range of features to help you run your tournament smoothly.
+O!tm is a tool to help tournament organizers manage their tournaments. It is designed to be easy to use and to provide a wide range of features to help you run your tournament smoothly.
 
-Application: [Otm!](https://osu-tm.vercel.app)
+Application: [O!tm](https://osu-tm.vercel.app)
 
 ## .env file
 
