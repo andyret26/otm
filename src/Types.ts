@@ -114,9 +114,8 @@ export type QualifierSchedule = {
   id: number
   roundId: number
   dateTime: string
-  teams: Team[]
-  players: Player[]
-  referee?: Staff
+  names: string[]
+  referee?: string
   num: string
 }
 
@@ -125,4 +124,10 @@ export type QualifierSchedule = {
 export type AddedReferee = {
   ref: Staff
   qualScheduleId: number
+}
+
+export type QsPut = {
+  scheduleId: number
+  refId: number | null
+  names: string[] | null
 }

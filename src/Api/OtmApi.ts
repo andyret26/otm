@@ -9,7 +9,8 @@ import type {
   Map,
   QualifierSchedule,
   Staff,
-  Team
+  Team,
+  QsPut
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -168,6 +169,14 @@ export async function getTournementTeamsMin(tourneyId: number): Promise<AxiosRes
 }
 export async function getTournamentStaff(tourneyId: number): Promise<AxiosResponse<Staff[]>> {
   const resp = await axios.get<Staff[]>(`${otm_API}/tournament/${tourneyId}/staff`)
+  return resp
+}
+
+export async function updateQualsSchedule(qs: QsPut): Promise<AxiosResponse<QualifierSchedule>> {
+  const resp = await axios.put<QualifierSchedule>(
+    `${otm_API}/schedule/quals-schedule/${qs.scheduleId}`,
+    qs
+  )
   return resp
 }
 

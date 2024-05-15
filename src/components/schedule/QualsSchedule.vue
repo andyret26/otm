@@ -15,13 +15,10 @@
       </div>
       <div class="quals-schedule__card-time card-field1">{{ getTime(qual.dateTime) }}</div>
       <div class="quals-schedule__card-ref card-field2">
-        <div v-if="qual.referee">{{ qual.referee.username }}</div>
+        <div v-if="qual.referee">{{ qual.referee }}</div>
       </div>
-      <div class="quals-schedule__card-teams card-field1" v-if="isTeamTourney">
-        <div v-for="team in qual.teams" :key="team.id">{{ team.teamName }}</div>
-      </div>
-      <div class="quals-schedule__card-players card-field1" v-else>
-        <div v-for="player in qual.players" :key="player.id">{{ player.username }}</div>
+      <div class="quals-schedule__card-names card-field1">
+        <div v-for="name in qual.names" :key="name">{{ name }}</div>
       </div>
       <div class="quals-schedule__card-edit">
         <IconBtn
@@ -47,8 +44,7 @@
       :quals-schedule="currentEditRow!"
       :staff="staff"
       :participants="particapents"
-      :handle-ref-add="handleAddReferee"
-      @closeClicked="showEditRow = false"
+      @row-updated="handleRowUpdated"
     />
   </div>
 </template>
@@ -56,12 +52,7 @@
 <script setup lang="ts">
 import IconBtn from '../common/IconBtn.vue'
 import { useAuth0 } from '@auth0/auth0-vue'
-import {
-  addQualsRef,
-  getTournamentPlayerMin,
-  getTournamentStaff,
-  getTournementTeamsMin
-} from '@/Api/OtmApi'
+import { getTournamentPlayerMin, getTournamentStaff, getTournementTeamsMin } from '@/Api/OtmApi'
 import { useRoute } from 'vue-router'
 import type { Player, QualifierSchedule, ResponseError, Staff, Team } from '@/Types'
 import { useToast } from 'vue-toastification'
@@ -75,8 +66,9 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+const emit = defineEmits(['rowUpdated'])
 
-const { isAuthenticated, idTokenClaims } = useAuth0()
+const { isAuthenticated } = useAuth0()
 const route = useRoute()
 const toast = useToast()
 const TourneyId = parseInt(route.path.split('/')[2])
@@ -93,16 +85,9 @@ const isDateSwitch = (index: number): boolean => {
   return curretDate !== previousDate
 }
 
-const handleAddReferee = async (qualId: number) => {
-  try {
-    await addQualsRef(TourneyId, qualId, idTokenClaims.value!.__raw)
-    toast.success('Referee added')
-
-    // TODO Update qualsSchedule with new referee
-  } catch (e) {
-    const err = e as AxiosError<ResponseError>
-    toast.error(err.response?.data.detail)
-  }
+const handleRowUpdated = (updatedRow: QualifierSchedule) => {
+  emit('rowUpdated', updatedRow)
+  showEditRow.value = false
 }
 
 const getDate = (dateString: string) => {
@@ -158,8 +143,8 @@ onMounted(async () => {
 
 .quals-schedule__card {
   display: flex;
-  min-height: 30px;
-  max-height: 30px;
+  min-height: 40px;
+  max-height: 40px;
   align-items: center;
 
   &-id {
@@ -180,13 +165,17 @@ onMounted(async () => {
     min-width: 75px;
   }
 
-  &-teams,
-  &-players {
+  &-names {
+    box-sizing: border-box;
+    font-size: 12px;
     min-width: 400px;
+    max-width: 400px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    gap: 0px 10px;
+    padding: 3px;
   }
 
   &-edit {
@@ -198,14 +187,14 @@ onMounted(async () => {
 }
 
 .card-field1 {
-  height: 30px;
+  height: 40px;
   background-color: var(--bg3);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .card-field2 {
-  height: 30px;
+  height: 40px;
   background-color: var(--bg2);
   display: flex;
   justify-content: center;

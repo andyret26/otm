@@ -8,6 +8,7 @@
       v-if="qualsSchedule != null && qualsSchedule.length > 0"
       :quals-schedule="qualsSchedule"
       :is-team-tourney="tourney.teams.length > 0"
+      @row-updated="handleRowUpdated"
     />
     <div class="schedule__generation" v-else-if="isAuthenticated">
       <div class="schedule__inputs">
@@ -79,6 +80,11 @@ const handleGenerateQuals = async () => {
     const err = e as AxiosError<ResponseError>
     toast.error(err.response?.data.detail)
   }
+}
+
+const handleRowUpdated = (updatedRow: QualifierSchedule) => {
+  const index = qualsSchedule.value!.findIndex((qs) => qs.id === updatedRow.id)
+  qualsSchedule.value![index] = updatedRow
 }
 </script>
 
