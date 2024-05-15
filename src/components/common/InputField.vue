@@ -57,6 +57,7 @@ const validTextLength = computed<boolean>(() => {
   &__label {
     font-size: 15px;
     font-weight: 900;
+    margin-left: 5px;
   }
 
   &__field {

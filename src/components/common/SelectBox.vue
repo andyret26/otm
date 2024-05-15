@@ -7,7 +7,14 @@
       :style="{ color: disabled ? 'lightgray' : 'white' }"
       >{{ label }}</label
     >
-    <select class="select__field" name="select" id="select" v-model="model" :disabled="disabled">
+    <select
+      class="select__field"
+      name="select"
+      id="select"
+      v-model="model"
+      :disabled="disabled"
+      :style="{ height: height }"
+    >
       <option class="select__option" v-for="option in options" :value="option" :key="option">
         {{ option }}
       </option>
@@ -21,11 +28,13 @@ interface Props {
   disabled?: boolean
   label?: string
   maxWidth?: string
+  height?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
   disabled: false,
-  maxWidth: '200px'
+  maxWidth: '200px',
+  height: '40px'
 })
 const model = defineModel()
 </script>
@@ -39,7 +48,6 @@ const model = defineModel()
   }
   &__field {
     width: 100%;
-    height: 40px;
     margin-top: 5px;
     background-color: var(--bg3);
     color: inherit;

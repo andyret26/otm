@@ -5,7 +5,8 @@
     :style="{
       backgroundColor: `var(--osu-${props.color})`,
       color: props.textColor,
-      '--size': props.size + 'px'
+      '--size': props.size + 'px',
+      margin: props.margin
     }"
   >
     <v-icon :name="props.iconName" :scale="props.iconSize" />
@@ -20,6 +21,7 @@ interface Props {
   size?: number
   iconSize?: number
   disabled?: boolean
+  margin?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -27,7 +29,8 @@ const props = withDefaults(defineProps<Props>(), {
   iconSize: 1,
   color: 'blue',
   textColor: 'white',
-  disabled: false
+  disabled: false,
+  margin: '0px'
 })
 </script>
 
@@ -40,9 +43,8 @@ const props = withDefaults(defineProps<Props>(), {
   height: var(--size);
   width: var(--size);
 
-  padding: 5px 10px;
   border: none;
-  border-radius: 50%;
+  border-radius: 999999px;
 
   display: flex;
   justify-content: center;
