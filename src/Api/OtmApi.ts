@@ -10,7 +10,8 @@ import type {
   QualifierSchedule,
   Staff,
   Team,
-  QsPut
+  QsPut,
+  QsPost
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -178,6 +179,18 @@ export async function updateQualsSchedule(
   const resp = await axios.put<QualifierSchedule>(
     `${otm_API}/schedule/quals-schedule/${qs.scheduleId}`,
     qs,
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  return resp
+}
+
+export async function addQualsSchedule(
+  qualsSchedule: QsPost,
+  token: string
+): Promise<AxiosResponse<QualifierSchedule>> {
+  const resp = axios.post<QualifierSchedule>(
+    `${otm_API}/schedule/quals-schedule/add-extra`,
+    qualsSchedule,
     { headers: { Authorization: `Bearer ${token}` } }
   )
   return resp

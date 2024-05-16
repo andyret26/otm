@@ -132,3 +132,10 @@ export type QsPut = {
   refId: number | null
   names: string[] | null
 }
+
+export type QsPost = {
+  tourneyId: number
+  roundId: number
+  dateTime: Date
+  num: string
+}

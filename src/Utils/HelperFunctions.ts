@@ -21,3 +21,11 @@ export const validDate = (date: string): boolean => {
   const inputDate = new Date(date)
   return inputDate > today
 }
+
+export const validTime = (time: string): boolean => {
+  if (!time) return false
+  if (time.length !== 5) return false
+  if (time.split(':').length !== 2) return false
+
+  return true
+}

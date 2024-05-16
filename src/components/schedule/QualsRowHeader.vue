@@ -24,7 +24,7 @@
   z-index: 3;
 
   &-id {
-    min-width: 30px;
+    min-width: 35px;
   }
 
   &-date {

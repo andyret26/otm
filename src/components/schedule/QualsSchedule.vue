@@ -5,7 +5,9 @@
       class="quals-schedule__card"
       v-for="(qual, index) in qualsSchedule"
       :key="qual.id"
-      :style="{ marginTop: isDateSwitch(index) ? '20px' : '0px' }"
+      :style="{
+        marginBottom: isDateSwitch(index) && qual.num.substring(0, 2) !== 'EX' ? '20px' : '0px'
+      }"
     >
       <div class="quals-schedule__card-id card-field1">
         {{ qual.num }}
@@ -81,10 +83,15 @@ const currentEditRow = ref<QualifierSchedule | null>(null)
 const showEditRow = ref(false)
 
 const isDateSwitch = (index: number): boolean => {
-  if (index === 0) return false
+  if (index > props.qualsSchedule.length - 2) return false
   var curretDate = props.qualsSchedule[index].dateTime.split('T')[0]
-  var previousDate = props.qualsSchedule[index - 1].dateTime.split('T')[0]
-  return curretDate !== previousDate
+  var nextDate = props.qualsSchedule[index + 1].dateTime.split('T')[0]
+  if (
+    props.qualsSchedule[index].num.substring(0, 2) !== 'EX' &&
+    props.qualsSchedule[index + 1].num.substring(0, 2) === 'EX'
+  )
+    return true
+  return curretDate !== nextDate
 }
 
 const handleRowUpdated = (updatedRow: QualifierSchedule) => {
@@ -150,7 +157,7 @@ onMounted(async () => {
   align-items: center;
 
   &-id {
-    min-width: 30px;
+    min-width: 35px;
   }
 
   &-date {

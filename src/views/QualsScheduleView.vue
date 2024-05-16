@@ -4,7 +4,20 @@
       <h1>{{ tourney!.name }}</h1>
     </RouterLink>
     <h2>{{ round!.name }} schedule</h2>
-    <ButtonComp class="schedule__add-ex-btn" v-if="isAuthenticated" btn-text="Add extra time" />
+    <div
+      class="schedule__add-extra"
+      v-if="isAuthenticated && qualsSchedule !== null && qualsSchedule.length > 0"
+    >
+      <InputField v-model="ExDate" label="Date" placeholder="yyyy-MM-dd" />
+      <InputField v-model="ExTime" label="Time" placeholder="hh:mm" />
+      <ButtonComp
+        class="schedule__add-extra-btn"
+        @click="handleAddExtra"
+        btn-text="Add extra time"
+        color="green"
+        text-color="black"
+      />
+    </div>
     <QualsSchedule
       v-if="qualsSchedule != null && qualsSchedule.length > 0"
       :quals-schedule="qualsSchedule"
@@ -24,13 +37,14 @@
 
 <script setup lang="ts">
 import {
+  addQualsSchedule,
   generateQualsSchedule,
   getQualifierSchedule,
   getRound,
   getTournamentById
 } from '@/Api/OtmApi'
-import type { QualifierSchedule, ResponseError, Round, Tournament } from '@/Types'
-import { validDate } from '@/Utils/HelperFunctions'
+import type { QsPost, QualifierSchedule, ResponseError, Round, Tournament } from '@/Types'
+import { validDate, validTime } from '@/Utils/HelperFunctions'
 import ButtonComp from '@/components/common/ButtonComp.vue'
 import InputField from '@/components/common/InputField.vue'
 import QualsSchedule from '@/components/schedule/QualsSchedule.vue'
@@ -49,6 +63,8 @@ const tourney = ref<Tournament | null>(null)
 
 const startDate = ref<string>('')
 const endDate = ref<string>('')
+const ExDate = ref<string>('')
+const ExTime = ref<string>('')
 
 const qualsSchedule = ref<QualifierSchedule[] | null>(null)
 
@@ -87,6 +103,36 @@ const handleRowUpdated = (updatedRow: QualifierSchedule) => {
   const index = qualsSchedule.value!.findIndex((qs) => qs.id === updatedRow.id)
   qualsSchedule.value![index] = updatedRow
 }
+
+const handleAddExtra = async () => {
+  if (!validDate(ExDate.value)) {
+    toast.error('Invalid date')
+    return
+  }
+  if (!validTime(ExTime.value)) {
+    toast.error('Invalid time')
+    return
+  }
+  const ExNum = qualsSchedule.value!.filter((qs) => qs.num.substring(0, 2) === 'EX').length + 1
+  const num = `EX${ExNum}`
+
+  const dateTime = new Date(`${ExDate.value}T${ExTime.value}:00Z`)
+
+  try {
+    const qs: QsPost = {
+      tourneyId: tourney.value!.id,
+      roundId: round.value!.id,
+      num,
+      dateTime
+    }
+    const resp = await addQualsSchedule(qs, idTokenClaims.value!.__raw)
+    qualsSchedule.value!.push(resp.data)
+    toast.success('Extra time added')
+  } catch (error) {
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response?.data.detail)
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -98,8 +144,16 @@ const handleRowUpdated = (updatedRow: QualifierSchedule) => {
   margin: 20px;
   max-height: calc(100vh - 110px);
 
-  &__add-ex-btn {
+  &__add-extra {
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 10px;
     margin-bottom: 10px;
+  }
+
+  &__add-extra-btn {
+    margin-bottom: 7px;
   }
 
   &__generation {
