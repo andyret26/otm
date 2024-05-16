@@ -13,3 +13,11 @@ VITE_AUTH_DOMAIN=YOUR_AUTH0_DOMAIN
 VITE_AUTH_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
 
 ```
+
+# Todo
+
+- [x] Qualifier schedule row header
+- [ ] Add extra lobby in qualifier schedule
+- [ ] Simple stats view to determine who qualified
+- [ ] Bracket schedule
+- [ ] Referee system

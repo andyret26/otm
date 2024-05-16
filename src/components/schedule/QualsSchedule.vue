@@ -1,5 +1,6 @@
 <template>
   <div class="quals-schedule">
+    <QualsRowHeader />
     <div
       class="quals-schedule__card"
       v-for="(qual, index) in qualsSchedule"
@@ -59,6 +60,7 @@ import { useToast } from 'vue-toastification'
 import type { AxiosError } from 'axios'
 import { onMounted, ref } from 'vue'
 import QualsRowEdit from './QualsRowEdit.vue'
+import QualsRowHeader from './QualsRowHeader.vue'
 
 interface Props {
   isTeamTourney: boolean
