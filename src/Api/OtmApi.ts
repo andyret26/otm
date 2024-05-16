@@ -172,10 +172,14 @@ export async function getTournamentStaff(tourneyId: number): Promise<AxiosRespon
   return resp
 }
 
-export async function updateQualsSchedule(qs: QsPut): Promise<AxiosResponse<QualifierSchedule>> {
+export async function updateQualsSchedule(
+  qs: QsPut,
+  token: string
+): Promise<AxiosResponse<QualifierSchedule>> {
   const resp = await axios.put<QualifierSchedule>(
     `${otm_API}/schedule/quals-schedule/${qs.scheduleId}`,
-    qs
+    qs,
+    { headers: { Authorization: `Bearer ${token}` } }
   )
   return resp
 }

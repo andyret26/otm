@@ -4,6 +4,7 @@
       <h1>{{ tourney!.name }}</h1>
     </RouterLink>
     <h2>{{ round!.name }} schedule</h2>
+    <ButtonComp class="schedule__add-ex-btn" v-if="isAuthenticated" btn-text="Add extra lobby" />
     <QualsSchedule
       v-if="qualsSchedule != null && qualsSchedule.length > 0"
       :quals-schedule="qualsSchedule"
@@ -96,6 +97,10 @@ const handleRowUpdated = (updatedRow: QualifierSchedule) => {
   max-width: 100%;
   margin: 20px;
   max-height: calc(100vh - 110px);
+
+  &__add-ex-btn {
+    margin-bottom: 10px;
+  }
 
   &__generation {
     margin-top: 10px;

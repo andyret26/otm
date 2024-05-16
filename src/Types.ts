@@ -127,6 +127,7 @@ export type AddedReferee = {
 }
 
 export type QsPut = {
+  tourneyId: number
   scheduleId: number
   refId: number | null
   names: string[] | null

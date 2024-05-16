@@ -73,6 +73,8 @@ import ButtonComp from '../common/ButtonComp.vue'
 import { updateQualsSchedule } from '@/Api/OtmApi'
 import type { AxiosError } from 'axios'
 import { useToast } from 'vue-toastification'
+import { useRoute } from 'vue-router'
+import { useAuth0 } from '@auth0/auth0-vue'
 
 interface Props {
   qualsSchedule: QualifierSchedule
@@ -80,7 +82,9 @@ interface Props {
   participants: Player[] | Team[]
 }
 
+const { idTokenClaims } = useAuth0()
 const toast = useToast()
+const route = useRoute()
 
 const props = defineProps<Props>()
 const emit = defineEmits(['rowUpdated'])
@@ -113,6 +117,7 @@ const handleRemovePaticipant = (name: string) => {
 const handleSaveChanges = async () => {
   console.log('handleSaveChanges')
   const qs: QsPut = {
+    tourneyId: parseInt(route.path.split('/')[2]),
     scheduleId: props.qualsSchedule.id,
     refId:
       selectedRef.value === 'None'
@@ -122,7 +127,7 @@ const handleSaveChanges = async () => {
   }
 
   try {
-    const resp = await updateQualsSchedule(qs)
+    const resp = await updateQualsSchedule(qs, idTokenClaims.value!.__raw)
     console.log(resp)
     emit('rowUpdated', resp.data)
     toast.success('Schedule updated')
