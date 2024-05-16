@@ -83,7 +83,6 @@ const handleCreateClick = async () => {
     toast.success('Round created')
   } catch (error) {
     const err = error as AxiosError<ResponseError>
-    console.log('creat round error', err)
     if (err.response?.status === 401) {
       toast.error('Unauthorized.\nAre you logged in?')
     } else {

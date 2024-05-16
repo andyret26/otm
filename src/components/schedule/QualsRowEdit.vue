@@ -115,7 +115,6 @@ const handleRemovePaticipant = (name: string) => {
 }
 
 const handleSaveChanges = async () => {
-  console.log('handleSaveChanges')
   const qs: QsPut = {
     tourneyId: parseInt(route.path.split('/')[2]),
     scheduleId: props.qualsSchedule.id,
@@ -128,12 +127,11 @@ const handleSaveChanges = async () => {
 
   try {
     const resp = await updateQualsSchedule(qs, idTokenClaims.value!.__raw)
-    console.log(resp)
     emit('rowUpdated', resp.data)
     toast.success('Schedule updated')
   } catch (error) {
     const e = error as AxiosError<ResponseError>
-    console.log(e.response!.data.detail)
+    toast.error(e.response?.data.detail)
   }
 }
 

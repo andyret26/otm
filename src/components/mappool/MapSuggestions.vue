@@ -85,7 +85,6 @@ const handleSuggestMap = async () => {
     emit('addedSuggestion', resp.data)
     toast.success('Map suggestion added')
   } catch (error) {
-    console.log(error)
     const e = error as AxiosError<ResponseError>
     toast.error(e.response?.data.detail)
   } finally {

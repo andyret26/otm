@@ -109,7 +109,6 @@ export async function addMapSuggestion(
   const resp = await axios.post<Map>(`${otm_API}/round/${roundId}/suggestion`, suggestion, {
     headers: { Authorization: `Bearer ${token}` }
   })
-  console.log(resp.data)
   return resp
 }
 

@@ -112,7 +112,6 @@ const showCreateRound = ref<boolean>(false)
 
 onMounted(async () => {
   tournament.value = await getTournamentById(parseInt(route.path.split('/')[2]))
-  console.log(tournament.value)
   tournament.value.rounds = tournament.value.rounds.reverse()
   activeBtn.value = route.hash.replace('#', '') || 'Rounds'
 })

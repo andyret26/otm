@@ -4,7 +4,7 @@
       <h1>{{ tourney!.name }}</h1>
     </RouterLink>
     <h2>{{ round!.name }} schedule</h2>
-    <ButtonComp class="schedule__add-ex-btn" v-if="isAuthenticated" btn-text="Add extra lobby" />
+    <ButtonComp class="schedule__add-ex-btn" v-if="isAuthenticated" btn-text="Add extra time" />
     <QualsSchedule
       v-if="qualsSchedule != null && qualsSchedule.length > 0"
       :quals-schedule="qualsSchedule"
