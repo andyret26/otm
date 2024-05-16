@@ -19,7 +19,6 @@
   min-height: 40px;
   max-height: 40px;
   align-items: center;
-  margin-bottom: 20px;
   position: sticky;
   top: 0;
   z-index: 3;
