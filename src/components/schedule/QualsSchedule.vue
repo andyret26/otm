@@ -23,6 +23,11 @@
       <div class="quals-schedule__card-names card-field1">
         <div v-for="name in qual.names" :key="name">{{ name }}</div>
       </div>
+
+      <div class="quals-schedule__card-match-id card-field2">
+        <a :href="`https://osu.ppy.sh/community/matches/${qual.matchId}`">{{ qual.matchId }}</a>
+      </div>
+
       <div class="quals-schedule__card-edit">
         <IconBtn
           v-if="isAuthenticated"
@@ -185,6 +190,12 @@ onMounted(async () => {
     align-items: center;
     gap: 0px 10px;
     padding: 3px;
+  }
+
+  &-match-id {
+    width: 70px;
+    font-size: 12px;
+    text-decoration: underline;
   }
 
   &-edit {

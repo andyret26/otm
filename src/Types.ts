@@ -117,6 +117,7 @@ export type QualifierSchedule = {
   names: string[]
   referee?: string
   num: string
+  matchId?: number
 }
 
 // Random Types

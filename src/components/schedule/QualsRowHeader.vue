@@ -9,6 +9,7 @@
     <div class="quals-schedule__header-names header-field1">
       <div>Names</div>
     </div>
+    <div class="quals-schedule__header-mp-link header-field2">Mp Link</div>
     <div class="quals-schedule__header-edit"></div>
   </div>
 </template>
@@ -42,7 +43,6 @@
 
   &-names {
     box-sizing: border-box;
-    font-size: 12px;
     min-width: 400px;
     max-width: 400px;
     display: flex;
@@ -51,6 +51,10 @@
     align-items: center;
     gap: 0px 10px;
     padding: 3px;
+  }
+
+  &-mp-link {
+    width: 70px;
   }
 
   &-edit {
