@@ -128,9 +128,11 @@ export type AddedReferee = {
 
 export type QsPut = {
   tourneyId: number
+  roundId: number
   scheduleId: number
   refId: number | null
   names: string[] | null
+  mpLinkId?: number | null
 }
 
 export type QsPost = {

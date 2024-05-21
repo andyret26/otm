@@ -6,6 +6,7 @@
       :label="'Add referee'"
       v-model="selectedRef"
     />
+    <InputField v-model="mpLinkId" label="MP Link id" placeholder="ex. 123456" />
 
     <div class="quals-row-edit__add-participant">
       <SelectBox
@@ -75,6 +76,7 @@ import type { AxiosError } from 'axios'
 import { useToast } from 'vue-toastification'
 import { useRoute } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
+import InputField from '../common/InputField.vue'
 
 interface Props {
   qualsSchedule: QualifierSchedule
@@ -90,6 +92,7 @@ const props = defineProps<Props>()
 const emit = defineEmits(['rowUpdated'])
 
 const selectedRef = ref<string>('None')
+const mpLinkId = ref<string>('')
 const selectedParticipant = ref<string>('Select')
 const addedParticipants = ref<string[]>([])
 
@@ -117,12 +120,14 @@ const handleRemovePaticipant = (name: string) => {
 const handleSaveChanges = async () => {
   const qs: QsPut = {
     tourneyId: parseInt(route.path.split('/')[2]),
+    roundId: parseInt(route.path.split('/')[4]),
     scheduleId: props.qualsSchedule.id,
     refId:
       selectedRef.value === 'None'
         ? null
         : props.staff.find((s) => s.username === selectedRef.value)!.id,
-    names: addedParticipants.value
+    names: addedParticipants.value,
+    mpLinkId: parseInt(mpLinkId.value)
   }
 
   try {
@@ -149,7 +154,7 @@ onMounted(() => {
   transform: translateX(-50%);
   left: 50%;
   width: 300px;
-  height: 415px;
+  height: 500px;
   background-color: var(--bg2);
   border-radius: var(--base-border-radius);
   box-shadow: var(--boxshadow-white);
