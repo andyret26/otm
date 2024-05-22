@@ -1,6 +1,6 @@
 <template>
   <div class="quals-schedule">
-    <QualsRowHeader />
+    <QualsRowHeader :handle-hide-mp-links="handleHideMpLinks" :links-visible="linksVisible" />
     <div
       class="quals-schedule__card"
       v-for="(qual, index) in qualsSchedule"
@@ -25,7 +25,11 @@
       </div>
 
       <div class="quals-schedule__card-match-id card-field2">
-        <a :href="`https://osu.ppy.sh/community/matches/${qual.matchId}`">{{ qual.matchId }}</a>
+        <a
+          v-if="qual.mpLinkIsVisable"
+          :href="`https://osu.ppy.sh/community/matches/${qual.matchId}`"
+          >{{ qual.matchId }}</a
+        >
       </div>
 
       <div class="quals-schedule__card-edit">
@@ -72,6 +76,8 @@ import QualsRowHeader from './QualsRowHeader.vue'
 interface Props {
   isTeamTourney: boolean
   qualsSchedule: QualifierSchedule[]
+  handleHideMpLinks: () => void
+  linksVisible: boolean
 }
 
 const props = defineProps<Props>()
@@ -193,7 +199,7 @@ onMounted(async () => {
   }
 
   &-match-id {
-    width: 70px;
+    min-width: 85px;
     font-size: 12px;
     text-decoration: underline;
   }

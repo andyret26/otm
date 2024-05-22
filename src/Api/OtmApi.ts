@@ -196,6 +196,19 @@ export async function addQualsSchedule(
   return resp
 }
 
+export async function changeMpVisability(
+  tourneyId: number,
+  roundId: number,
+  token: string
+): Promise<AxiosResponse> {
+  const resp = await axios.put(
+    `${otm_API}/schedule/tournament/${tourneyId}/round/${roundId}/mp-visibility`,
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  return resp
+}
+
 function subToId(sub: string): number {
   return parseInt(sub.split('|')[2], 10)
 }

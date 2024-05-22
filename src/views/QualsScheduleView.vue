@@ -22,6 +22,8 @@
       v-if="qualsSchedule != null && qualsSchedule.length > 0"
       :quals-schedule="qualsSchedule"
       :is-team-tourney="tourney.teams.length > 0"
+      :handle-hide-mp-links="handleHideMpLinks"
+      :links-visible="linksVisable"
       @row-updated="handleRowUpdated"
     />
     <div class="schedule__generation" v-else-if="isAuthenticated">
@@ -38,6 +40,7 @@
 <script setup lang="ts">
 import {
   addQualsSchedule,
+  changeMpVisability,
   generateQualsSchedule,
   getQualifierSchedule,
   getRound,
@@ -50,7 +53,7 @@ import InputField from '@/components/common/InputField.vue'
 import QualsSchedule from '@/components/schedule/QualsSchedule.vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 import type { AxiosError } from 'axios'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
@@ -76,6 +79,11 @@ onMounted(async () => {
   tourney.value = resp2
 
   qualsSchedule.value = (await getQualifierSchedule(round.value!.id)).data
+})
+
+const linksVisable = computed<boolean>(() => {
+  if (qualsSchedule.value === null) return false
+  return qualsSchedule.value.some((qs) => qs.mpLinkIsVisable)
 })
 
 const handleGenerateQuals = async () => {
@@ -128,6 +136,19 @@ const handleAddExtra = async () => {
     const resp = await addQualsSchedule(qs, idTokenClaims.value!.__raw)
     qualsSchedule.value!.push(resp.data)
     toast.success('Extra time added')
+  } catch (error) {
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response?.data.detail)
+  }
+}
+
+const handleHideMpLinks = async () => {
+  try {
+    await changeMpVisability(tourney.value!.id, round.value!.id, idTokenClaims.value!.__raw)
+    qualsSchedule.value?.forEach((qs) => {
+      qs.mpLinkIsVisable = !qs.mpLinkIsVisable
+    })
+    toast.success('Mp links visability changed')
   } catch (error) {
     const e = error as AxiosError<ResponseError>
     toast.error(e.response?.data.detail)

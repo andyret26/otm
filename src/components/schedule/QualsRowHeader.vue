@@ -9,10 +9,47 @@
     <div class="quals-schedule__header-names header-field1">
       <div>Names</div>
     </div>
-    <div class="quals-schedule__header-mp-link header-field2">Mp Link</div>
+    <div class="quals-schedule__header-mp-link header-field2">
+      <div class="quals-schedule__header-mp-link-text">Mp Link</div>
+      <div v-if="isAuthenticated" class="quals-schedule__header-mp-link-btns">
+        <IconBtn
+          v-if="!linksVisible"
+          @click="handleHideMpLinks"
+          icon-name="fa-eye-slash"
+          title="Mp links are private. Click to make mp links public"
+          :size="20"
+          :icon-size="1.1"
+          color="none"
+          text-color="#ff5656"
+        />
+        <IconBtn
+          v-else
+          @click="handleHideMpLinks"
+          icon-name="fa-eye"
+          title="Mp links are public. Click to make mp links private"
+          :size="20"
+          :icon-size="1.1"
+          color="none"
+          text-color="lightgreen"
+        />
+      </div>
+    </div>
     <div class="quals-schedule__header-edit"></div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { useAuth0 } from '@auth0/auth0-vue'
+import IconBtn from '../common/IconBtn.vue'
+
+interface Props {
+  handleHideMpLinks: () => void
+  linksVisible: boolean
+}
+
+defineProps<Props>()
+const { isAuthenticated } = useAuth0()
+</script>
 
 <style scoped lang="scss">
 .quals-schedule__header {
@@ -54,7 +91,15 @@
   }
 
   &-mp-link {
-    width: 70px;
+    min-width: 85px;
+    max-width: 85px;
+    text-align: center;
+    text-wrap: wrap;
+
+    &-text {
+      max-width: 50px;
+      line-height: 17px;
+    }
   }
 
   &-edit {

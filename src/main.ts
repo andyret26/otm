@@ -5,12 +5,22 @@ import App from './App.vue'
 import router from './router'
 import { createAuth0 } from '@auth0/auth0-vue'
 import { OhVueIcon, addIcons } from 'oh-vue-icons'
-import { FaSearch, FaPlus, FaTimes, FaDiscord, FaTrash, FaMinus, FaEdit } from 'oh-vue-icons/icons'
 import Toast from 'vue-toastification'
 import type { PluginOptions } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import {
+  FaSearch,
+  FaPlus,
+  FaTimes,
+  FaDiscord,
+  FaTrash,
+  FaMinus,
+  FaEdit,
+  FaEye,
+  FaEyeSlash
+} from 'oh-vue-icons/icons'
 
-addIcons(FaSearch, FaPlus, FaTimes, FaDiscord, FaTrash, FaMinus, FaEdit)
+addIcons(FaSearch, FaPlus, FaTimes, FaDiscord, FaTrash, FaMinus, FaEdit, FaEye, FaEyeSlash)
 
 const app = createApp(App)
 

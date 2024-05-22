@@ -118,6 +118,7 @@ export type QualifierSchedule = {
   referee?: string
   num: string
   matchId?: number
+  mpLinkIsVisable: boolean
 }
 
 // Random Types
