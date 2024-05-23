@@ -19,6 +19,8 @@ export type Round = {
   isQualifier: boolean
   mappool: Map[]
   mapSuggestions: Map[]
+  isMpLinksPublic: boolean
+  isStatsPublic: boolean
 }
 
 export type Map = {
@@ -118,7 +120,6 @@ export type QualifierSchedule = {
   referee?: string
   num: string
   matchId?: number
-  mpLinkIsVisable: boolean
 }
 
 // Random Types

@@ -25,11 +25,9 @@
       </div>
 
       <div class="quals-schedule__card-match-id card-field2">
-        <a
-          v-if="qual.mpLinkIsVisable"
-          :href="`https://osu.ppy.sh/community/matches/${qual.matchId}`"
-          >{{ qual.matchId }}</a
-        >
+        <a v-if="linksVisible" :href="`https://osu.ppy.sh/community/matches/${qual.matchId}`">{{
+          qual.matchId
+        }}</a>
       </div>
 
       <div class="quals-schedule__card-edit">
