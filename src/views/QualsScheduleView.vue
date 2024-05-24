@@ -8,8 +8,10 @@
       class="schedule__add-extra"
       v-if="isAuthenticated && qualsSchedule !== null && qualsSchedule.length > 0"
     >
-      <InputField v-model="ExDate" label="Date" placeholder="yyyy-MM-dd" />
-      <InputField v-model="ExTime" label="Time" placeholder="hh:mm" />
+      <div class="schedule__add-extra-inputs">
+        <InputField v-model="ExDate" label="Date" placeholder="yyyy-MM-dd" />
+        <InputField v-model="ExTime" label="Time" placeholder="hh:mm" />
+      </div>
       <ButtonComp
         class="schedule__add-extra-btn"
         @click="handleAddExtra"
@@ -166,6 +168,11 @@ const handleHideMpLinks = async () => {
     margin-bottom: 10px;
   }
 
+  &__add-extra-inputs {
+    display: flex;
+    gap: 10px;
+  }
+
   &__add-extra-btn {
     margin-bottom: 7px;
   }
@@ -181,6 +188,15 @@ const handleHideMpLinks = async () => {
   &__inputs {
     display: flex;
     gap: 10px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .schedule {
+    &__add-extra {
+      flex-direction: column;
+      align-items: center;
+    }
   }
 }
 </style>

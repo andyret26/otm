@@ -28,6 +28,8 @@
         </div>
       </div>
 
+      <div class="tournament__devider"></div>
+
       <div v-if="activeBtn === 'Rounds'" class="tournament__tab-container">
         <p v-if="tournament.rounds.length <= 0">No Rounds</p>
         <IconBtn
@@ -146,8 +148,8 @@ const handleRoundCreated = (round: Round) => {
 .tournament {
   display: flex;
   justify-content: center;
-  height: 100%;
-  width: 100%;
+  align-items: center;
+  padding: 20px;
 
   &__container {
     width: 100%;
@@ -171,6 +173,12 @@ const handleRoundCreated = (round: Round) => {
   &__header-btns {
     display: flex;
     gap: 10px;
+  }
+
+  &__devider {
+    width: 100%;
+    height: 2px;
+    background-color: var(--osu-yellow);
   }
 
   &__cards-container {

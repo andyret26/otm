@@ -26,6 +26,7 @@ defineProps<Props>()
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px 0px;
 
   &__name {
     margin: 5px 0px;

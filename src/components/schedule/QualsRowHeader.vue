@@ -60,6 +60,8 @@ const { isAuthenticated } = useAuth0()
   position: sticky;
   top: 0;
   z-index: 3;
+  border-bottom: 5px solid var(--bg1);
+  margin-bottom: -5px;
 
   &-id {
     min-width: 35px;
