@@ -62,6 +62,13 @@ export async function getTournamentById(id: number): Promise<Tournament> {
   return resp.data
 }
 
+export async function deleteTournament(id: number, token: string): Promise<AxiosResponse> {
+  const resp = await axios.delete(`${otm_API}/tournament/${id}`, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  return resp
+}
+
 export async function registerTeam(team: TeamRegister): Promise<AxiosResponse<Tournament>> {
   const resp = await axios.post<Tournament>(
     `${otm_API}/tournament/${team.tournamentId}/register-team`,

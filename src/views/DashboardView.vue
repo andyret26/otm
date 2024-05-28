@@ -10,7 +10,13 @@
     />
     <LoadingSpinner v-if="!dashboardData" />
     <div v-if="dashboardData" class="dashboard__tournaments">
-      <TournamentCard v-for="tourney in dashboardData" :key="tourney.id" :tournament="tourney" />
+      <TournamentCard
+        v-for="tourney in dashboardData"
+        :key="tourney.id"
+        :tournament="tourney"
+        :show-btns="true"
+        @tournament-deleted="dashboardData = dashboardData!.filter((t) => t.id !== $event)"
+      />
     </div>
     <CreateTournamet
       v-if="showCreateTournament"

@@ -1,6 +1,7 @@
 export type Tournament = {
   id: number
   name: string
+  hostId: number
   formuPostLink?: string
   isTeamTourney: boolean
   format: '2v2' | '3v3' | '4v4'
