@@ -21,6 +21,7 @@ export type Round = {
   mapSuggestions: Map[]
   isMpLinksPublic: boolean
   isStatsPublic: boolean
+  tournament: Tournament
 }
 
 export type Map = {
@@ -40,6 +41,9 @@ export type Map = {
   url: string
   image: string
   notes?: string
+
+  playerStats: PlayerStats[]
+  teamStats: TeamStats[]
 }
 
 export type TournamentPlayer = {
@@ -57,6 +61,7 @@ export type Player = {
   global_rank?: number
   country_code: string
   discordUsername?: string
+  tournaments: TournamentPlayer[]
 }
 
 export type Team = {
@@ -143,4 +148,52 @@ export type QsPost = {
   roundId: number
   dateTime: Date
   num: string
+}
+
+export type PlayerStats = {
+  mapId: number
+  playerId: number
+  player: Player
+  score: number
+  acc: number
+  roundid: number
+}
+
+export type TeamStats = {
+  mapId: number
+  teamId: number
+  team: Team
+  totalScore: number
+  avgScore: number
+  roundid: number
+}
+
+export type UserPlacement = {
+  username: string
+  isKnockedOut?: boolean
+  mapList: {
+    mapId?: number
+    placement?: number
+    normalizedScore?: number
+    score?: number
+  }[]
+
+  avgPlacement: number
+  totalNormScore: number
+  avgScore: number
+}
+
+export type TeamPlacement = {
+  teamName: string
+  isKnockedOut: boolean
+  mapList: {
+    mapId?: number
+    placement?: number
+    normalizedScore?: number
+    score?: number
+  }[]
+
+  avgPlacement: number
+  totalNormScore: number
+  avgScore: number
 }

@@ -1,4 +1,4 @@
-import type { CreateTouernament } from '@/Types'
+import type { CreateTouernament, Map, TeamPlacement, UserPlacement } from '@/Types'
 
 export const validateCreatTournament = (tourney: CreateTouernament): string[] => {
   const errors = []
@@ -28,4 +28,123 @@ export const validTime = (time: string): boolean => {
   if (time.split(':').length !== 2) return false
 
   return true
+}
+
+export const mapStatsToUserPlacements = (maps: Map[], tourneyId: number): UserPlacement[] => {
+  const up: UserPlacement[] = []
+  for (const map of maps) {
+    map.playerStats.sort((a, b) => b.score - a.score)
+    for (const [i, ps] of map.playerStats.entries()) {
+      const username = ps.player.username
+      if (!up.some((u) => u.username === username)) {
+        const pt = ps.player.tournaments.find((t) => t.tournamentId === tourneyId)
+        const newUp = {
+          username: username,
+          isKnockedOut: pt ? pt.isknockout : undefined,
+          mapList: [
+            {
+              mapId: map.id,
+              placement: i + 1,
+              normalizedScore: parseFloat((ps.score / map.playerStats[0].score).toFixed(2)),
+              score: ps.score
+            }
+          ],
+          avgPlacement: 0,
+          totalNormScore: 0,
+          avgScore: 0
+        }
+        up.push(newUp)
+        continue
+      }
+      const existingUp = up.find((u) => u.username === username)
+      existingUp!.mapList.push({
+        mapId: map.id,
+        placement: i + 1,
+        normalizedScore: parseFloat((ps.score / map.playerStats[0].score).toFixed(2)),
+        score: ps.score
+      })
+    }
+  }
+
+  for (const userp of up) {
+    const total = userp.mapList.reduce((sum, currentValue) => {
+      if (!currentValue.placement) return sum
+      return sum + currentValue.placement
+    }, 0)
+    const length = userp.mapList.filter((p) => p.placement).length
+    userp.avgPlacement = parseFloat((total / length).toFixed(2))
+
+    const totalNormScore = userp.mapList.reduce((sum, currentValue) => {
+      if (!currentValue.normalizedScore) return sum
+      return sum + currentValue.normalizedScore
+    }, 0)
+    userp.totalNormScore = parseFloat(totalNormScore.toFixed(2))
+
+    const totalScore = userp.mapList.reduce((sum, currentValue) => {
+      if (!currentValue.score) return sum
+      return sum + currentValue.score
+    }, 0)
+    userp.avgScore = Math.round(totalScore / userp.mapList.length)
+  }
+
+  return up.sort((a, b) => b.totalNormScore - a.totalNormScore)
+}
+
+export const mapStatsToTeamPlacements = (maps: Map[]): TeamPlacement[] => {
+  const tp: TeamPlacement[] = []
+  for (const map of maps) {
+    map.teamStats.sort((a, b) => b.totalScore - a.totalScore)
+    for (const [i, ts] of map.teamStats.entries()) {
+      const teamName = ts.team.teamName
+      if (!tp.some((t) => t.teamName === teamName)) {
+        const newTp = {
+          teamName: teamName,
+          isKnockedOut: ts.team.isknockout,
+          mapList: [
+            {
+              mapId: map.id,
+              placement: i + 1,
+              normalizedScore: parseFloat((ts.totalScore / map.teamStats[0].totalScore).toFixed(2)),
+              score: ts.totalScore
+            }
+          ],
+          avgPlacement: 0,
+          totalNormScore: 0,
+          avgScore: 0
+        }
+        tp.push(newTp)
+        continue
+      }
+      const existingUp = tp.find((t) => t.teamName === teamName)
+      existingUp!.mapList.push({
+        mapId: map.id,
+        placement: i + 1,
+        normalizedScore: parseFloat((ts.totalScore / map.teamStats[0].totalScore).toFixed(2)),
+        score: ts.totalScore
+      })
+    }
+  }
+
+  for (const teamp of tp) {
+    const totalPlacement = teamp.mapList.reduce((sum, currentValue) => {
+      if (!currentValue.placement) return sum
+      return sum + currentValue.placement
+    }, 0)
+    const length = teamp.mapList.filter((t) => t.placement).length
+    teamp.avgPlacement = parseFloat((totalPlacement / length).toFixed(2))
+
+    const totalNormScore = teamp.mapList.reduce((sum, currentValue) => {
+      if (!currentValue.normalizedScore) return sum
+      return sum + currentValue.normalizedScore
+    }, 0)
+    teamp.totalNormScore = parseFloat(totalNormScore.toFixed(2))
+
+    const totalScore = teamp.mapList.reduce((sum, currentValue) => {
+      if (!currentValue.score) return sum
+      return sum + currentValue.score
+    }, 0)
+    teamp.avgScore = Math.round(totalScore / teamp.mapList.length)
+  }
+
+  return tp.sort((a, b) => b.totalNormScore - a.totalNormScore)
 }

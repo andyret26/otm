@@ -209,6 +209,11 @@ export async function changeMpVisability(
   return resp
 }
 
+export async function getStats(roundId: number): Promise<AxiosResponse<Map[]>> {
+  const resp = await axios.get<Map[]>(`${otm_API}/round/${roundId}/stats`)
+  return resp
+}
+
 function subToId(sub: string): number {
   return parseInt(sub.split('|')[2], 10)
 }
