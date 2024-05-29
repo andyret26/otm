@@ -17,10 +17,22 @@ import {
   FaMinus,
   FaEdit,
   FaEye,
-  FaEyeSlash
+  FaEyeSlash,
+  MdAdminpanelsettings
 } from 'oh-vue-icons/icons'
 
-addIcons(FaSearch, FaPlus, FaTimes, FaDiscord, FaTrash, FaMinus, FaEdit, FaEye, FaEyeSlash)
+addIcons(
+  FaSearch,
+  FaPlus,
+  FaTimes,
+  FaDiscord,
+  FaTrash,
+  FaMinus,
+  FaEdit,
+  FaEye,
+  FaEyeSlash,
+  MdAdminpanelsettings
+)
 
 const app = createApp(App)
 

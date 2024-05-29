@@ -148,3 +148,21 @@ export const mapStatsToTeamPlacements = (maps: Map[]): TeamPlacement[] => {
 
   return tp.sort((a, b) => b.totalNormScore - a.totalNormScore)
 }
+
+export function sortPool(maps: Map[]): Map[] {
+  const modSort = (modPrefix: string) => {
+    return maps
+      .filter((map) => map.mod.startsWith(modPrefix))
+      .sort((a, b) => a.mod.localeCompare(b.mod))
+  }
+
+  const modPrefixes = ['NM', 'HD', 'HR', 'DT', 'FM', 'TB']
+  const res: Map[] = []
+
+  modPrefixes.forEach((prefix) => {
+    const filteredMaps = modSort(prefix)
+    res.push(...filteredMaps)
+  })
+
+  return res
+}

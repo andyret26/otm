@@ -7,6 +7,10 @@
       <h3 class="home__subtext">
         Participate in a fun tournament by searching for one down below.
       </h3>
+      <div :style="{ marginTop: '20px', color: '#ff4444' }">
+        This app is currently in development, any data that is seen is just for testing purposes and
+        will most likely be deleted when the app is finished.
+      </div>
     </div>
 
     <div class="home__divider"></div>

@@ -18,12 +18,13 @@
     <div v-if="suggestions.length > 0" class="suggestions__card-container">
       <MapCardHeader :show-btns="true" />
       <MapCard
-        v-for="map in suggestions"
+        v-for="map in sortPool(suggestions)"
         :key="map.id + map.mod"
         :map="map"
         :main-pool="mainPool"
         :show-btns="true"
         @suggestion-to-pool="$emit('suggestionToPool', $event)"
+        @remove-suggestion-from-pool="$emit('removeSuggestionFromPool', $event)"
       />
     </div>
     <p v-else>No suggestions made</p>
@@ -42,6 +43,7 @@ import { useToast } from 'vue-toastification'
 import type { AxiosError } from 'axios'
 import MapCard from '../cards/MapCard.vue'
 import MapCardHeader from '../cards/MapCardHeader.vue'
+import { sortPool } from '@/Utils/HelperFunctions'
 
 interface Props {
   suggestions: Map[]
@@ -50,7 +52,7 @@ interface Props {
   tournamentId: number
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['addedSuggestion', 'suggestionToPool'])
+const emit = defineEmits(['addedSuggestion', 'suggestionToPool', 'removeSuggestionFromPool'])
 const { idTokenClaims } = useAuth0()
 const toast = useToast()
 

@@ -129,6 +129,19 @@ export async function addSuggestionToPool(
   })
   return resp
 }
+export async function removeSuggestionFromPool(
+  request: PostMapSuggestion,
+  token: string
+): Promise<AxiosResponse<Map>> {
+  const resp = await axios.post<Map>(
+    `${otm_API}/round/${request.roundId}/mappool/remove-suggestion`,
+    request,
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  )
+  return resp
+}
 
 export async function generateQualsSchedule(
   tournamentId: number,

@@ -73,12 +73,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Map } from '@/Types'
+import type { Map, ResponseError } from '@/Types'
 import { computed } from 'vue'
 import IconBtn from '@/components/common/IconBtn.vue'
-import { addSuggestionToPool } from '@/Api/OtmApi'
+import { addSuggestionToPool, removeSuggestionFromPool } from '@/Api/OtmApi'
 import { useRoute } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { useToast } from 'vue-toastification'
+import type { AxiosError } from 'axios'
 
 interface Props {
   map: Map
@@ -89,8 +91,9 @@ const props = withDefaults(defineProps<Props>(), {
   showBtns: false
 })
 
-const emit = defineEmits(['suggestionToPool'])
+const emit = defineEmits(['suggestionToPool', 'removeSuggestionFromPool'])
 const route = useRoute()
+const toast = useToast()
 const { idTokenClaims } = useAuth0()
 
 const lengthInMin = computed(() => {
@@ -119,13 +122,33 @@ const handleAddClick = async () => {
     )
 
     emit('suggestionToPool', resp.data)
+    toast.success('Map added to pool')
   } catch (error) {
-    console.log(error)
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response?.data.detail)
   }
 }
 
-const handleRemoveClick = () => {
+const handleRemoveClick = async () => {
   console.log('Remove clicked')
+  try {
+    await removeSuggestionFromPool(
+      {
+        mapId: props.map.id,
+        tournamentId: parseInt(route.path.split('/')[2]),
+        roundId: parseInt(route.path.split('/')[4]),
+        mod: props.map.mod
+      },
+      idTokenClaims.value!.__raw
+    )
+
+    emit('removeSuggestionFromPool', props.map.id)
+    toast.success('Map removed from pool')
+  } catch (error) {
+    ;('')
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response?.data.detail)
+  }
 }
 </script>
 

@@ -22,6 +22,7 @@
       :tournament-id="parseInt(route.path.split('/')[2])"
       :main-pool="round.mappool"
       @suggestion-to-pool="round?.mappool.push($event)"
+      @remove-suggestion-from-pool="round!.mappool = round!.mappool.filter((m) => m.id !== $event)"
     />
 
     <div class="mappool__maps-tab" v-if="activeBtn === 'Maps'">
@@ -51,6 +52,7 @@ import { useRoute } from 'vue-router'
 import MapCard from '@/components/cards/MapCard.vue'
 import MapCardHeader from '@/components/cards/MapCardHeader.vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { sortPool } from '@/Utils/HelperFunctions'
 const route = useRoute()
 const { isAuthenticated } = useAuth0()
 
@@ -67,21 +69,7 @@ onMounted(async () => {
 })
 
 const poolSorted = computed<Map[]>(() => {
-  const modSort = (modPrefix: string) => {
-    return round
-      .value!.mappool.filter((map) => map.mod.startsWith(modPrefix))
-      .sort((a, b) => a.mod.localeCompare(b.mod))
-  }
-
-  const modPrefixes = ['NM', 'HD', 'HR', 'DT', 'FM', 'TB']
-  const res: Map[] = []
-
-  modPrefixes.forEach((prefix) => {
-    const filteredMaps = modSort(prefix)
-    res.push(...filteredMaps)
-  })
-
-  return res
+  return sortPool(round.value!.mappool)
 })
 </script>
 
