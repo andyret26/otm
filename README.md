@@ -16,8 +16,17 @@ VITE_AUTH_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
 
 # Todo
 
-- [x] Qualifier schedule row header
+## Admin / staff
+
 - [x] Add extra lobby in qualifier schedule
-- [ ] Simple stats view to determine who qualified
-- [ ] Bracket schedule
+- [ ] Quals Schedule Admin
+- [ ] Stats view Admin
+- [ ] Bracket schedule Admin
 - [ ] Referee system
+
+## general / public
+
+- [x] Qualifier schedule row header
+- [x] Simple stats view
+- [ ] Bracket schedule
+- [ ] Bracket Visualiser
