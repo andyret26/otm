@@ -7,10 +7,16 @@
       <div class="stats__header-round">{{ round.name }} stats</div>
     </div>
     <div class="stats__players" v-if="!isTeamTourney">
-      <div class="stats__players-row" v-for="user in userPlacements" :key="user.username">
-        <div>{{ user.username }}</div>
-        <div>{{ user.totalNormScore }}</div>
-        <div>{{ user.isKnockedOut }}</div>
+      <TeamStatsHeader />
+
+      <div class="stats__players-container">
+        <div class="stats__players-row" v-for="(user, i) in userPlacements" :key="user.username">
+          <div class="stats__players-row-seed">{{ i + 1 }}</div>
+          <div class="stats__players-row-name">{{ user.username }}</div>
+          <div class="stats__players-row-norm">{{ user.totalNormScore }}</div>
+          <div class="stats__players-row-avg-placement">{{ user.avgPlacement }}</div>
+          <div class="stats__players-row-avg-score">{{ user.avgScore.toLocaleString() }}</div>
+        </div>
       </div>
     </div>
     <div class="stats__teams" v-else>
@@ -53,6 +59,7 @@ onMounted(async () => {
   isTeamTourney.value = resp.data.tournament.isTeamTourney
 
   userPlacements.value = mapStatsToUserPlacements(resp.data.mappool, tourneyId)
+
   if (isTeamTourney.value) {
     teamPlacements.value = mapStatsToTeamPlacements(resp.data.mappool)
   }
@@ -95,7 +102,8 @@ onMounted(async () => {
     }
   }
 
-  &__teams {
+  &__teams,
+  &__players {
     display: flex;
     flex-direction: column;
     overflow-y: auto;

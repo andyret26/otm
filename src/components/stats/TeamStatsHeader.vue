@@ -19,6 +19,7 @@
   padding: 5px 10px;
   line-height: 16px;
   width: 500px;
+  position: sticky;
   top: 0;
   background-color: var(--bg1);
 
