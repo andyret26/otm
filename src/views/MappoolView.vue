@@ -24,9 +24,10 @@
       @suggestion-to-pool="round?.mappool.push($event)"
       @remove-suggestion-from-pool="round!.mappool = round!.mappool.filter((m) => m.id !== $event)"
       @suggestion-deleted="
-        round!.mapSuggestions = round!.mapSuggestions.filter(
-          (m) => m.id !== $event.id && m.mod !== $event.mod
-        )
+        (e) => {
+          const i = round!.mapSuggestions.findIndex((m) => m.id === e.id && m.mod === e.mod)
+          round!.mapSuggestions.splice(i, 1)
+        }
       "
     />
 

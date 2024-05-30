@@ -110,8 +110,9 @@ const roundId = parseInt(route.path.split('/')[4])
 const btnDisabled = ref<boolean>(false)
 
 const lengthInMin = computed(() => {
-  const min = Math.floor(props.map.total_length / 60)
-  const sec = props.map.total_length - 60 * min
+  const LengthRounded = Math.round(props.map.total_length)
+  const min = Math.floor(LengthRounded / 60)
+  const sec = LengthRounded - 60 * min
   return `${min}:${sec.toString().padStart(2, '0')}`
 })
 
