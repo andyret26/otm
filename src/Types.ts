@@ -198,3 +198,13 @@ export type TeamPlacement = {
   totalNormScore: number
   avgScore: number
 }
+
+// Request Types
+
+export type DeleteSuggestionFromRound = {
+  tournamentId: number
+  roundId: number
+  mapId: number
+  mod: string
+  token: string
+}

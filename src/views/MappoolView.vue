@@ -23,6 +23,11 @@
       :main-pool="round.mappool"
       @suggestion-to-pool="round?.mappool.push($event)"
       @remove-suggestion-from-pool="round!.mappool = round!.mappool.filter((m) => m.id !== $event)"
+      @suggestion-deleted="
+        round!.mapSuggestions = round!.mapSuggestions.filter(
+          (m) => m.id !== $event.id && m.mod !== $event.mod
+        )
+      "
     />
 
     <div class="mappool__maps-tab" v-if="activeBtn === 'Maps'">

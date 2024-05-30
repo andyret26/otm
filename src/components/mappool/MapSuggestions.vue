@@ -25,6 +25,7 @@
         :show-btns="true"
         @suggestion-to-pool="$emit('suggestionToPool', $event)"
         @remove-suggestion-from-pool="$emit('removeSuggestionFromPool', $event)"
+        @suggestion-deleted="$emit('suggestionDeleted', $event)"
       />
     </div>
     <p v-else>No suggestions made</p>
@@ -52,7 +53,12 @@ interface Props {
   tournamentId: number
 }
 const props = defineProps<Props>()
-const emit = defineEmits(['addedSuggestion', 'suggestionToPool', 'removeSuggestionFromPool'])
+const emit = defineEmits([
+  'addedSuggestion',
+  'suggestionToPool',
+  'removeSuggestionFromPool',
+  'suggestionDeleted'
+])
 const { idTokenClaims } = useAuth0()
 const toast = useToast()
 

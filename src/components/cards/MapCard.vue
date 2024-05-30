@@ -9,6 +9,7 @@
         color="green"
         title="Add to mappool"
         :size="25"
+        :disabled="btnDisabled"
       />
 
       <IconBtn
@@ -19,6 +20,7 @@
         color="red"
         title="Remove from mappool"
         :size="25"
+        :disabled="btnDisabled"
       />
     </div>
 
@@ -62,11 +64,13 @@
     <p class="map-card__notes map-card__field">{{ map.notes }}</p>
     <div class="map-card__remove map-card__field" v-if="showBtns">
       <IconBtn
+        @click="handleDeleteClick"
         iconName="fa-trash"
         color="red"
         :size="25"
         :iconSize="0.75"
         title="Delete from suggestions"
+        :disabled="btnDisabled"
       />
     </div>
   </div>
@@ -74,9 +78,13 @@
 
 <script setup lang="ts">
 import type { Map, ResponseError } from '@/Types'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import IconBtn from '@/components/common/IconBtn.vue'
-import { addSuggestionToPool, removeSuggestionFromPool } from '@/Api/OtmApi'
+import {
+  addSuggestionToPool,
+  deleteSuggestionFromRound,
+  removeSuggestionFromPool
+} from '@/Api/OtmApi'
 import { useRoute } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { useToast } from 'vue-toastification'
@@ -91,10 +99,15 @@ const props = withDefaults(defineProps<Props>(), {
   showBtns: false
 })
 
-const emit = defineEmits(['suggestionToPool', 'removeSuggestionFromPool'])
+const emit = defineEmits(['suggestionToPool', 'removeSuggestionFromPool', 'suggestionDeleted'])
 const route = useRoute()
 const toast = useToast()
 const { idTokenClaims } = useAuth0()
+
+const tourneyId = parseInt(route.path.split('/')[2])
+const roundId = parseInt(route.path.split('/')[4])
+
+const btnDisabled = ref<boolean>(false)
 
 const lengthInMin = computed(() => {
   const min = Math.floor(props.map.total_length / 60)
@@ -110,12 +123,13 @@ const isAdded = computed<boolean>(() => {
 })
 
 const handleAddClick = async () => {
+  btnDisabled.value = true
   try {
     const resp = await addSuggestionToPool(
       {
         mapId: props.map.id,
-        tournamentId: parseInt(route.path.split('/')[2]),
-        roundId: parseInt(route.path.split('/')[4]),
+        tournamentId: tourneyId,
+        roundId: roundId,
         mod: props.map.mod
       },
       idTokenClaims.value!.__raw
@@ -126,17 +140,19 @@ const handleAddClick = async () => {
   } catch (error) {
     const e = error as AxiosError<ResponseError>
     toast.error(e.response?.data.detail)
+  } finally {
+    btnDisabled.value = false
   }
 }
 
 const handleRemoveClick = async () => {
-  console.log('Remove clicked')
+  btnDisabled.value = true
   try {
     await removeSuggestionFromPool(
       {
         mapId: props.map.id,
-        tournamentId: parseInt(route.path.split('/')[2]),
-        roundId: parseInt(route.path.split('/')[4]),
+        tournamentId: tourneyId,
+        roundId: roundId,
         mod: props.map.mod
       },
       idTokenClaims.value!.__raw
@@ -145,9 +161,38 @@ const handleRemoveClick = async () => {
     emit('removeSuggestionFromPool', props.map.id)
     toast.success('Map removed from pool')
   } catch (error) {
-    ;('')
     const e = error as AxiosError<ResponseError>
     toast.error(e.response?.data.detail)
+  } finally {
+    btnDisabled.value = false
+  }
+}
+
+const handleDeleteClick = async () => {
+  if (props.mainPool.some((map) => map.id === props.map.id && map.mod === props.map.mod)) {
+    toast.error('Map is in the pool, remove it from the pool before deleting')
+    return
+  }
+
+  if (confirm('Are you sure you want to delete this map suggestion?')) {
+    btnDisabled.value = true
+    try {
+      await deleteSuggestionFromRound({
+        tournamentId: tourneyId,
+        roundId: roundId,
+        mapId: props.map.id,
+        mod: props.map.mod,
+        token: idTokenClaims.value!.__raw
+      })
+
+      emit('suggestionDeleted', { id: props.map.id, mod: props.map.mod })
+      toast.success('Map suggestion deleted')
+    } catch (error) {
+      const e = error as AxiosError<ResponseError>
+      toast.error(e.response?.data.detail)
+    } finally {
+      btnDisabled.value = false
+    }
   }
 }
 </script>

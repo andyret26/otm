@@ -11,7 +11,8 @@ import type {
   Staff,
   Team,
   QsPut,
-  QsPost
+  QsPost,
+  DeleteSuggestionFromRound
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -141,6 +142,16 @@ export async function removeSuggestionFromPool(
     }
   )
   return resp
+}
+
+export async function deleteSuggestionFromRound(obj: DeleteSuggestionFromRound): Promise<void> {
+  await axios({
+    url: `${otm_API}/round/${obj.roundId}/delete-suggestion`,
+    method: 'DELETE',
+    data: obj,
+    headers: { Authorization: `Bearer ${obj.token}` }
+  })
+  return
 }
 
 export async function generateQualsSchedule(
