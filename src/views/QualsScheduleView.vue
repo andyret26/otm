@@ -90,7 +90,8 @@ onMounted(async () => {
   round.value = resp.data
   tourney.value = resp2
 
-  qualsSchedule.value = (await getQualifierSchedule(round.value!.id)).data
+  var token = idTokenClaims.value ? idTokenClaims.value!.__raw : '0'
+  qualsSchedule.value = (await getQualifierSchedule(round.value!.id, tourney.value!.id, token)).data
 })
 
 const handleGenerateQuals = async () => {

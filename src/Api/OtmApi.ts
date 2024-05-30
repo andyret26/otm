@@ -159,9 +159,15 @@ export async function generateQualsSchedule(
 }
 
 export async function getQualifierSchedule(
-  roundId: number
+  roundId: number,
+  tournamentId: number,
+  token: string
 ): Promise<AxiosResponse<QualifierSchedule[]>> {
-  const resp = await axios.get<QualifierSchedule[]>(`${otm_API}/schedule/qualifier/${roundId}`)
+  const resp = await axios<QualifierSchedule[]>({
+    url: `${otm_API}/schedule/tournament/${tournamentId}/qualifier/${roundId}`,
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` }
+  })
   return resp
 }
 
