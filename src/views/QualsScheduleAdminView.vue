@@ -3,7 +3,7 @@
     <RouterLink :to="`/tournament/${tourney.id}`">
       <h1>{{ tourney!.name }}</h1>
     </RouterLink>
-    <h2>{{ round!.name }} schedule</h2>
+    <h2>{{ round!.name }} schedule admin</h2>
     <div
       class="schedule__add-extra"
       v-if="isAuthenticated && qualsSchedule !== null && qualsSchedule.length > 0"
@@ -20,13 +20,23 @@
         text-color="black"
       />
     </div>
+    <div class="schedule__mp-visability">
+      <ButtonComp
+        v-if="round.isMpLinksPublic"
+        @click="handleHideMpLinks"
+        btn-text="Make Mp Link Private"
+        color="red"
+      />
+      <ButtonComp v-else @click="handleHideMpLinks" btn-text="Make Mp Link Public" color="blue" />
+    </div>
     <QualsSchedule
       v-if="qualsSchedule != null && qualsSchedule.length > 0"
+      @row-updated="handleRowUpdated"
       :quals-schedule="qualsSchedule"
       :is-team-tourney="tourney.teams.length > 0"
       :handle-hide-mp-links="handleHideMpLinks"
-      :links-visible="round.isMpLinksPublic"
-      @row-updated="handleRowUpdated"
+      :links-visible="true"
+      :is-admin="true"
     />
     <div class="schedule__generation" v-else-if="isAuthenticated">
       <div class="schedule__inputs">
@@ -39,10 +49,11 @@
     <IconBtn
       class="schedule__admin-btn"
       v-if="isAuthenticated"
-      @click="handleAdminClick"
-      icon-name="md-adminpanelsettings"
-      color="brown"
-      text-color="black"
+      title="Back to main view"
+      @click="handleMainViewClick"
+      icon-name="fa-globe"
+      color="blue"
+      text-color="white"
       :icon-size="1.2"
     />
   </div>
@@ -55,7 +66,8 @@ import {
   generateQualsSchedule,
   getQualifierSchedule,
   getRound,
-  getTournamentById
+  getTournamentById,
+  isAuthorized
 } from '@/Api/OtmApi'
 import type { QsPost, QualifierSchedule, ResponseError, Round, Tournament } from '@/Types'
 import { validDate, validTime } from '@/Utils/HelperFunctions'
@@ -66,10 +78,11 @@ import QualsSchedule from '@/components/schedule/QualsSchedule.vue'
 import { useAuth0 } from '@auth0/auth0-vue'
 import type { AxiosError } from 'axios'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
 const route = useRoute()
+const router = useRouter()
 const { isAuthenticated, idTokenClaims } = useAuth0()
 const toast = useToast()
 
@@ -84,13 +97,24 @@ const ExTime = ref<string>('')
 const qualsSchedule = ref<QualifierSchedule[] | null>(null)
 
 onMounted(async () => {
+  const respAuth = await isAuthorized(
+    idTokenClaims.value!.__raw,
+    parseInt(route.path.split('/')[2]),
+    ['admin', 'host', 'referee']
+  )
+  if (!respAuth.data) {
+    toast.error('You are not authorized to view this page')
+    router.go(-1)
+    return
+  }
   const resp = await getRound(parseInt(route.path.split('/')[4]))
   const resp2 = await getTournamentById(parseInt(route.path.split('/')[2]))
 
   round.value = resp.data
   tourney.value = resp2
 
-  qualsSchedule.value = (await getQualifierSchedule(round.value!.id)).data
+  var token = idTokenClaims.value ? idTokenClaims.value!.__raw : '0'
+  qualsSchedule.value = (await getQualifierSchedule(round.value!.id, tourney.value!.id, token)).data
 })
 
 const handleGenerateQuals = async () => {
@@ -160,13 +184,14 @@ const handleHideMpLinks = async () => {
   }
 }
 
-const handleAdminClick = async () => {
-  console.log('admin clicked')
+const handleMainViewClick = () => {
+  router.push(`/tournament/${tourney.value!.id}/round/${round.value!.id}/quals-schedule/`)
 }
 </script>
 
 <style scoped lang="scss">
 .schedule {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -204,10 +229,17 @@ const handleAdminClick = async () => {
     gap: 10px;
   }
 
+  &__mp-visability {
+    display: flex;
+    gap: 10px;
+    max-width: 150px;
+    margin-bottom: 10px;
+  }
+
   &__admin-btn {
     position: absolute;
     right: 20px;
-    top: 90px;
+    top: 20px;
   }
 }
 

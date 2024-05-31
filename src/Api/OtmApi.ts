@@ -25,6 +25,23 @@ if (process.env.NODE_ENV === 'production') {
   otm_API = 'http://localhost:80/api/v1'
 }
 
+export async function isAuthorized(
+  token: string,
+  tournamentId: number,
+  roles: string[]
+): Promise<AxiosResponse<boolean>> {
+  const resp = await axios<boolean>({
+    url: `${otm_API}/tournament/${tournamentId}/is-authorized`,
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    data: {
+      tournamentId,
+      roles
+    }
+  })
+  return resp
+}
+
 export async function getAllTournaments(): Promise<Tournament[]> {
   const resp = await axios.get<Tournament[]>(`${otm_API}/tournament`)
   return resp.data

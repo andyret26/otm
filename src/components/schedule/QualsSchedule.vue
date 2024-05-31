@@ -1,6 +1,6 @@
 <template>
   <div class="quals-schedule">
-    <QualsRowHeader :handle-hide-mp-links="handleHideMpLinks" :links-visible="linksVisible" />
+    <QualsRowHeader />
     <div
       class="quals-schedule__card"
       v-for="(qual, index) in qualsSchedule"
@@ -32,7 +32,7 @@
 
       <div class="quals-schedule__card-edit">
         <IconBtn
-          v-if="isAuthenticated"
+          v-if="isAuthenticated && isAdmin"
           @click="
             () => {
               showEditRow = true
@@ -74,11 +74,14 @@ import QualsRowHeader from './QualsRowHeader.vue'
 interface Props {
   isTeamTourney: boolean
   qualsSchedule: QualifierSchedule[]
-  handleHideMpLinks: () => void
+  handleHideMpLinks?: () => void
   linksVisible: boolean
+  isAdmin?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  isAdmin: false
+})
 const emit = defineEmits(['rowUpdated'])
 
 const { isAuthenticated } = useAuth0()

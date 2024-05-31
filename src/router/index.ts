@@ -44,9 +44,16 @@ const router = createRouter({
       path: '/tournament/:id/round/:roundId/quals-schedule',
       name: 'Quals-schedule',
       component: () => import('@/views/QualsScheduleView.vue')
+    }, // admin routes
+    {
+      path: '/tournament/:id/round/:roundId/quals-schedule/admin',
+      name: 'Quals-schedule-admin',
+      component: () => import('@/views/QualsScheduleAdminView.vue')
     }
   ]
 })
+
+// admin routes
 
 router.beforeEach((to) => {
   const { isAuthenticated } = useAuth0()

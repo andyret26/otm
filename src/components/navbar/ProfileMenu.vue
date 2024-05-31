@@ -61,6 +61,7 @@ onMounted(() => {
     right: 0px;
     top: 64px;
     border-radius: var(--base-border-radius);
+    z-index: 10000;
   }
 
   &__list {

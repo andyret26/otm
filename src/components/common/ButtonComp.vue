@@ -14,7 +14,7 @@
 <script setup lang="ts">
 interface Props {
   btnText?: string
-  color?: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow'
+  color?: 'purple' | 'blue' | 'green' | 'pink' | 'brown' | 'yellow' | 'red'
   textColor?: string
   disabled?: boolean
 }
