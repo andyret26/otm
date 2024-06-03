@@ -7,6 +7,7 @@ export type Tournament = {
   format: '2v2' | '3v3' | '4v4'
   maxTeamSize: number
   rankRange: string
+  howManyQualifies?: string
 
   rounds: Round[]
   players: TournamentPlayer[]

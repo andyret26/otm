@@ -33,18 +33,35 @@
         </div>
       </div>
     </div>
+
+    <IconBtn
+      class="stats__admin-btn"
+      v-if="isAuthenticated"
+      title="Admin view"
+      @click="handleAdminClick"
+      icon-name="md-adminpanelsettings"
+      color="brown"
+      text-color="black"
+      :icon-size="1.2"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-import { getRound } from '@/Api/OtmApi'
-import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
-import type { Round, TeamPlacement, UserPlacement } from '@/Types'
-import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import { mapStatsToTeamPlacements, mapStatsToUserPlacements } from '@/Utils/HelperFunctions'
 import TeamStatsHeader from '@/components/stats/TeamStatsHeader.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import IconBtn from '@/components/common/IconBtn.vue'
+import type { Round, TeamPlacement, UserPlacement } from '@/Types'
+import { useAuth0 } from '@auth0/auth0-vue'
+import { getRound } from '@/Api/OtmApi'
+import { useRoute, useRouter } from 'vue-router'
+import { onMounted, ref } from 'vue'
+
 const route = useRoute()
+const router = useRouter()
+const { isAuthenticated } = useAuth0()
+
 const tourneyId = parseInt(route.path.split('/')[2])
 const roundId = parseInt(route.path.split('/')[4])
 
@@ -64,16 +81,29 @@ onMounted(async () => {
     teamPlacements.value = mapStatsToTeamPlacements(resp.data.mappool)
   }
 })
+
+const handleAdminClick = () => {
+  router.push(`/tournament/${tourneyId}/round/${roundId}/stats/admin`)
+}
 </script>
 
 <style scoped lang="scss">
 .stats {
+  position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  max-height: calc(100vh - 110px);
 
-  margin: 20px;
+  max-height: calc(100vh - 110px);
+  padding: 20px;
+  max-width: 1000px;
+
+  margin: auto;
+
+  &__admin-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
 
   &__header {
     display: flex;
@@ -91,21 +121,11 @@ onMounted(async () => {
     }
   }
 
-  &__players {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    &-row {
-      display: flex;
-      justify-content: space-between;
-    }
-  }
-
   &__teams,
   &__players {
     display: flex;
     flex-direction: column;
+    margin: auto;
     overflow-y: auto;
     overflow-x: auto;
     max-width: 100%;

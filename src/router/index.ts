@@ -7,7 +7,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'Home',
-      component: () => import('../views/HomeView.vue')
+      component: () => import('../views/public/HomeView.vue')
     },
     {
       path: '/user/:id',
@@ -16,44 +16,47 @@ const router = createRouter({
         {
           path: 'dashboard',
           name: 'Dashboard',
-          component: () => import('../views/DashboardView.vue')
+          component: () => import('../views/admin/DashboardView.vue')
         }
       ]
     },
     {
       path: '/tournament/:id',
       name: 'Tournament',
-      component: () => import('../views/TournamentView.vue')
+      component: () => import('../views/public/TournamentView.vue')
     },
     {
       path: '/tournament/:id/round/:roundId/mappool',
       name: 'Mappool',
-      component: () => import('@/views/MappoolView.vue')
+      component: () => import('@/views/public/MappoolView.vue')
     },
     {
       path: '/tournament/:id/round/:roundId/stats',
       name: 'Stats',
-      component: () => import('@/views/StatsView.vue')
+      component: () => import('@/views/public/StatsView.vue')
     },
     {
       path: '/tournament/:id/round/:roundId/schedule',
       name: 'Schedule',
-      component: () => import('@/views/ScheduleView.vue')
+      component: () => import('@/views/public/ScheduleView.vue')
     },
     {
       path: '/tournament/:id/round/:roundId/quals-schedule',
       name: 'Quals-schedule',
-      component: () => import('@/views/QualsScheduleView.vue')
-    }, // admin routes
+      component: () => import('@/views/public/QualsScheduleView.vue')
+    }, // ##### ADMIN ROUTES #####
     {
       path: '/tournament/:id/round/:roundId/quals-schedule/admin',
       name: 'Quals-schedule-admin',
-      component: () => import('@/views/QualsScheduleAdminView.vue')
+      component: () => import('@/views/admin/QualsScheduleAdminView.vue')
+    },
+    {
+      path: '/tournament/:id/round/:roundId/stats/admin',
+      name: 'Stats-admin',
+      component: () => import('@/views/admin/StatsAdminView.vue')
     }
   ]
 })
-
-// admin routes
 
 router.beforeEach((to) => {
   const { isAuthenticated } = useAuth0()

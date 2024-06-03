@@ -69,7 +69,7 @@ const handleAdminClick = async () => {
   margin: auto;
   max-height: calc(100vh - 90px);
   max-width: 1000px;
-  padding: 0px 20px;
+  padding: 20px;
 
   &__admin-btn {
     position: absolute;
