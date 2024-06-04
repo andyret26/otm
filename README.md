@@ -22,7 +22,7 @@ VITE_AUTH_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
 - [x] when geting quals schedule, if private don't include MpIds
 - [x] Delete MapSuggestion from round
 - [x] Quals Schedule Admin
-- [ ] Stats view Admin
+- [x] Stats view Admin
 - [ ] Bracket schedule Admin
 - [ ] Referee system
 
