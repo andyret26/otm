@@ -13,13 +13,24 @@
         v-model="selectedNumQualifies"
         max-width="125px"
       />
-      <ButtonComp btn-text="Set" color="green" text-color="black" />
+      <ButtonComp
+        @click="handleUpdateClick"
+        btn-text="Update"
+        color="green"
+        text-color="black"
+        :disabled="btnDisabled"
+      />
     </div>
     <div class="stats__players" v-if="!isTeamTourney">
       <TeamStatsHeader />
 
       <div class="stats__players-container">
-        <div class="stats__players-row" v-for="(user, i) in userPlacements" :key="user.username">
+        <div
+          class="stats__players-row"
+          :style="user.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+          v-for="(user, i) in userPlacements"
+          :key="user.username"
+        >
           <div class="stats__players-row-seed">{{ i + 1 }}</div>
           <div class="stats__players-row-name">{{ user.username }}</div>
           <div class="stats__players-row-norm">{{ user.totalNormScore }}</div>
@@ -31,7 +42,12 @@
     <div class="stats__teams" v-else>
       <TeamStatsHeader />
       <div class="stats__teams-container">
-        <div class="stats__teams-row" v-for="(team, i) in teamPlacements" :key="team.teamName">
+        <div
+          class="stats__teams-row"
+          :style="team.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+          v-for="(team, i) in teamPlacements"
+          :key="team.teamName"
+        >
           <div class="stats__teams-row-seed">{{ i + 1 }}</div>
           <div class="stats__teams-row-name">{{ team.teamName }}</div>
           <div class="stats__teams-row-norm">{{ team.totalNormScore }}</div>
@@ -58,18 +74,21 @@
 import { mapStatsToTeamPlacements, mapStatsToUserPlacements } from '@/Utils/HelperFunctions'
 import TeamStatsHeader from '@/components/stats/TeamStatsHeader.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
-import type { Round, TeamPlacement, UserPlacement } from '@/Types'
+import type { ResponseError, Round, TeamPlacement, UserPlacement } from '@/Types'
 import IconBtn from '@/components/common/IconBtn.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { getRound, isAuthorized } from '@/Api/OtmApi'
+import { getRound, isAuthorized, knockout, setSeeds } from '@/Api/OtmApi'
 import { onMounted, ref } from 'vue'
 import SelectBox from '@/components/common/SelectBox.vue'
 import ButtonComp from '@/components/common/ButtonComp.vue'
+import { useToast } from 'vue-toastification'
+import type { AxiosError } from 'axios'
 
 const route = useRoute()
 const router = useRouter()
 const { isAuthenticated, idTokenClaims } = useAuth0()
+const toast = useToast()
 
 const tourneyId = parseInt(route.path.split('/')[2])
 const roundId = parseInt(route.path.split('/')[4])
@@ -80,12 +99,15 @@ const teamPlacements = ref<TeamPlacement[]>([])
 const isTeamTourney = ref(false)
 const selectedNumQualifies = ref<string>('Not Set')
 
+const btnDisabled = ref(false)
+
 onMounted(async () => {
   if (
     !isAuthenticated.value ||
     !(await isAuthorized(idTokenClaims.value!.__raw, tourneyId, ['admin', 'host']))
   ) {
     router.push(`/tournament/${tourneyId}/round/${roundId}/stats`)
+    return
   }
 
   const resp = await getRound(roundId)
@@ -101,6 +123,97 @@ onMounted(async () => {
     teamPlacements.value = mapStatsToTeamPlacements(resp.data.mappool)
   }
 })
+
+const handleUpdateClick = async () => {
+  console.log(userPlacements.value.slice(-1))
+
+  btnDisabled.value = true
+  const howManyQualsNum = parseInt(selectedNumQualifies.value.split(' ')[1])
+  if (
+    (isTeamTourney.value && howManyQualsNum > teamPlacements.value.length) ||
+    (!isTeamTourney.value && howManyQualsNum > userPlacements.value.length)
+  ) {
+    toast.error('Cannot qualify more than the number of teams/players')
+    btnDisabled.value = false
+    return
+  }
+
+  const playerSeeds = isTeamTourney.value
+    ? undefined
+    : userPlacements.value.map((u, i) => {
+        return {
+          id: u.playerId,
+          seed: i + 1
+        }
+      })
+
+  const teamSeeds = isTeamTourney.value
+    ? teamPlacements.value.map((t, i) => {
+        return {
+          id: t.teamId,
+          seed: i + 1
+        }
+      })
+    : undefined
+
+  const playersToKnockout = isTeamTourney.value
+    ? undefined
+    : userPlacements.value.length - howManyQualsNum === 0
+      ? []
+      : userPlacements.value
+          .slice(-(userPlacements.value.length - howManyQualsNum))
+          .map((u) => u.playerId)
+
+  const teamsToKnockout = !isTeamTourney.value
+    ? undefined
+    : teamPlacements.value.length - howManyQualsNum === 0
+      ? []
+      : teamPlacements.value
+          .slice(-(teamPlacements.value.length - howManyQualsNum))
+          .map((t) => t.teamId)
+
+  try {
+    await setSeeds(
+      {
+        HowManyQualifies: selectedNumQualifies.value,
+        isTeamTourney: isTeamTourney.value,
+        tournamentId: tourneyId,
+        PlayerSeeds: playerSeeds,
+        TeamSeeds: teamSeeds
+      },
+      idTokenClaims.value!.__raw
+    )
+
+    await knockout(
+      {
+        tournamentId: tourneyId,
+        isTeamTourney: isTeamTourney.value,
+        playerIds: playersToKnockout,
+        teamIds: teamsToKnockout
+      },
+      idTokenClaims.value!.__raw
+    )
+
+    if (isTeamTourney.value) {
+      teamPlacements.value.forEach((t) => {
+        if (teamsToKnockout!.includes(t.teamId)) t.isKnockedOut = true
+        else t.isKnockedOut = false
+      })
+    } else {
+      userPlacements.value.forEach((p) => {
+        if (playersToKnockout!.includes(p.playerId)) p.isKnockedOut = true
+        else p.isKnockedOut = false
+      })
+    }
+
+    toast.success('Seeds and knockouts updated')
+  } catch (error) {
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response!.data.detail)
+  } finally {
+    btnDisabled.value = false
+  }
+}
 
 const handlePublicClick = async () => {
   router.push(`/tournament/${tourneyId}/round/${roundId}/stats`)
@@ -173,6 +286,7 @@ const handlePublicClick = async () => {
       padding: 10px;
       text-align: center;
       width: 500px;
+      background-color: var(--bg3);
 
       &-seed {
         min-width: 40px;
@@ -194,11 +308,8 @@ const handlePublicClick = async () => {
         min-width: 100px;
       }
 
-      &:nth-child(odd) {
-        background-color: var(--bg2);
-      }
       &:nth-child(even) {
-        background-color: var(--bg3);
+        filter: contrast(1.15);
       }
     }
   }

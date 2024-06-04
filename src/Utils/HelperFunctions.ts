@@ -39,6 +39,7 @@ export const mapStatsToUserPlacements = (maps: Map[], tourneyId: number): UserPl
       if (!up.some((u) => u.username === username)) {
         const pt = ps.player.tournaments.find((t) => t.tournamentId === tourneyId)
         const newUp = {
+          playerId: ps.player.id,
           username: username,
           isKnockedOut: pt ? pt.isknockout : undefined,
           mapList: [
@@ -98,6 +99,7 @@ export const mapStatsToTeamPlacements = (maps: Map[]): TeamPlacement[] => {
       const teamName = ts.team.teamName
       if (!tp.some((t) => t.teamName === teamName)) {
         const newTp = {
+          teamId: ts.team.id,
           teamName: teamName,
           isKnockedOut: ts.team.isknockout,
           mapList: [

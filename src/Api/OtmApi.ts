@@ -12,7 +12,9 @@ import type {
   Team,
   QsPut,
   QsPost,
-  DeleteSuggestionFromRound
+  DeleteSuggestionFromRound,
+  SetSeedReq,
+  KnockoutReq
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -265,6 +267,20 @@ export async function changeMpVisability(
 
 export async function getStats(roundId: number): Promise<AxiosResponse<Map[]>> {
   const resp = await axios.get<Map[]>(`${otm_API}/round/${roundId}/stats`)
+  return resp
+}
+
+export async function setSeeds(req: SetSeedReq, token: string): Promise<AxiosResponse> {
+  const resp = await axios.post(`${otm_API}/tournament/${req.tournamentId}/set-seed`, req, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+  return resp
+}
+
+export async function knockout(req: KnockoutReq, token: string): Promise<AxiosResponse> {
+  const resp = await axios.post(`${otm_API}/tournament/${req.tournamentId}/knockout`, req, {
+    headers: { Authorization: `Bearer ${token}` }
+  })
   return resp
 }
 

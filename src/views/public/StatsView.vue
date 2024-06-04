@@ -10,7 +10,12 @@
       <TeamStatsHeader />
 
       <div class="stats__players-container">
-        <div class="stats__players-row" v-for="(user, i) in userPlacements" :key="user.username">
+        <div
+          class="stats__players-row"
+          v-for="(user, i) in userPlacements"
+          :style="user.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+          :key="user.username"
+        >
           <div class="stats__players-row-seed">{{ i + 1 }}</div>
           <div class="stats__players-row-name">{{ user.username }}</div>
           <div class="stats__players-row-norm">{{ user.totalNormScore }}</div>
@@ -22,7 +27,12 @@
     <div class="stats__teams" v-else>
       <TeamStatsHeader />
       <div class="stats__teams-container">
-        <div class="stats__teams-row" v-for="(team, i) in teamPlacements" :key="team.teamName">
+        <div
+          class="stats__teams-row"
+          v-for="(team, i) in teamPlacements"
+          :style="team.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+          :key="team.teamName"
+        >
           <div class="stats__teams-row-seed">{{ i + 1 }}</div>
           <div class="stats__teams-row-name">{{ team.teamName }}</div>
           <div class="stats__teams-row-norm">{{ team.totalNormScore }}</div>
@@ -144,6 +154,7 @@ const handleAdminClick = () => {
       padding: 10px;
       text-align: center;
       width: 500px;
+      background-color: var(--bg3);
 
       &-seed {
         min-width: 40px;
@@ -165,11 +176,8 @@ const handleAdminClick = () => {
         min-width: 100px;
       }
 
-      &:nth-child(odd) {
-        background-color: var(--bg2);
-      }
       &:nth-child(even) {
-        background-color: var(--bg3);
+        filter: contrast(1.15);
       }
     }
   }

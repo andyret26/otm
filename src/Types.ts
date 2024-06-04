@@ -171,6 +171,7 @@ export type TeamStats = {
 }
 
 export type UserPlacement = {
+  playerId: number
   username: string
   isKnockedOut?: boolean
   mapList: {
@@ -186,6 +187,7 @@ export type UserPlacement = {
 }
 
 export type TeamPlacement = {
+  teamId: number
   teamName: string
   isKnockedOut: boolean
   mapList: {
@@ -208,4 +210,19 @@ export type DeleteSuggestionFromRound = {
   mapId: number
   mod: string
   token: string
+}
+
+export type SetSeedReq = {
+  tournamentId: number
+  isTeamTourney: boolean
+  PlayerSeeds?: { id: number; seed: number }[]
+  TeamSeeds?: { id: number; seed: number }[]
+  HowManyQualifies: string
+}
+
+export type KnockoutReq = {
+  tournamentId: number
+  isTeamTourney: boolean
+  playerIds?: number[]
+  teamIds?: number[]
 }
