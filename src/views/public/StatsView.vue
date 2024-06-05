@@ -1,49 +1,50 @@
 <template>
-  <LoadingSpinner v-if="round === null" />
-  <div v-else-if="round.mappool[0].playerStats.length <= 0">No stats</div>
-  <div class="stats" v-else>
-    <div class="stats__header">
-      <div class="stats__header-tournament">{{ round.tournament.name }}</div>
-      <div class="stats__header-round">{{ round.name }} stats</div>
-    </div>
-    <div class="stats__players" v-if="!isTeamTourney">
-      <TeamStatsHeader />
+  <div class="page">
+    <LoadingSpinner v-if="round === null" />
+    <div v-else-if="round.mappool[0].playerStats.length <= 0 || round.isStatsPublic">No stats</div>
+    <div class="stats" v-else>
+      <div class="stats__header">
+        <div class="stats__header-tournament">{{ round.tournament.name }}</div>
+        <div class="stats__header-round">{{ round.name }} stats</div>
+      </div>
+      <div class="stats__players" v-if="!isTeamTourney">
+        <TeamStatsHeader />
 
-      <div class="stats__players-container">
-        <div
-          class="stats__players-row"
-          v-for="(user, i) in userPlacements"
-          :style="user.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
-          :key="user.username"
-        >
-          <div class="stats__players-row-seed">{{ i + 1 }}</div>
-          <div class="stats__players-row-name">{{ user.username }}</div>
-          <div class="stats__players-row-norm">{{ user.totalNormScore }}</div>
-          <div class="stats__players-row-avg-placement">{{ user.avgPlacement }}</div>
-          <div class="stats__players-row-avg-score">{{ user.avgScore.toLocaleString() }}</div>
+        <div class="stats__players-container">
+          <div
+            class="stats__players-row"
+            v-for="(user, i) in userPlacements"
+            :style="user.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+            :key="user.username"
+          >
+            <div class="stats__players-row-seed">{{ i + 1 }}</div>
+            <div class="stats__players-row-name">{{ user.username }}</div>
+            <div class="stats__players-row-norm">{{ user.totalNormScore }}</div>
+            <div class="stats__players-row-avg-placement">{{ user.avgPlacement }}</div>
+            <div class="stats__players-row-avg-score">{{ user.avgScore.toLocaleString() }}</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="stats__teams" v-else>
-      <TeamStatsHeader />
-      <div class="stats__teams-container">
-        <div
-          class="stats__teams-row"
-          v-for="(team, i) in teamPlacements"
-          :style="team.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
-          :key="team.teamName"
-        >
-          <div class="stats__teams-row-seed">{{ i + 1 }}</div>
-          <div class="stats__teams-row-name">{{ team.teamName }}</div>
-          <div class="stats__teams-row-norm">{{ team.totalNormScore }}</div>
-          <div class="stats__teams-row-avg-placement">{{ team.avgPlacement }}</div>
-          <div class="stats__teams-row-avg-score">
-            {{ team.avgScore.toLocaleString() }}
+      <div class="stats__teams" v-else>
+        <TeamStatsHeader />
+        <div class="stats__teams-container">
+          <div
+            class="stats__teams-row"
+            v-for="(team, i) in teamPlacements"
+            :style="team.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+            :key="team.teamName"
+          >
+            <div class="stats__teams-row-seed">{{ i + 1 }}</div>
+            <div class="stats__teams-row-name">{{ team.teamName }}</div>
+            <div class="stats__teams-row-norm">{{ team.totalNormScore }}</div>
+            <div class="stats__teams-row-avg-placement">{{ team.avgPlacement }}</div>
+            <div class="stats__teams-row-avg-score">
+              {{ team.avgScore.toLocaleString() }}
+            </div>
           </div>
         </div>
       </div>
     </div>
-
     <IconBtn
       class="stats__admin-btn"
       v-if="isAuthenticated"
@@ -98,16 +99,23 @@ const handleAdminClick = () => {
 </script>
 
 <style scoped lang="scss">
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  gap: 20px;
+  max-height: calc(100vh - 110px);
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
 .stats {
   position: relative;
   display: flex;
   flex-direction: column;
-
-  max-height: calc(100vh - 110px);
-  padding: 20px;
-  max-width: 1000px;
-
-  margin: auto;
 
   &__admin-btn {
     position: absolute;

@@ -24,16 +24,18 @@
       :icon-size="1.2"
     />
   </div>
+  <LoadingSpinner v-else />
 </template>
 
 <script setup lang="ts">
 import { getQualifierSchedule, getRound, getTournamentById } from '@/Api/OtmApi'
 import type { QualifierSchedule, Round, Tournament } from '@/Types'
-import IconBtn from '@/components/common/IconBtn.vue'
 import QualsSchedule from '@/components/schedule/QualsSchedule.vue'
+import IconBtn from '@/components/common/IconBtn.vue'
+import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
