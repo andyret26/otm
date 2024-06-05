@@ -264,6 +264,18 @@ export async function changeMpVisability(
   )
   return resp
 }
+export async function changeStatsVisibility(
+  tourneyId: number,
+  roundId: number,
+  token: string
+): Promise<AxiosResponse> {
+  const resp = await axios.put(
+    `${otm_API}/round/${roundId}/tournament/${tourneyId}/stats-visibility`,
+    {},
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  return resp
+}
 
 export async function getStats(roundId: number): Promise<AxiosResponse<Map[]>> {
   const resp = await axios.get<Map[]>(`${otm_API}/round/${roundId}/stats`)

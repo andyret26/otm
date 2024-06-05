@@ -168,3 +168,42 @@ export function sortPool(maps: Map[]): Map[] {
 
   return res
 }
+
+export async function generateSeesAndKnockout(
+  userPlacements: UserPlacement[],
+  teamPlacements: TeamPlacement[],
+  isTeamTourney: boolean,
+  howManyQualsNum: number
+) {
+  const playerSeeds = isTeamTourney
+    ? undefined
+    : userPlacements.map((u, i) => {
+        return {
+          id: u.playerId,
+          seed: i + 1
+        }
+      })
+
+  const teamSeeds = isTeamTourney
+    ? teamPlacements.map((t, i) => {
+        return {
+          id: t.teamId,
+          seed: i + 1
+        }
+      })
+    : undefined
+
+  const playersToKnockout = isTeamTourney
+    ? undefined
+    : userPlacements.length - howManyQualsNum === 0
+      ? []
+      : userPlacements.slice(-(userPlacements.length - howManyQualsNum)).map((u) => u.playerId)
+
+  const teamsToKnockout = !isTeamTourney
+    ? undefined
+    : teamPlacements.length - howManyQualsNum === 0
+      ? []
+      : teamPlacements.slice(-(teamPlacements.length - howManyQualsNum)).map((t) => t.teamId)
+
+  return { playerSeeds, teamSeeds, playersToKnockout, teamsToKnockout }
+}

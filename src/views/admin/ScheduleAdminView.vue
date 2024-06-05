@@ -14,16 +14,28 @@
 </template>
 
 <script setup lang="ts">
+import { isAuthorized } from '@/Api/OtmApi'
 import IconBtn from '@/components/common/IconBtn.vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
-const { isAuthenticated } = useAuth0()
+const { isAuthenticated, idTokenClaims } = useAuth0()
 const route = useRoute()
 const router = useRouter()
 
 const tourneyId = parseInt(route.path.split('/')[2])
 const roundId = parseInt(route.path.split('/')[4])
+
+onMounted(async () => {
+  if (
+    !isAuthenticated.value ||
+    !(await isAuthorized(idTokenClaims.value!.__raw, tourneyId, ['admin', 'host']))
+  ) {
+    router.push(`/tournament/${tourneyId}/round/${roundId}/stats`)
+    return
+  }
+})
 
 const handleAdminClick = () => {
   router.push(`/tournament/${tourneyId}/round/${roundId}/schedule/admin`)

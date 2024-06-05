@@ -1,7 +1,15 @@
 <template>
   <div class="page">
     <LoadingSpinner v-if="round === null" />
-    <div v-else-if="round.mappool[0].playerStats.length <= 0 || round.isStatsPublic">No stats</div>
+    <div
+      v-else-if="
+        round.mappool.length <= 0 ||
+        round.mappool.every((m) => m.playerStats.length <= 0) ||
+        !round.isStatsPublic
+      "
+    >
+      No stats
+    </div>
     <div class="stats" v-else>
       <div class="stats__header">
         <div class="stats__header-tournament">{{ round.tournament.name }}</div>

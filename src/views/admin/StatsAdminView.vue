@@ -21,6 +21,18 @@
         :disabled="btnDisabled"
       />
     </div>
+    <div class="stats__visability-btns">
+      <ButtonComp
+        v-if="round.isStatsPublic"
+        @click="handleHideStats"
+        btn-text="Make Stats Private"
+        color="red"
+      />
+      <ButtonComp v-else @click="handleHideStats" btn-text="Make Stats Public" color="blue" />
+    </div>
+
+    <div class="stats__divider"></div>
+
     <div class="stats__players" v-if="!isTeamTourney">
       <TeamStatsHeader />
 
@@ -39,6 +51,7 @@
         </div>
       </div>
     </div>
+
     <div class="stats__teams" v-else>
       <TeamStatsHeader />
       <div class="stats__teams-container">
@@ -71,14 +84,18 @@
 </template>
 
 <script setup lang="ts">
-import { mapStatsToTeamPlacements, mapStatsToUserPlacements } from '@/Utils/HelperFunctions'
+import {
+  generateSeesAndKnockout,
+  mapStatsToTeamPlacements,
+  mapStatsToUserPlacements
+} from '@/Utils/HelperFunctions'
 import TeamStatsHeader from '@/components/stats/TeamStatsHeader.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import type { ResponseError, Round, TeamPlacement, UserPlacement } from '@/Types'
 import IconBtn from '@/components/common/IconBtn.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { getRound, isAuthorized, knockout, setSeeds } from '@/Api/OtmApi'
+import { changeStatsVisibility, getRound, isAuthorized, knockout, setSeeds } from '@/Api/OtmApi'
 import { onMounted, ref } from 'vue'
 import SelectBox from '@/components/common/SelectBox.vue'
 import ButtonComp from '@/components/common/ButtonComp.vue'
@@ -125,8 +142,6 @@ onMounted(async () => {
 })
 
 const handleUpdateClick = async () => {
-  console.log(userPlacements.value.slice(-1))
-
   btnDisabled.value = true
   const howManyQualsNum = parseInt(selectedNumQualifies.value.split(' ')[1])
   if (
@@ -138,39 +153,13 @@ const handleUpdateClick = async () => {
     return
   }
 
-  const playerSeeds = isTeamTourney.value
-    ? undefined
-    : userPlacements.value.map((u, i) => {
-        return {
-          id: u.playerId,
-          seed: i + 1
-        }
-      })
-
-  const teamSeeds = isTeamTourney.value
-    ? teamPlacements.value.map((t, i) => {
-        return {
-          id: t.teamId,
-          seed: i + 1
-        }
-      })
-    : undefined
-
-  const playersToKnockout = isTeamTourney.value
-    ? undefined
-    : userPlacements.value.length - howManyQualsNum === 0
-      ? []
-      : userPlacements.value
-          .slice(-(userPlacements.value.length - howManyQualsNum))
-          .map((u) => u.playerId)
-
-  const teamsToKnockout = !isTeamTourney.value
-    ? undefined
-    : teamPlacements.value.length - howManyQualsNum === 0
-      ? []
-      : teamPlacements.value
-          .slice(-(teamPlacements.value.length - howManyQualsNum))
-          .map((t) => t.teamId)
+  const { playerSeeds, playersToKnockout, teamSeeds, teamsToKnockout } =
+    await generateSeesAndKnockout(
+      userPlacements.value,
+      teamPlacements.value,
+      isTeamTourney.value,
+      howManyQualsNum
+    )
 
   try {
     await setSeeds(
@@ -218,6 +207,16 @@ const handleUpdateClick = async () => {
 const handlePublicClick = async () => {
   router.push(`/tournament/${tourneyId}/round/${roundId}/stats`)
 }
+
+const handleHideStats = async () => {
+  try {
+    await changeStatsVisibility(tourneyId, roundId, idTokenClaims.value!.__raw)
+    round.value!.isStatsPublic = !round.value!.isStatsPublic
+  } catch (error) {
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response!.data.detail)
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -245,6 +244,18 @@ const handlePublicClick = async () => {
     text-align: center;
     gap: 10px;
     margin-bottom: 20px;
+  }
+
+  &__visability-btns {
+    margin: auto;
+    margin-bottom: 5px;
+  }
+
+  &__divider {
+    width: 100%;
+    height: 2px;
+    background-color: var(--osu-yellow);
+    margin: 10px 0;
   }
 
   &__header {

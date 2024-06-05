@@ -54,6 +54,11 @@ const router = createRouter({
       path: '/tournament/:id/round/:roundId/stats/admin',
       name: 'Stats-admin',
       component: () => import('@/views/admin/StatsAdminView.vue')
+    },
+    {
+      path: '/tournament/:id/round/:roundId/schedule/admin',
+      name: 'Schedule-admin',
+      component: () => import('@/views/admin/ScheduleAdminView.vue')
     }
   ]
 })
