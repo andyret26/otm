@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <IconBtn
-      class="stats__admin-btn"
+      class="stats__globe-btn"
       v-if="isAuthenticated"
       title="Public view"
       @click="handlePublicClick"
@@ -14,11 +14,10 @@
 </template>
 
 <script setup lang="ts">
-import { getRound, isAuthorized } from '@/Api/OtmApi'
-import type { Round } from '@/Types'
+import { isAuthorized } from '@/Api/OtmApi'
 import IconBtn from '@/components/common/IconBtn.vue'
 import { useAuth0 } from '@auth0/auth0-vue'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
 
@@ -30,20 +29,15 @@ const toast = useToast()
 const tourneyId = parseInt(route.path.split('/')[2])
 const roundId = parseInt(route.path.split('/')[4])
 
-const round = ref<Round | null>(null)
-
 onMounted(async () => {
   if (
     !isAuthenticated.value ||
-    !(await isAuthorized(idTokenClaims.value!.__raw, tourneyId, ['admin', 'host']))
+    !(await isAuthorized(idTokenClaims.value!.__raw, tourneyId, ['admin', 'host', 'referee']))
   ) {
     router.push(`/tournament/${tourneyId}/round/${roundId}/stats`)
     toast.error('You are not authorized to view this page')
     return
   }
-
-  const resp = await getRound(roundId)
-  round.value = resp.data
 })
 
 const handlePublicClick = () => {
@@ -65,7 +59,7 @@ const handlePublicClick = () => {
   margin: auto;
 }
 
-.stats__admin-btn {
+.stats__globe-btn {
   position: absolute;
   top: 20px;
   right: 20px;
