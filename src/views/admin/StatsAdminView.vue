@@ -1,72 +1,76 @@
 <template>
-  <LoadingSpinner v-if="round === null" />
-  <div v-else-if="round.mappool[0].playerStats.length <= 0">No stats</div>
-  <div class="stats" v-else>
-    <div class="stats__header">
-      <div class="stats__header-tournament">{{ round.tournament.name }}</div>
-      <div class="stats__header-round">{{ round.name }} stats admin</div>
+  <div class="page">
+    <LoadingSpinner v-if="round === null" />
+    <div v-else-if="round.mappool.length <= 0 || round.mappool[0].playerStats.length <= 0">
+      No stats
     </div>
-    <div class="stats__qualifies" v-if="round.isQualifier">
-      <div>How many qualifies</div>
-      <SelectBox
-        :options="['Not Set', 'Top 2', 'Top 4', 'Top 8', 'Top 16', 'Top 32', 'Top 64']"
-        v-model="selectedNumQualifies"
-        max-width="125px"
-      />
-      <ButtonComp
-        @click="handleUpdateClick"
-        btn-text="Update"
-        color="green"
-        text-color="black"
-        :disabled="btnDisabled"
-      />
-    </div>
-    <div class="stats__visability-btns">
-      <ButtonComp
-        v-if="round.isStatsPublic"
-        @click="handleHideStats"
-        btn-text="Make Stats Private"
-        color="red"
-      />
-      <ButtonComp v-else @click="handleHideStats" btn-text="Make Stats Public" color="blue" />
-    </div>
+    <div class="stats" v-else>
+      <div class="stats__header">
+        <div class="stats__header-tournament">{{ round.tournament.name }}</div>
+        <div class="stats__header-round">{{ round.name }} stats admin</div>
+      </div>
+      <div class="stats__qualifies" v-if="round.isQualifier">
+        <div>How many qualifies</div>
+        <SelectBox
+          :options="['Not Set', 'Top 2', 'Top 4', 'Top 8', 'Top 16', 'Top 32', 'Top 64']"
+          v-model="selectedNumQualifies"
+          max-width="125px"
+        />
+        <ButtonComp
+          @click="handleUpdateClick"
+          btn-text="Update"
+          color="green"
+          text-color="black"
+          :disabled="btnDisabled"
+        />
+      </div>
+      <div class="stats__visability-btns">
+        <ButtonComp
+          v-if="round.isStatsPublic"
+          @click="handleHideStats"
+          btn-text="Make Stats Private"
+          color="red"
+        />
+        <ButtonComp v-else @click="handleHideStats" btn-text="Make Stats Public" color="blue" />
+      </div>
 
-    <div class="stats__divider"></div>
+      <div class="stats__divider"></div>
 
-    <div class="stats__players" v-if="!isTeamTourney">
-      <TeamStatsHeader />
+      <div class="stats__players" v-if="!isTeamTourney">
+        <TeamStatsHeader />
 
-      <div class="stats__players-container">
-        <div
-          class="stats__players-row"
-          :style="user.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
-          v-for="(user, i) in userPlacements"
-          :key="user.username"
-        >
-          <div class="stats__players-row-seed">{{ i + 1 }}</div>
-          <div class="stats__players-row-name">{{ user.username }}</div>
-          <div class="stats__players-row-norm">{{ user.totalNormScore }}</div>
-          <div class="stats__players-row-avg-placement">{{ user.avgPlacement }}</div>
-          <div class="stats__players-row-avg-score">{{ user.avgScore.toLocaleString() }}</div>
+        <div class="stats__players-container">
+          <div
+            class="stats__players-row"
+            :style="user.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+            v-for="(user, i) in userPlacements"
+            :key="user.username"
+          >
+            <div class="stats__players-row-seed">{{ i + 1 }}</div>
+            <div class="stats__players-row-name">{{ user.username }}</div>
+            <div class="stats__players-row-norm">{{ user.totalNormScore }}</div>
+            <div class="stats__players-row-avg-placement">{{ user.avgPlacement }}</div>
+            <div class="stats__players-row-avg-score">{{ user.avgScore.toLocaleString() }}</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="stats__teams" v-else>
-      <TeamStatsHeader />
-      <div class="stats__teams-container">
-        <div
-          class="stats__teams-row"
-          :style="team.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
-          v-for="(team, i) in teamPlacements"
-          :key="team.teamName"
-        >
-          <div class="stats__teams-row-seed">{{ i + 1 }}</div>
-          <div class="stats__teams-row-name">{{ team.teamName }}</div>
-          <div class="stats__teams-row-norm">{{ team.totalNormScore }}</div>
-          <div class="stats__teams-row-avg-placement">{{ team.avgPlacement }}</div>
-          <div class="stats__teams-row-avg-score">
-            {{ team.avgScore.toLocaleString() }}
+      <div class="stats__teams" v-else>
+        <TeamStatsHeader />
+        <div class="stats__teams-container">
+          <div
+            class="stats__teams-row"
+            :style="team.isKnockedOut ? { backgroundColor: 'var(--osu-red)' } : ''"
+            v-for="(team, i) in teamPlacements"
+            :key="team.teamName"
+          >
+            <div class="stats__teams-row-seed">{{ i + 1 }}</div>
+            <div class="stats__teams-row-name">{{ team.teamName }}</div>
+            <div class="stats__teams-row-norm">{{ team.totalNormScore }}</div>
+            <div class="stats__teams-row-avg-placement">{{ team.avgPlacement }}</div>
+            <div class="stats__teams-row-avg-score">
+              {{ team.avgScore.toLocaleString() }}
+            </div>
           </div>
         </div>
       </div>
@@ -79,6 +83,12 @@
       color="blue"
       text-color="white"
       :icon-size="1.2"
+    />
+    <BackBtn
+      title="Back to tournament"
+      color="yellow"
+      text-color="black"
+      @click="router.push(`/tournament/${tourneyId}`)"
     />
   </div>
 </template>
@@ -101,6 +111,7 @@ import SelectBox from '@/components/common/SelectBox.vue'
 import ButtonComp from '@/components/common/ButtonComp.vue'
 import { useToast } from 'vue-toastification'
 import type { AxiosError } from 'axios'
+import BackBtn from '@/components/common/BackBtn.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -220,16 +231,23 @@ const handleHideStats = async () => {
 </script>
 
 <style scoped lang="scss">
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+  gap: 20px;
+  max-height: calc(100vh - 110px);
+  padding: 20px;
+  max-width: 1000px;
+  margin: auto;
+}
+
 .stats {
   position: relative;
   display: flex;
   flex-direction: column;
-
-  max-height: calc(100vh - 110px);
-  padding: 20px;
-  max-width: 1000px;
-
-  margin: auto;
 
   &__public-btn {
     position: absolute;

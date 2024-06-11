@@ -1,6 +1,5 @@
 <template>
   <button
-    @click="$router.go(-1)"
     class="btn"
     :disabled="props.disabled"
     :style="{

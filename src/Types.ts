@@ -24,6 +24,7 @@ export type Round = {
   isMpLinksPublic: boolean
   isStatsPublic: boolean
   tournament: Tournament
+  schedules: Schedule[]
 }
 
 export type Map = {
@@ -127,6 +128,25 @@ export type QualifierSchedule = {
   referee?: string
   num: string
   matchId?: number
+}
+
+export type Schedule = {
+  id: number
+  num: number
+  roundId: number
+  roundNumber: number
+  dateTime: string
+  referee: string
+  streamer: string
+  commentators: string[]
+  name1: string
+  name2: string
+  score1: number
+  score2: number
+  winner: string
+  looser: string
+  isInLosersBracket: boolean
+  mpLinkId: number
 }
 
 // Random Types

@@ -63,6 +63,12 @@
       text-color="black"
       :icon-size="1.2"
     />
+    <BackBtn
+      title="Back to tournament"
+      color="yellow"
+      text-color="black"
+      @click="router.push(`/tournament/${tourneyId}`)"
+    />
   </div>
 </template>
 
@@ -76,6 +82,7 @@ import { useAuth0 } from '@auth0/auth0-vue'
 import { getRound } from '@/Api/OtmApi'
 import { useRoute, useRouter } from 'vue-router'
 import { onMounted, ref } from 'vue'
+import BackBtn from '@/components/common/BackBtn.vue'
 
 const route = useRoute()
 const router = useRouter()
