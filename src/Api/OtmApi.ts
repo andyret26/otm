@@ -14,7 +14,8 @@ import type {
   QsPost,
   DeleteSuggestionFromRound,
   SetSeedReq,
-  KnockoutReq
+  KnockoutReq,
+  Schedule
 } from '@/Types'
 import axios, { type AxiosResponse } from 'axios'
 
@@ -293,6 +294,21 @@ export async function knockout(req: KnockoutReq, token: string): Promise<AxiosRe
   const resp = await axios.post(`${otm_API}/tournament/${req.tournamentId}/knockout`, req, {
     headers: { Authorization: `Bearer ${token}` }
   })
+  return resp
+}
+
+export async function generateSchedule(
+  tournamentId: number,
+  roundId: number,
+  startDate: Date,
+  endDate: Date,
+  token: string
+): Promise<AxiosResponse<Schedule[]>> {
+  const resp = await axios.post<Schedule[]>(
+    `${otm_API}/schedule/tournament/${tournamentId}/round/${roundId}/generate-schedule`,
+    { tournamentId, roundId, startDate, endDate },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
   return resp
 }
 

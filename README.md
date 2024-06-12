@@ -29,6 +29,7 @@ VITE_AUTH_CLIENT_ID=YOUR_AUTH0_CLIENT_ID
 
 ## general / public
 
+- [ ] barcket stuff integrate with challonge
 - [ ] Fix Hr/Dt Map attribute calculations
 - [x] Qualifier schedule row header
 - [x] Simple stats view

@@ -6,7 +6,17 @@
         <h1>{{ round.tournament.name }}</h1>
         <h2>{{ round.name }} schedule admin</h2>
       </div>
-      <div class="schedule__generate"></div>
+      <div class="schedule__generate">
+        <div class="schedule__gen-inputs">
+          <InputField v-model="startDate" label="Start Date" placeholder="yyyy-MM-dd" />
+          <InputField v-model="endDate" label="End Date" placeholder="yyyy-MM-dd" />
+        </div>
+        <ButtonComp
+          @click="handleGenerateBtnClick"
+          btn-text="Generate schedule"
+          :disabled="btnDisabled"
+        />
+      </div>
       <div>
         <div v-for="s in round.schedules" :key="s.id">{{ s.name1 }} vs {{ s.name2 }}</div>
       </div>
@@ -21,39 +31,29 @@
       text-color="white"
       :icon-size="1.2"
     />
+    <BackBtn
+      class="schedule__back-btn"
+      v-if="isAuthenticated"
+      title="Public view"
+      @click="$router.push(`/tournament/${tourneyId}`)"
+      color="yellow"
+      text-color="black"
+      :icon-size="1.2"
+    />
   </div>
-  <!-- <div>
-    <LoadingSpinner v-if="round === null" />
-    <div class="schedule" v-else>
-      <div class="shcedule_header">
-        <h1>{{ round.tournament.name }}</h1>
-        <h2>{{ round.name }} schedule admin</h2>
-      </div>
-
-      <div v-if="round.schedules.length > 0">
-        <div v-for="s in round.schedules" :key="s.id">{{ s.name1 }} vs {{ s.name2 }}</div>
-      </div>
-      <div v-else>No Schedule</div>
-      <IconBtn
-        class="schedule__globe-btn"
-        v-if="isAuthenticated"
-        title="Public view"
-        @click="handlePublicClick"
-        icon-name="fa-globe"
-        color="blue"
-        text-color="white"
-        :icon-size="1.2"
-      />
-    </div>
-  </div> -->
 </template>
 
 <script setup lang="ts">
-import { getRound, isAuthorized } from '@/Api/OtmApi'
-import type { Round } from '@/Types'
+import { generateSchedule, getRound, isAuthorized } from '@/Api/OtmApi'
+import type { ResponseError, Round } from '@/Types'
+import { validDate } from '@/Utils/HelperFunctions'
+import BackBtn from '@/components/common/BackBtn.vue'
+import ButtonComp from '@/components/common/ButtonComp.vue'
 import IconBtn from '@/components/common/IconBtn.vue'
+import InputField from '@/components/common/InputField.vue'
 import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import { useAuth0 } from '@auth0/auth0-vue'
+import type { AxiosError } from 'axios'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
@@ -67,6 +67,10 @@ const tourneyId = parseInt(route.path.split('/')[2])
 const roundId = parseInt(route.path.split('/')[4])
 
 const round = ref<Round | null>(null)
+const btnDisabled = ref<boolean>(false)
+
+const startDate = ref<string>('')
+const endDate = ref<string>('')
 
 onMounted(async () => {
   if (
@@ -82,6 +86,31 @@ onMounted(async () => {
   round.value = resp.data
 })
 
+const handleGenerateBtnClick = async () => {
+  btnDisabled.value = true
+  try {
+    if (!validDate(startDate.value) || !validDate(endDate.value)) {
+      btnDisabled.value = false
+      return toast.error('Invalid date format')
+    }
+
+    const rsp = await generateSchedule(
+      tourneyId,
+      roundId,
+      new Date(startDate.value),
+      new Date(endDate.value),
+      idTokenClaims.value!.__raw
+    )
+    round.value!.schedules = rsp.data
+    toast.success('Schedule generated')
+  } catch (error) {
+    const e = error as AxiosError<ResponseError>
+    toast.error(e.response?.data.detail)
+  } finally {
+    btnDisabled.value = false
+  }
+}
+
 const handlePublicClick = () => {
   router.push(`/tournament/${tourneyId}/round/${roundId}/schedule`)
 }
@@ -92,7 +121,6 @@ const handlePublicClick = () => {
   position: relative;
   display: flex;
   flex-direction: column;
-  text-align: center;
 
   gap: 20px;
   max-height: calc(100vh - 110px);
@@ -102,6 +130,27 @@ const handlePublicClick = () => {
 }
 
 .schedule {
+  display: flex;
+  flex-direction: column;
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &__generate {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__gen-inputs {
+    display: flex;
+    gap: 20px;
+  }
 }
 
 .schedule__globe-btn {

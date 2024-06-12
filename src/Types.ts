@@ -149,8 +149,6 @@ export type Schedule = {
   mpLinkId: number
 }
 
-// Random Types
-
 export type AddedReferee = {
   ref: Staff
   qualScheduleId: number
