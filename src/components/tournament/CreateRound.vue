@@ -21,12 +21,25 @@
     />
 
     <RadioGroup
-      @change="isQuals = $event.value"
+      @change="
+        (e) => {
+          isQuals = e.value
+          selectedRoundNum = isQuals === 'yes' ? '0' : '1'
+          roundNumOpt = isQuals === 'yes' ? ['0'] : ['1', '2', '3', '4', '5', '6', '7', '8']
+        }
+      "
       id="is-quals"
       :value="isQuals"
       :options="radioOptions"
       label="Qualifier round?"
       direction="row"
+    />
+
+    <SelectBox
+      :options="roundNumOpt"
+      label="Round number"
+      v-model="selectedRoundNum"
+      :disabled="isQuals === 'yes'"
     />
 
     <ButtonComp
@@ -50,6 +63,7 @@ import { AxiosError } from 'axios'
 import { addRound } from '@/Api/OtmApi'
 import type { RadioOption, ResponseError } from '@/Types'
 import RadioGroup from '../common/RadioGroup.vue'
+import SelectBox from '../common/SelectBox.vue'
 
 interface Props {
   tournamentId: number
@@ -65,6 +79,9 @@ const radioOptions = ref<RadioOption[]>([
   { label: 'No', value: 'no' }
 ])
 
+const roundNumOpt = ref<string[]>(['0', '1', '2', '3', '4', '5', '6', '7', '8'])
+const selectedRoundNum = ref<string>('1')
+
 const isQuals = ref('no')
 const roundName = ref('')
 const createDisabled = ref(false)
@@ -76,7 +93,8 @@ const handleCreateClick = async () => {
       props.tournamentId,
       roundName.value,
       isQuals.value === 'yes' ? true : false,
-      idTokenClaims.value?.__raw as string
+      parseInt(selectedRoundNum.value),
+      idTokenClaims.value!.__raw
     )
 
     emit('roundCreated', res.data)
