@@ -11,7 +11,7 @@
     <div class="register__player-inputs" v-for="(pi, i) in playerInputs" :key="i">
       <p class="register__player-label">Player {{ i + 1 }}</p>
       <div class="register__player-fields">
-        <InputField v-model="pi.osuUserId" placeholder="Osu user id" />
+        <InputField :error="userIdErrors[i]" v-model="pi.osuUserId" placeholder="Osu user id" />
         <InputField v-model="pi.discordUsername" placeholder="Discord username" />
       </div>
     </div>
@@ -24,6 +24,7 @@
       @click="handleRegisterTeam"
       :disabled="regBtnDisabled"
     />
+
     <ButtonComp
       v-else
       btn-text="Register"
@@ -38,7 +39,7 @@
 <script setup lang="ts">
 import type { PlayerRegister, ResponseError, Tournament } from '@/Types'
 import InputField from '../common/InputField.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import ButtonComp from '../common/ButtonComp.vue'
 import { registerPlayer, registerTeam } from '@/Api/OtmApi'
 import type { AxiosError } from 'axios'
@@ -54,6 +55,7 @@ const toast = useToast()
 const teamName = ref('')
 const playerInputs = ref<PlayerRegister[]>([])
 const regBtnDisabled = ref(false)
+const userIdErrors = ref<boolean[]>([])
 
 onMounted(() => {
   for (let i = 0; i < props.tournament.maxTeamSize; i++) {
@@ -61,15 +63,30 @@ onMounted(() => {
       osuUserId: '',
       discordUsername: ''
     })
+
+    userIdErrors.value.push(false)
   }
+  console.log(userIdErrors)
 })
+
+watch(
+  playerInputs,
+  () => {
+    playerInputs.value.forEach((v, i) => {
+      if (v.osuUserId === '') userIdErrors.value[i] = false
+      else if (isNaN(parseInt(v.osuUserId))) userIdErrors.value[i] = true
+      else userIdErrors.value[i] = false
+    })
+  },
+  { deep: true }
+)
 
 const handleRegisterTeam = async () => {
   regBtnDisabled.value = true
   playerInputs.value = playerInputs.value.map((pi) => {
     return {
       ...pi,
-      osuUserId: Number(pi.osuUserId)
+      osuUserId: pi.osuUserId
     }
   })
 
@@ -96,7 +113,7 @@ const handleRegisterPlayer = async () => {
 
   try {
     const resp = await registerPlayer(props.tournament.id, {
-      osuUserId: Number(playerInputs.value[0].osuUserId),
+      osuUserId: playerInputs.value[0].osuUserId,
       discordUsername: playerInputs.value[0].discordUsername
     })
     toast.success('Player registered successfully')

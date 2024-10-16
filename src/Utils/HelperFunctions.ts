@@ -16,6 +16,7 @@ export const validDate = (date: string): boolean => {
   if (!date) return false
   if (date.length !== 10) return false
   if (date.split('-').length !== 3) return false
+  console.log('test')
 
   const today = new Date()
   const inputDate = new Date(date)

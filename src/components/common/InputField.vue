@@ -11,6 +11,7 @@
       :style="{
         backgroundColor: props.bgColor,
         outline: validTextLength ? 'none' : '2px solid var(--osu-red)',
+        border: error ? '2px solid var(--osu-red)' : 'none',
         marginTop: label ? '5px' : '0'
       }"
     />
@@ -31,10 +32,12 @@ interface Props {
   maxTextLength?: number
   label?: string
   maxWidth?: string
+  error?: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
   bgColor: 'var(--bg3)',
-  maxWidth: '200px'
+  maxWidth: '200px',
+  error: false
 })
 const model = defineModel()
 

@@ -8,6 +8,7 @@
       '--size': props.size + 'px',
       margin: props.margin
     }"
+    @click="$router.go(-1)"
   >
     <v-icon :name="props.iconName" :scale="props.iconSize" />
   </button>
@@ -53,6 +54,7 @@ const props = withDefaults(defineProps<Props>(), {
 
   position: absolute;
   left: 20px;
+  top: 20px;
 
   &:hover {
     cursor: pointer;

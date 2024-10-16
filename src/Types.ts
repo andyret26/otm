@@ -91,7 +91,7 @@ export type CreateTouernament = {
 }
 
 export type PlayerRegister = {
-  osuUserId: string | number
+  osuUserId: string
   discordUsername?: string
 }
 

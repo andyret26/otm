@@ -46,6 +46,12 @@
             :key="round.id"
             :round="round"
             :tournament-id="tournament.id"
+            :current-context-id="currentContextId"
+            @context-open="
+              (e) => {
+                currentContextId = e
+              }
+            "
           />
         </div>
 
@@ -111,6 +117,7 @@ const { isAuthenticated } = useAuth0()
 const tournament = ref<Tournament | null>(null)
 const activeBtn = ref<string>('Rounds')
 const showCreateRound = ref<boolean>(false)
+const currentContextId = ref<number | null>()
 
 onMounted(async () => {
   tournament.value = await getTournamentById(parseInt(route.path.split('/')[2]))

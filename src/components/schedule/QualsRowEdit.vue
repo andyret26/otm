@@ -1,5 +1,13 @@
 <template>
   <div class="quals-row-edit">
+    <IconBtn
+      class="quals-row-edit__close-btn"
+      icon-name="fa-times"
+      color="red"
+      :icon-size="0.7"
+      :size="18"
+      @click="() => emit('closeClick')"
+    />
     <div class="quals-row-edit__title">Id {{ qualsSchedule.num }}</div>
     <SelectBox
       :options="['None', ...staff.map((s) => s.username)]"
@@ -89,7 +97,7 @@ const toast = useToast()
 const route = useRoute()
 
 const props = defineProps<Props>()
-const emit = defineEmits(['rowUpdated'])
+const emit = defineEmits(['rowUpdated', 'closeClick'])
 
 const selectedRef = ref<string>('None')
 const mpLinkId = ref<string>('')
@@ -165,6 +173,12 @@ onMounted(() => {
   gap: 20px;
   padding: 20px;
 
+  &__close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
   &__title {
     font-size: 20px;
     font-weight: bold;
@@ -201,6 +215,7 @@ onMounted(() => {
 
     height: 100px;
   }
+
   &__participants-names {
     height: 16px;
     font-size: 12px;

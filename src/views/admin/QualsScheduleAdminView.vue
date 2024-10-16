@@ -27,7 +27,7 @@
         btn-text="Make Mp Link Private"
         color="red"
       />
-      <ButtonComp v-else @click="handleHideMpLinks" btn-text="Make Mp Link Public" color="blue" />
+      <ButtonComp v-else @click="handleHideMpLinks" btn-text="Make Mp Links Public" color="blue" />
     </div>
     <QualsSchedule
       v-if="qualsSchedule != null && qualsSchedule.length > 0"

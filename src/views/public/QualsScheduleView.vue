@@ -1,5 +1,6 @@
 <template>
   <div class="schedule" v-if="round != null && tourney != null">
+    <BackBtn />
     <RouterLink :to="`/tournament/${tourney.id}`">
       <h1>{{ tourney!.name }}</h1>
     </RouterLink>
@@ -36,6 +37,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth0 } from '@auth0/auth0-vue'
 import { onMounted, ref } from 'vue'
+import BackBtn from '@/components/common/BackBtn.vue'
 
 const route = useRoute()
 const router = useRouter()

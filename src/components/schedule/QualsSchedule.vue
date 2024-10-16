@@ -55,6 +55,7 @@
       :staff="staff"
       :participants="particapents"
       @row-updated="handleRowUpdated"
+      @close-click="() => (showEditRow = false)"
     />
   </div>
 </template>

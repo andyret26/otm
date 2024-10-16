@@ -20,7 +20,9 @@ import {
   FaEyeSlash,
   MdAdminpanelsettings,
   FaArrowLeft,
-  FaGlobe
+  FaGlobe,
+  FaTrashAlt,
+  OiTrash
 } from 'oh-vue-icons/icons'
 
 addIcons(
@@ -35,7 +37,9 @@ addIcons(
   FaEyeSlash,
   MdAdminpanelsettings,
   FaArrowLeft,
-  FaGlobe
+  FaGlobe,
+  FaTrashAlt,
+  OiTrash
 )
 
 const app = createApp(App)
