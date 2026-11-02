@@ -13,8 +13,7 @@
         {{ qual.num }}
       </div>
       <div class="quals-schedule__card-date card-field2">
-        ({{ getDate(qual.dateTime).split(' ')[0] }}) {{ getDate(qual.dateTime).split(' ')[1] }}
-        {{ getDate(qual.dateTime).split(' ')[2] }}
+        {{ new Date(qual.dateTime).toLocaleString('en-US',{month: "short", day: "2-digit",weekday: "short"})}}
       </div>
       <div class="quals-schedule__card-time card-field1">{{ getTime(qual.dateTime) }}</div>
       <div class="quals-schedule__card-ref card-field2">

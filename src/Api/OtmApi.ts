@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === 'production') {
   otm_API = 'https://osu-tm-api.azurewebsites.net/api/v1'
   // @ts-ignore
 } else if (process.env.NODE_ENV === 'development') {
-  otm_API = 'http://localhost:80/api/v1'
+  otm_API = 'http://localhost:5236/api/v1'
 }
 
 export async function isAuthorized(

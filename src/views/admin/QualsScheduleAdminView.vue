@@ -119,10 +119,17 @@ onMounted(async () => {
 
 const handleGenerateQuals = async () => {
   try {
-    if (!validDate(startDate.value) || !validDate(endDate.value)) {
-      toast.error('Invalid date format')
+    const validStart = validDate(startDate.value)
+    const validEnd = validDate(endDate.value)
+    if (!validStart.isValid){
+      toast.error(validStart.msg)
       return
     }
+    if (!validEnd.isValid) {
+      toast.error(validEnd.msg)
+      return
+    }
+
     const resp = await generateQualsSchedule(
       tourney.value!.id,
       round.value!.id,
@@ -144,14 +151,21 @@ const handleRowUpdated = (updatedRow: QualifierSchedule) => {
 }
 
 const handleAddExtra = async () => {
-  if (!validDate(ExDate.value)) {
-    toast.error('Invalid date')
-    return
-  }
-  if (!validTime(ExTime.value)) {
-    toast.error('Invalid time')
-    return
-  }
+  console.log(ExDate.value)
+  console.log(ExTime.value)
+    const validExDate = validDate(ExDate.value)
+    const validExTime = validTime(ExTime.value)
+    console.log(validExDate.msg)
+    console.log(validExTime.msg)
+
+    if (!validExDate.isValid){
+      toast.error(validExDate.msg)
+      return
+    }
+    if (!validExTime.isValid) {
+      toast.error(validExTime.msg)
+      return
+    }
   const ExNum = qualsSchedule.value!.filter((qs) => qs.num.substring(0, 2) === 'EX').length + 1
   const num = `EX${ExNum}`
 

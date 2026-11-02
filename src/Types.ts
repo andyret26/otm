@@ -244,3 +244,9 @@ export type KnockoutReq = {
   playerIds?: number[]
   teamIds?: number[]
 }
+
+
+export type ValidationResult = {
+  isValid: boolean
+  msg: string
+}

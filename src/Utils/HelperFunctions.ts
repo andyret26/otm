@@ -1,4 +1,4 @@
-import type { CreateTouernament, Map, TeamPlacement, UserPlacement } from '@/Types'
+import type { CreateTouernament, Map, TeamPlacement, UserPlacement, ValidationResult } from '@/Types'
 
 export const validateCreatTournament = (tourney: CreateTouernament): string[] => {
   const errors = []
@@ -12,22 +12,24 @@ export const validateCreatTournament = (tourney: CreateTouernament): string[] =>
   return errors
 }
 
-export const validDate = (date: string): boolean => {
-  if (!date) return false
-  if (date.length !== 10) return false
-  if (date.split('-').length !== 3) return false
+export const validDate = (date: string): ValidationResult => {
+  if (!date) return {isValid: false, msg: 'Date is required'}
+  if (date.length !== 10) return {isValid: false, msg: 'Date must be in the format YYYY-MM-DD'}
+  if (date.split('-').length !== 3) return {isValid: false, msg: 'Date must be in the format YYYY-MM-DD'}
 
   const today = new Date()
   const inputDate = new Date(date)
-  return inputDate > today
+  if (inputDate < today) return {isValid: false, msg: 'Date must be in the future'}
+
+  return {isValid: true, msg: ''}
 }
 
-export const validTime = (time: string): boolean => {
-  if (!time) return false
-  if (time.length !== 5) return false
-  if (time.split(':').length !== 2) return false
+export const validTime = (time: string): ValidationResult => {
+  if (!time) return {isValid: false, msg: 'Time is required'}
+  if (time.length !== 5) return {isValid: false, msg: 'Time must be in the format HH:MM'}
+  if (time.split(':').length !== 2) return {isValid: false, msg: 'Time must be in the format HH:MM'}
 
-  return true
+  return {isValid: true, msg: ''}
 }
 
 export const mapStatsToUserPlacements = (maps: Map[], tourneyId: number): UserPlacement[] => {
